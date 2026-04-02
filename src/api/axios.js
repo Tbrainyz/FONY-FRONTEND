@@ -1,10 +1,12 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL, // now points to /api
+  baseURL: import.meta.env.VITE_API_URL, // Now: https://fony-backend.onrender.com
+  withCredentials: true, // ← Critical for cookies & sessions
+  timeout: 10000,
 });
 
-// Attach the token to every request
+// Attach token if you're using JWT (optional)
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
