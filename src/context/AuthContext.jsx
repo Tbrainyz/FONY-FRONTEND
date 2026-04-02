@@ -45,7 +45,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   // ==================== GOOGLE AUTH ====================
-  const googleAuth = async (data) => {
+ // ==================== GOOGLE AUTH ====================
+const googleAuth = async (data) => {
+  try {
     const res = await API.post("/users/google", { token: data.token });
 
     const googleUser = res.data.user || res.data;
@@ -57,8 +59,11 @@ export const AuthProvider = ({ children }) => {
     }
 
     return res.data;
-  };
-
+  } catch (error) {
+    console.error("Google login error:", error.response?.data || error.message);
+    throw error;
+  }
+};
   // ==================== LOGOUT ====================
   const logout = async () => {
     try {
