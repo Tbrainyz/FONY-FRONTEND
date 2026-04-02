@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import API from "../api/axios";
 
 export const AuthContext = createContext();
@@ -23,6 +23,20 @@ export const AuthProvider = ({ children }) => {
     setUser(loggedInUser);
     localStorage.setItem("user", JSON.stringify(loggedInUser));
 
+    if (res.data.token) {
+      localStorage.setItem("token", res.data.token);
+    }
+
+    return res.data;
+  };
+
+  // ==================== GOOGLE LOGIN ====================
+  const googleAuth = async (token) => {
+    const res = await API.post("/api/users/google", { token });
+    const loggedInUser = res.data.user || res.data;
+
+    setUser(loggedInUser);
+    localStorage.setItem("user", JSON.stringify(loggedInUser));
     if (res.data.token) {
       localStorage.setItem("token", res.data.token);
     }
@@ -113,10 +127,11 @@ export const AuthProvider = ({ children }) => {
         user,
         saveUser,
         login,
+        googleAuth,
         register,
         logout,
         updateProfile,
-        updatePassword, // ✅ new method exposed
+        updatePassword,
         forgotPassword,
         resendOtp,
         resetPassword,
