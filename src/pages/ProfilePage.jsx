@@ -4,11 +4,9 @@ import { AiOutlineLogout } from "react-icons/ai";
 import { MdOutlineLockOpen } from "react-icons/md";
 import { AuthContext } from "../context/AuthContext";
 import ProfileImage from "../assets/FB_IMG_16265830618836469 1.png";
-import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const { user, updateProfile, logout } = useContext(AuthContext);
-   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: user?.name || "",
@@ -56,12 +54,6 @@ const ProfilePage = () => {
       alert("Update failed");
     }
   };
-// LOGOUT
-   const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
-
 
   return (
     <div className=" w-full flex justify-center items-center bg-gray-50 ">
@@ -156,7 +148,7 @@ const ProfilePage = () => {
           {/* LOGOUT */}
           <button
             type="button"
-            onClick={handleLogout}
+            onClick={logout}
             className="w-full flex items-center justify-center gap-2 bg-white border border-gray-400 text-red-500 py-4 rounded-2xl font-semibold hover:bg-black-50 transition"
           >
             <AiOutlineLogout /> Log out
