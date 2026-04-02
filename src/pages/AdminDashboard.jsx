@@ -4,8 +4,8 @@ import {
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
 import API from "../api/axios";
-import AdminSummaryCard from "../Components/AdminSummaryCard";
-import AdminUsersRow from "../Components/AdminUsersRow";
+import AdminSummaryCard from "../components/AdminSummarycard";
+import AdminUsersRow from "../components/AdminUsersRow";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
@@ -66,28 +66,32 @@ const AdminDashboard = () => {
 
         {loading && <div className="py-10 text-center">Loading users...</div>}
 
-        {!loading && Array.isArray(users) && users.map((user) => (
-          <AdminUsersRow key={user._id} user={user} />
-        ))}
+        {!loading &&
+          Array.isArray(users) &&
+          users.map((user) => <AdminUsersRow key={user._id} user={user} />)}
 
         {/* Pagination */}
         {!loading && (
           <div className="flex justify-between px-8 py-4 border-t">
-            <p>Page {page} of {totalPages}</p>
+            <p>
+              Page {page} of {totalPages}
+            </p>
             <div className="flex items-center gap-3">
               <MdOutlineKeyboardArrowLeft
                 onClick={() => page > 1 && setPage(page - 1)}
                 className={`text-2xl cursor-pointer ${page === 1 ? "opacity-40" : ""}`}
               />
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
-                <p
-                  key={num}
-                  onClick={() => setPage(num)}
-                  className={`cursor-pointer px-3 py-1 rounded ${num === page ? "font-bold underline" : ""}`}
-                >
-                  {num}
-                </p>
-              ))}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (num) => (
+                  <p
+                    key={num}
+                    onClick={() => setPage(num)}
+                    className={`cursor-pointer px-3 py-1 rounded ${num === page ? "font-bold underline" : ""}`}
+                  >
+                    {num}
+                  </p>
+                ),
+              )}
               <MdOutlineKeyboardArrowRight
                 onClick={() => page < totalPages && setPage(page + 1)}
                 className={`text-2xl cursor-pointer ${page === totalPages ? "opacity-40" : ""}`}
