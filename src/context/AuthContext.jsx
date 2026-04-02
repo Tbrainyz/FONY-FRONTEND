@@ -1,25 +1,25 @@
 import React, { createContext, useState, useEffect } from "react";
-import API from "../api/axios";   // Make sure this has withCredentials: true
+import API from "../api/axios"; // Make sure this has withCredentials: true
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Load user from localStorage on initial mount
-  useEffect(() => {
+  const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
-  }, []);
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+
+  const saveUser = (userData, token) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
+  };
+  // const [loading, setLoading] = useState(true);
 
   // ==================== LOGIN ====================
   const login = async (data) => {
     try {
-      const res = await API.post("/users/login", data);   // withCredentials is already in axios
+      const res = await API.post("/api/users/login", data); // withCredentials is already in axios
 
       const loggedInUser = res.data.user || res.data;
 
@@ -40,35 +40,38 @@ export const AuthProvider = ({ children }) => {
 
   // ==================== REGISTER ====================
   const register = async (data) => {
-    const res = await API.post("/users/register", data);
+    const res = await API.post("/api/users/register", data);
     return res.data;
   };
 
   // ==================== GOOGLE AUTH ====================
- // ==================== GOOGLE AUTH ====================
-const googleAuth = async (data) => {
-  try {
-    const res = await API.post("/users/google", { token: data.token });
+  // ==================== GOOGLE AUTH ====================
+  // const googleAuth = async (data) => {
+  //   try {
+  //     const res = await API.post("/api/users/google", { token: data.token });
 
-    const googleUser = res.data.user || res.data;
-    setUser(googleUser);
-    localStorage.setItem("user", JSON.stringify(googleUser));
+  //     const googleUser = res.data.user || res.data;
+  //     setUser(googleUser);
+  //     localStorage.setItem("user", JSON.stringify(googleUser));
 
-    if (res.data.token) {
-      localStorage.setItem("token", res.data.token);
-    }
+  //     if (res.data.token) {
+  //       localStorage.setItem("token", res.data.token);
+  //     }
 
-    return res.data;
-  } catch (error) {
-    console.error("Google login error:", error.response?.data || error.message);
-    throw error;
-  }
-};
+  //     return res.data;
+  //   } catch (error) {
+  //     console.error(
+  //       "Google login error:",
+  //       error.response?.data || error.message,
+  //     );
+  //     throw error;
+  //   }
+  // };
   // ==================== LOGOUT ====================
   const logout = async () => {
     try {
       // Optional: Call backend logout to clear session cookie
-      await API.post("/users/logout");
+      await API.post("/api/users/logout");
     } catch (err) {
       console.warn("Backend logout failed, clearing local only");
     }
@@ -86,7 +89,7 @@ const googleAuth = async (data) => {
     formData.append("phone", data.phone);
     if (data.image) formData.append("image", data.image);
 
-    const res = await API.put("/users/profile", formData, {
+    const res = await API.put("/api/users/profile", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         // Remove Authorization header if using sessions (cookies)
@@ -103,17 +106,21 @@ const googleAuth = async (data) => {
 
   // ==================== OTHER METHODS ====================
   const forgotPassword = async (email) => {
-    const res = await API.post("/users/forgot-password", { email });
+    const res = await API.post("/api/users/forgot-password", { email });
     return res.data;
   };
 
   const resendOtp = async (email) => {
-    const res = await API.post("/users/resend-otp", { email });
+    const res = await API.post("/api/users/resend-otp", { email });
     return res.data;
   };
 
   const resetPassword = async (email, otp, newPassword) => {
-    const res = await API.post("/users/reset-password", { email, otp, newPassword });
+    const res = await API.post("/api/users/reset-password", {
+      email,
+      otp,
+      newPassword,
+    });
     return res.data;
   };
 
@@ -123,10 +130,10 @@ const googleAuth = async (data) => {
     <AuthContext.Provider
       value={{
         user,
-        loading,
+        saveUser,
         login,
         register,
-        googleAuth,
+        // googleAuth,
         logout,
         updateProfile,
         forgotPassword,

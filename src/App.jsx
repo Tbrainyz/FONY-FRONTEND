@@ -18,6 +18,7 @@ import { useContext } from "react";
 // ✅ Toastify imports
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AuthCallback from "./pages/AuthCallback";
 
 const AdminRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
@@ -35,6 +36,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/register" element={<SignUp />} />
           <Route path="/login" element={<Signin />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/forgot-password" element={<ForgetPassword />} />
           <Route path="/codeverification" element={<CodeVerification />} />
           <Route path="/createpassword" element={<CreatePassword />} />

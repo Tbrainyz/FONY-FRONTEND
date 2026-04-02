@@ -4,16 +4,15 @@ import "./index.css";
 import App from "./App.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { TaskProvider } from "./context/TasksContext.jsx";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <AuthProvider>
-        <TaskProvider>
-          <App />
-        </TaskProvider>
-      </AuthProvider>
-    </GoogleOAuthProvider>
+    {/* <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}> */}
+    <AuthProvider>
+      <TaskProvider>
+        <App />
+      </TaskProvider>
+    </AuthProvider>
+    {/* </GoogleOAuthProvider> */}
   </StrictMode>,
 );
