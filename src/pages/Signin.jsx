@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Signin = () => {
   const navigate = useNavigate();
-  const { login, googleAuth } = useContext(AuthContext);
+  const { login, } = useContext(AuthContext);
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
@@ -50,23 +50,23 @@ const Signin = () => {
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
-    setLoading(true);
-    try {
-      const { credential } = credentialResponse;
-      await googleAuth({ token: credential });
-      toast.success("Google Login Successful!");
-      navigate("/dashboard");
-    } catch (error) {
-      toast.error(error?.response?.data?.message || "Google login failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+//   const handleGoogleSuccess = async (credentialResponse) => {
+//     setLoading(true);
+//     try {
+//       const { credential } = credentialResponse;
+//       await googleAuth({ token: credential });
+//       toast.success("Google Login Successful!");
+//       navigate("/dashboard");
+//     } catch (error) {
+//       toast.error(error?.response?.data?.message || "Google login failed");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-  const handleGoogleError = () => {
-    toast.error("Google login failed. Please try again.");
-  };
+//   const handleGoogleError = () => {
+//     toast.error("Google login failed. Please try again.");
+//   };
 
   return (
     <div className="flex gap-[20px]">
