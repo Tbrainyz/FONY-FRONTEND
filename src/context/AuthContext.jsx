@@ -101,17 +101,17 @@ export const AuthProvider = ({ children }) => {
 
   // ==================== OTHER METHODS ====================
   const forgotPassword = async (email) => {
-    const res = await API.post("/api/forgot-password", { email });
+    const res = await API.post("/api/users/forgot-password", { email });
     return res.data;
   };
 
   const resendOtp = async (email) => {
-    const res = await API.post("/api/resend-otp", { email });
+    const res = await API.post("/api/users/resend-otp", { email });
     return res.data;
   };
 
   const resetPassword = async (email, otp, newPassword) => {
-    const res = await API.post("/api/reset-password", {
+    const res = await API.post("/api/users/reset-password", {
       email,
       otp,
       newPassword,
