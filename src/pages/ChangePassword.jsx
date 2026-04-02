@@ -4,10 +4,12 @@ import arrow from "../assets/Arrow.svg";
 import eye from "../assets/eye.svg";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ChangePassword = () => {
   const navigate = useNavigate();
-  const { updatePassword } = useContext(AuthContext); // you’ll add this in AuthContext
+  const { updatePassword } = useContext(AuthContext);
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -15,27 +17,25 @@ const ChangePassword = () => {
   const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    setError("");
     if (!oldPassword || !newPassword || !confirmPassword) {
-      setError("Please fill in all fields");
+      toast.error("Please fill in all fields");
       return;
     }
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
     setLoading(true);
     try {
-      await updatePassword(oldPassword, newPassword); // backend route: /users/change-password
-      alert("Password updated successfully!");
+      await updatePassword(oldPassword, newPassword);
+      toast.success("Password updated successfully!");
       navigate("/profile");
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to update password");
+      toast.error(err.response?.data?.message || "Failed to update password");
     } finally {
       setLoading(false);
     }
@@ -116,8 +116,6 @@ const ChangePassword = () => {
               onClick={() => setShowConfirm(!showConfirm)}
             />
           </div>
-
-          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
             onClick={handleSubmit}
