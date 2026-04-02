@@ -56,7 +56,7 @@ const NavBar = () => {
       </div>
 
       {/* PROFILE */}
-      <div ref={dropdownRef}>
+      <div ref={dropdownRef} className="relative">
         <div
           className="flex items-center gap-3 cursor-pointer select-none"
           onClick={() => setIsOpen(!isOpen)}
@@ -72,7 +72,7 @@ const NavBar = () => {
         </div>
 
         {isOpen && (
-          <div className="absolute right-10 top-20 z-50 animate-in fade-in zoom-in duration-200">
+          <div className="absolute right-0 top-14 z-50">
             <ProfileDropDown setOpen={setIsOpen} />
           </div>
         )}
