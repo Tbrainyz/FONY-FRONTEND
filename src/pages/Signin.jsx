@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { GoogleLogin } from "@react-oauth/google";
+// import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate, Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { AuthContext } from "../context/AuthContext";
@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Signin = () => {
   const navigate = useNavigate();
-  const { login, } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
@@ -50,23 +50,23 @@ const Signin = () => {
     }
   };
 
-//   const handleGoogleSuccess = async (credentialResponse) => {
-//     setLoading(true);
-//     try {
-//       const { credential } = credentialResponse;
-//       await googleAuth({ token: credential });
-//       toast.success("Google Login Successful!");
-//       navigate("/dashboard");
-//     } catch (error) {
-//       toast.error(error?.response?.data?.message || "Google login failed");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  //   const handleGoogleSuccess = async (credentialResponse) => {
+  //     setLoading(true);
+  //     try {
+  //       const { credential } = credentialResponse;
+  //       await googleAuth({ token: credential });
+  //       toast.success("Google Login Successful!");
+  //       navigate("/dashboard");
+  //     } catch (error) {
+  //       toast.error(error?.response?.data?.message || "Google login failed");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-//   const handleGoogleError = () => {
-//     toast.error("Google login failed. Please try again.");
-//   };
+  //   const handleGoogleError = () => {
+  //     toast.error("Google login failed. Please try again.");
+  //   };
 
   return (
     <div className="flex gap-[20px]">
@@ -76,13 +76,17 @@ const Signin = () => {
           <img src={Logo} alt="Logo" />
         </div>
 
-        <h2 className="text-[30px] font-bold mb-6 text-[#000000]">Welcome Back</h2>
+        <h2 className="text-[30px] font-bold mb-6 text-[#000000]">
+          Welcome Back
+        </h2>
         <p className="mb-6">Enter your details to sign in to your account.</p>
 
         <form onSubmit={handleSubmit}>
           {/* Email */}
           <div className="mb-[11px]">
-            <label>Email <span className="text-[#A4003A]">*</span></label>
+            <label>
+              Email <span className="text-[#A4003A]">*</span>
+            </label>
             <input
               type="email"
               name="email"
@@ -92,12 +96,16 @@ const Signin = () => {
               className="w-[484px] h-[56px] mt-1 px-4 py-3 border rounded-[48px]"
               disabled={loading}
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
           </div>
 
           {/* Password */}
           <div className="mb-[11px]">
-            <label>Password <span className="text-[#A4003A]">*</span></label>
+            <label>
+              Password <span className="text-[#A4003A]">*</span>
+            </label>
             <div className="relative mt-1">
               <input
                 type={showPassword ? "text" : "password"}
@@ -114,10 +122,16 @@ const Signin = () => {
                 className="absolute right-12 top-1/2 -translate-y-1/2"
                 disabled={loading}
               >
-                {showPassword ? <AiOutlineEyeInvisible className={iconClass} /> : <AiOutlineEye className={iconClass} />}
+                {showPassword ? (
+                  <AiOutlineEyeInvisible className={iconClass} />
+                ) : (
+                  <AiOutlineEye className={iconClass} />
+                )}
               </button>
             </div>
-            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password}</p>
+            )}
           </div>
 
           <Link to="/forgot-password">
@@ -142,30 +156,37 @@ const Signin = () => {
 
           {/* Google Button */}
           <div className="flex justify-center">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={handleGoogleError}
+            <p>CONTINUE WITH GOOGLE</p>
+            {/* <GoogleLogin
+              //   onSuccess={handleGoogleSuccess}
+              //   onError={handleGoogleError}
               theme="outline"
               size="large"
               text="continue_with"
               shape="pill"
               width="484"
               disabled={loading}
-            />
+            /> */}
           </div>
         </form>
 
         <div className="flex justify-center font-medium m-6">
           <p>
             Don’t have an account?{" "}
-            <Link to="/register" className="text-[#77C2FF]">Sign Up</Link>
+            <Link to="/register" className="text-[#77C2FF]">
+              Sign Up
+            </Link>
           </p>
         </div>
       </div>
 
       {/* RIGHT SIDE */}
       <div className="mt-[30px]">
-        <img src={Run} alt="Illustration" className="w-[836px] h-[724px] object-cover" />
+        <img
+          src={Run}
+          alt="Illustration"
+          className="w-[836px] h-[724px] object-cover"
+        />
       </div>
     </div>
   );
