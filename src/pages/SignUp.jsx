@@ -75,6 +75,10 @@ const SignUp = () => {
 
   const iconClass = "text-gray-700 hover:text-gray-900 w-5 h-5";
 
+  const handleGoogleRegister = () => {
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/users/google`;
+  };
+
   return (
     <div className="flex gap-[20px]">
       {/* LEFT SIDE */}
@@ -87,14 +91,14 @@ const SignUp = () => {
           Create Account
         </h2>
 
-        <p className="mb-6">
-          Enter your details to sign up for an account.
-        </p>
+        <p className="mb-6">Enter your details to sign up for an account.</p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-[11px]">
           {/* NAME */}
           <div>
-            <label>Name <span className="text-[#A4003A]">*</span></label>
+            <label>
+              Name <span className="text-[#A4003A]">*</span>
+            </label>
             <input
               type="text"
               name="name"
@@ -103,12 +107,16 @@ const SignUp = () => {
               placeholder="Enter your name"
               className="mt-1 mb-[5px] h-[56px] w-[484px] rounded-[48px] border px-4 py-3"
             />
-            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name}</p>
+            )}
           </div>
 
           {/* EMAIL */}
           <div>
-            <label>Email <span className="text-[#A4003A]">*</span></label>
+            <label>
+              Email <span className="text-[#A4003A]">*</span>
+            </label>
             <input
               type="email"
               name="email"
@@ -117,12 +125,16 @@ const SignUp = () => {
               placeholder="Enter Email"
               className="mt-1 mb-[5px] h-[56px] w-[484px] rounded-[48px] border px-4 py-3"
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
           </div>
 
           {/* PHONE */}
           <div>
-            <label>Phone <span className="text-[#A4003A]">*</span></label>
+            <label>
+              Phone <span className="text-[#A4003A]">*</span>
+            </label>
             <input
               type="tel"
               name="phone"
@@ -131,12 +143,16 @@ const SignUp = () => {
               placeholder="Enter phone number"
               className="mt-1 mb-[5px] h-[56px] w-[484px] rounded-[48px] border px-4 py-3"
             />
-            {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+            {errors.phone && (
+              <p className="text-red-500 text-sm">{errors.phone}</p>
+            )}
           </div>
 
           {/* PASSWORD */}
           <div>
-            <label>Password <span className="text-[#A4003A]">*</span></label>
+            <label>
+              Password <span className="text-[#A4003A]">*</span>
+            </label>
             <div className="relative mb-[5px]">
               <input
                 type={showPassword ? "text" : "password"}
@@ -158,12 +174,16 @@ const SignUp = () => {
                 )}
               </button>
             </div>
-            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password}</p>
+            )}
           </div>
 
           {/* CONFIRM PASSWORD */}
           <div>
-            <label>Confirm Password <span className="text-[#A4003A]">*</span></label>
+            <label>
+              Confirm Password <span className="text-[#A4003A]">*</span>
+            </label>
             <div className="relative mb-[5px]">
               <input
                 type={showConfirmPassword ? "text" : "password"}
@@ -205,14 +225,11 @@ const SignUp = () => {
 
           {/* GOOGLE */}
           <button
+            onClick={handleGoogleRegister}
             type="button"
             className="flex h-[60px] w-[484px] items-center justify-center rounded-[48px] border border-[#D9D9D9] hover:bg-[#D9D9D9]"
           >
-            <img
-              src={Google}
-              alt="Google"
-              className="mr-2 h-[24px] w-[24px]"
-            />
+            <img src={Google} alt="Google" className="mr-2 h-[24px] w-[24px]" />
             Continue with Google
           </button>
         </form>

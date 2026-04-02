@@ -7,6 +7,7 @@ import Logo from "../assets/Frame.svg";
 import Run from "../assets/run.svg";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Google from "../assets/material.svg";
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -67,6 +68,9 @@ const Signin = () => {
   //   const handleGoogleError = () => {
   //     toast.error("Google login failed. Please try again.");
   //   };
+  const handleGoogleLogin = () => {
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/users/google`;
+  };
 
   return (
     <div className="flex gap-[20px]">
@@ -155,19 +159,14 @@ const Signin = () => {
           </div>
 
           {/* Google Button */}
-          <div className="flex justify-center">
-            <p>CONTINUE WITH GOOGLE</p>
-            {/* <GoogleLogin
-              //   onSuccess={handleGoogleSuccess}
-              //   onError={handleGoogleError}
-              theme="outline"
-              size="large"
-              text="continue_with"
-              shape="pill"
-              width="484"
-              disabled={loading}
-            /> */}
-          </div>
+          <button
+            onClick={handleGoogleLogin}
+            type="button"
+            className="flex h-[60px] w-[484px] items-center justify-center rounded-[48px] border border-[#D9D9D9] hover:bg-[#D9D9D9]"
+          >
+            <img src={Google} alt="Google" className="mr-2 h-[24px] w-[24px]" />
+            Continue with Google
+          </button>
         </form>
 
         <div className="flex justify-center font-medium m-6">
