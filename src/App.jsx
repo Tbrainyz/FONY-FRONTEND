@@ -1,0 +1,73 @@
+import "./App.css";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import SignUp from "./pages/SignUp";
+import Signin from "./pages/Signin";
+import ProfilePage from "./pages/ProfilePage";
+import ProtectedLayout from "./Layout/ProtectedLayout";
+import LandingPage from "./pages/LandingPage";
+import ErrorPage from "./pages/ErrorPage";
+import ForgetPassword from "./pages/ForgetPassword";
+import CodeVerification from "./pages/CodeVerification";
+import CreatePassword from "./pages/CreatePassword";
+import DashBoard from "./pages/Dashboard";
+import CompletedPage from "./pages/CompletedPage";
+import AdminDashboard from "./pages/AdminDashboard";
+import { AuthContext } from "./context/AuthContext";
+import { useContext } from "react";
+
+// ✅ Toastify imports
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const AdminRoute = ({ children }) => {
+  const { user } = useContext(AuthContext);
+  if (!user || user.role !== "admin") {
+    return <Navigate to="/dashboard" replace />;
+  }
+  return children;
+};
+
+function App() {
+  return (
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/register" element={<SignUp />} />
+          <Route path="/login" element={<Signin />} />
+          <Route path="/forgot-password" element={<ForgetPassword />} />
+          <Route path="/codeverification" element={<CodeVerification />} />
+          <Route path="/createpassword" element={<CreatePassword />} />
+          <Route element={<ProtectedLayout />}>
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/dashboard" element={<DashBoard />} />
+            <Route
+              path="/authdash"
+              element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              }
+            />
+            <Route path="/completed" element={<CompletedPage />} />
+          </Route>
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </BrowserRouter>
+
+      {/* ✅ Toastify container */}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="colored"
+      />
+    </div>
+  );
+}
+
+export default App;

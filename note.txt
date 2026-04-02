@@ -1,0 +1,307 @@
+npm install @react-oauth/google
+
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
+<GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+  <App />
+</GoogleOAuthProvider>
+
+import { GoogleLogin } from "@react-oauth/google";
+import jwt_decode from "jwt-decode";
+import API from "../api/axios";
+
+const GoogleSignIn = () => {
+  const handleSuccess = async (credentialResponse) => {
+    const decoded = jwt_decode(credentialResponse.credential);
+
+    const userData = {
+      name: decoded.name,
+      email: decoded.email,
+      googleId: decoded.sub,
+    };
+
+    const res = await API.post("/users/google-auth", userData);
+
+    localStorage.setItem("user", JSON.stringify(res.data));
+    window.location.href = "/dashboard";
+  };
+
+  return (
+    <GoogleLogin
+      onSuccess={handleSuccess}
+      onError={() => console.log("Login Failed")}
+    />
+  );
+};
+
+////////////////sign in ///////////////////////
+
+import { useState, useContext } from "react";
+import Logo from "../assets/Frame.svg";
+import Google from "../assets/material.svg";
+import Run from "../assets/run.svg";
+import { Link, useNavigate } from "react-router-dom";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { AuthContext } from "../context/AuthContext";
+
+const Signin = () => {
+  const navigate = useNavigate(); // ✅ FIXED
+  const { login } = useContext(AuthContext);
+
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const iconClass = "text-gray-700 hover:text-gray-900 w-5 h-5";
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      console.log("Sending:", form); // ✅ debug
+
+      await login(form);
+
+      alert("LOGIN SUCCESSFUL");
+      navigate("/dashboard");
+    } catch (err) {
+  console.log("FULL ERROR OBJECT:", err);
+  console.log("RESPONSE DATA:", err?.response?.data);
+  console.log("STATUS:", err?.response?.status);
+
+  alert(
+    err?.response?.data?.message ||
+    err?.response?.data ||
+    err.message ||
+    "LOGIN FAILED"
+  );
+}
+  };
+
+  return (
+    <div className="flex gap-[20px]">
+      {/* LEFT SIDE */}
+      <div className="flex flex-col pl-[100px]">
+        <div className="flex items-center gap-2 mt-[70px]">
+          <img src={Logo} alt="Logo" />
+        </div>
+
+        <h2 className="text-[30px] font-bold mb-6 text-[#000000]">
+          Welcome Back
+        </h2>
+        <p className="mb-6">Enter your details to sign in to your account.</p>
+
+        <form onSubmit={handleSubmit}>
+          {/* EMAIL */}
+          <div className="mb-[11px]">
+            <label>Email</label>
+            <span className="text-[#A4003A]">*</span>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="Enter Email"
+              className="w-[484px] h-[56px] mt-1 px-4 py-3 border rounded-[48px]"
+            />
+          </div>
+
+          {/* PASSWORD */}
+          <div className="mb-[11px]">
+            <label>Password</label>
+            <span className="text-[#A4003A]">*</span>
+
+            <div className="relative mt-1">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="Enter Your Password"
+                className="w-[484px] h-[56px] px-4 py-3 border rounded-[48px] pr-12"
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-12 top-1/2 -translate-y-1/2 z-50"
+              >
+                {showPassword ? (
+                  <AiOutlineEyeInvisible className={iconClass} />
+                ) : (
+                  <AiOutlineEye className={iconClass} />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* FORGOT PASSWORD */}
+          <Link to="/forgot-password">
+            <p className="mb-[20px] text-sm font-medium">Forgot password?</p>
+          </Link>
+
+          {/* LOGIN BUTTON */}
+          <div className="text-center mt-2">
+            <button
+              type="submit"
+              className="w-[484px] h-[56px] bg-[#77C2FF] text-white rounded-[48px] border-2 border-black shadow-[0_4px_0_0_black] mb-[30px] font-bold"
+            >
+              Login
+            </button>
+
+            {/* OR */}
+            <div className="relative my-6">
+              <div className="border-t border-[#D9D9D9]" />
+              <span className="absolute left-1/2 -top-3 -translate-x-1/2 bg-white px-3 text-sm text-[#666666]">
+                Or
+              </span>
+            </div>
+
+            {/* GOOGLE */}
+            <button
+              type="button"
+              className="flex items-center justify-center w-[484px] h-[60px] border rounded-[48px] hover:bg-[#D9D9D9]"
+            >
+              <img src={Google} alt="" className="w-[24px] h-[24px] mr-2" />
+              Continue with Google
+            </button>
+          </div>
+        </form>
+
+        {/* SIGN UP LINK */}
+        <div className="flex justify-center font-medium m-6">
+          <p>
+            Don’t have an account?{" "}
+            <Link to="/signup">
+              <span className="text-[#77C2FF]">Sign Up</span>
+            </Link>
+          </p>
+        </div>
+      </div>
+
+      {/* RIGHT SIDE IMAGE */}
+      <div className="mt-[30px]">
+        <img
+          src={Run}
+          alt="Illustration"
+          className="w-[836px] h-[724px] object-cover"
+        />
+      </div>
+    </div>
+  );
+};
+
+export default Signin;
+
+
+////////////// AuthContext//////////
+
+import React, { createContext, useState, useEffect } from "react";
+import API from "../api/axios";
+
+export const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // ✅ Load user from localStorage on refresh
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+    setLoading(false);
+  }, []);
+
+  // ================= LOGIN =================
+  const login = async (data) => {
+    const res = await API.post("/users/login", data);
+
+    setUser(res.data.user);
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+    localStorage.setItem("token", res.data.token);
+
+    return res.data;
+  };
+
+  // ================= REGISTER =================
+  const register = async (data) => {
+    const res = await API.post("/users/register", data);
+    return res.data;
+  };
+
+  // ================= GOOGLE AUTH =================
+  const googleAuth = async (data) => {
+    const res = await API.post("/auth/google", data);
+
+    setUser(res.data.user);
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+    localStorage.setItem("token", res.data.token);
+
+    return res.data;
+  };
+
+  // ================= LOGOUT =================
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+  };
+
+  // ================= UPDATE PROFILE =================
+  const updateProfile = async (data) => {
+    try {
+      const formData = new FormData();
+
+      formData.append("name", data.name);
+      formData.append("email", data.email);
+      formData.append("phone", data.phone);
+
+      if (data.image) {
+        formData.append("image", data.image);
+      }
+
+      const token = localStorage.getItem("token");
+
+      const res = await API.put("/users/profile", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // ✅ Update state + localStorage
+      setUser(res.data.user);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      return res.data;
+    } catch (error) {
+      throw error.response?.data || error;
+    }
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        login,
+        register,
+        googleAuth,
+        logout,
+        updateProfile,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
