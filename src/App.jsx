@@ -9,6 +9,7 @@ import ErrorPage from "./pages/ErrorPage";
 import ForgetPassword from "./pages/ForgetPassword";
 import CodeVerification from "./pages/CodeVerification";
 import CreatePassword from "./pages/CreatePassword";
+import ChangePassword from "./pages/ChangePassword"; // ✅ new page
 import DashBoard from "./pages/Dashboard";
 import CompletedPage from "./pages/CompletedPage";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -40,6 +41,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgetPassword />} />
           <Route path="/codeverification" element={<CodeVerification />} />
           <Route path="/createpassword" element={<CreatePassword />} />
+
           <Route element={<ProtectedLayout />}>
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/dashboard" element={<DashBoard />} />
@@ -52,7 +54,10 @@ function App() {
               }
             />
             <Route path="/completed" element={<CompletedPage />} />
+            {/* ✅ New Change Password route */}
+            <Route path="/change-password" element={<ChangePassword />} />
           </Route>
+
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </BrowserRouter>
