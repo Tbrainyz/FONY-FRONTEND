@@ -3,13 +3,13 @@ import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
-import TaskSummaryCard from "../Components/TaskSummaryCard";
-import Carousel from "../Components/Carousel";
+import TaskSummaryCard from "../components/TaskSummaryCard";
+import Carousel from "../components/Carousel";
 import arr from "../assets/AltArrow.svg";
-import CreateModal from "../Components/CreateModal";
-import UpdateModal from "../Components/UpdateModal";
-import SuccessModal from "../Components/SuccessModal";
-import DeleteModal from "../Components/DeleteModal";
+import CreateModal from "../components/CreateModal";
+import UpdateModal from "../components/UpdateModal";
+import SuccessModal from "../components/SuccessModal";
+import DeleteModal from "../components/DeleteModal";
 import TaskRow from "../components/TaskRow";
 import { TaskContext } from "../context/TasksContext";
 import { AuthContext } from "../context/AuthContext";

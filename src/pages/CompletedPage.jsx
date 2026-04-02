@@ -6,8 +6,8 @@ import {
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
 
-import ViewModal from "../Components/ViewModal";
-import PriorityDropdown from "../Components/PriorityDropdown";
+import ViewModal from "../components/ViewModal";
+import PriorityDropdown from "../components/PriorityDropdown";
 import { TaskContext } from "../context/TasksContext";
 
 const CompletedPage = () => {
