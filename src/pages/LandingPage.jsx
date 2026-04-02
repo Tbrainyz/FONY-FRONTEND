@@ -12,7 +12,7 @@ import facebook from "../assets/facebook.svg"
 import instagram from "../assets/instagram.svg"
 import twitter from "../assets/twitter.svg"
 import tiktok from "../assets/tiktok.svg"
-import LandingNavBar from "../Components/LandingNavBar";
+import LandingNavBar from "../components/LandingNavBar";
 import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
