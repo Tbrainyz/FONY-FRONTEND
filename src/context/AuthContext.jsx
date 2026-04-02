@@ -15,25 +15,30 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  // LOGIN
+  // ✅ LOGIN
   const login = async (data) => {
-    const res = await API.post("/api/users/login", data);
-    const loggedInUser = res.data.user;
-    setUser(loggedInUser);
-    localStorage.setItem("user", JSON.stringify(loggedInUser));
-    localStorage.setItem("token", res.data.token);
-    return res.data;
+    try {
+      const res = await API.post("/users/login", data, { withCredentials: true });
+      const loggedInUser = res.data.user;
+      setUser(loggedInUser);
+      localStorage.setItem("user", JSON.stringify(loggedInUser));
+      localStorage.setItem("token", res.data.token);
+      return res.data;
+    } catch (error) {
+      console.error("Login error:", error.response?.data || error.message);
+      throw error;
+    }
   };
 
-  // REGISTER
+  // ✅ REGISTER
   const register = async (data) => {
-    const res = await API.post("/api/users/register", data);
+    const res = await API.post("/users/register", data);
     return res.data;
   };
 
-  // GOOGLE AUTH (secure)
+  // ✅ GOOGLE AUTH
   const googleAuth = async (data) => {
-    const res = await API.post("/api/users/google-auth", { token: data.token });
+    const res = await API.post("/users/google", { token: data.token });
     const googleUser = res.data.user;
     setUser(googleUser);
     localStorage.setItem("user", JSON.stringify(googleUser));
@@ -41,14 +46,14 @@ export const AuthProvider = ({ children }) => {
     return res.data;
   };
 
-  // LOGOUT
+  // ✅ LOGOUT
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
   };
 
-  // UPDATE PROFILE
+  // ✅ UPDATE PROFILE
   const updateProfile = async (data) => {
     const formData = new FormData();
     formData.append("name", data.name);
@@ -57,7 +62,7 @@ export const AuthProvider = ({ children }) => {
     if (data.image) formData.append("image", data.image);
 
     const token = localStorage.getItem("token");
-    const res = await API.put("/api/users/profile", formData, {
+    const res = await API.put("/users/profile", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
@@ -70,25 +75,25 @@ export const AuthProvider = ({ children }) => {
     return res.data;
   };
 
-  // FORGOT PASSWORD
+  // ✅ FORGOT PASSWORD
   const forgotPassword = async (email) => {
-    const res = await API.post("/api/users/forgot-password", { email });
+    const res = await API.post("/users/forgot-password", { email });
     return res.data;
   };
 
-  // RESEND OTP
+  // ✅ RESEND OTP
   const resendOtp = async (email) => {
-    const res = await API.post("/api/users/resend-otp", { email });
+    const res = await API.post("/users/resend-otp", { email });
     return res.data;
   };
 
-  // RESET PASSWORD
+  // ✅ RESET PASSWORD
   const resetPassword = async (email, otp, newPassword) => {
-    const res = await API.post("/api/users/reset-password", { email, otp, newPassword });
+    const res = await API.post("/users/reset-password", { email, otp, newPassword });
     return res.data;
   };
 
-  // HELPER: CHECK ADMIN
+  // ✅ HELPER: CHECK ADMIN
   const isAdmin = () => user?.role === "admin";
 
   return (
