@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect } from "react";
-import API from "../api/axios"; // Make sure this has withCredentials: true
+import React, { createContext, useState } from "react";
+import API from "../api/axios";
 
 export const AuthContext = createContext();
 
@@ -14,28 +14,20 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
   };
-  // const [loading, setLoading] = useState(true);
 
   // ==================== LOGIN ====================
   const login = async (data) => {
-    try {
-      const res = await API.post("/api/users/login", data); // withCredentials is already in axios
+    const res = await API.post("/api/users/login", data);
+    const loggedInUser = res.data.user || res.data;
 
-      const loggedInUser = res.data.user || res.data;
+    setUser(loggedInUser);
+    localStorage.setItem("user", JSON.stringify(loggedInUser));
 
-      setUser(loggedInUser);
-      localStorage.setItem("user", JSON.stringify(loggedInUser));
-
-      // Only store token if your backend actually returns one (JWT)
-      if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
-      }
-
-      return res.data;
-    } catch (error) {
-      console.error("Login error:", error.response?.data || error.message);
-      throw error;
+    if (res.data.token) {
+      localStorage.setItem("token", res.data.token);
     }
+
+    return res.data;
   };
 
   // ==================== REGISTER ====================
@@ -44,38 +36,13 @@ export const AuthProvider = ({ children }) => {
     return res.data;
   };
 
-  // ==================== GOOGLE AUTH ====================
-  // ==================== GOOGLE AUTH ====================
-  // const googleAuth = async (data) => {
-  //   try {
-  //     const res = await API.post("/api/users/google", { token: data.token });
-
-  //     const googleUser = res.data.user || res.data;
-  //     setUser(googleUser);
-  //     localStorage.setItem("user", JSON.stringify(googleUser));
-
-  //     if (res.data.token) {
-  //       localStorage.setItem("token", res.data.token);
-  //     }
-
-  //     return res.data;
-  //   } catch (error) {
-  //     console.error(
-  //       "Google login error:",
-  //       error.response?.data || error.message,
-  //     );
-  //     throw error;
-  //   }
-  // };
   // ==================== LOGOUT ====================
   const logout = async () => {
     try {
-      // Optional: Call backend logout to clear session cookie
       await API.post("/api/users/logout");
-    } catch (err) {
+    } catch {
       console.warn("Backend logout failed, clearing local only");
     }
-
     setUser(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -89,11 +56,12 @@ export const AuthProvider = ({ children }) => {
     formData.append("phone", data.phone);
     if (data.image) formData.append("image", data.image);
 
+    const token = localStorage.getItem("token");
+
     const res = await API.put("/api/users/profile", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
-        // Remove Authorization header if using sessions (cookies)
-        // Authorization: `Bearer ${token}`  ← Comment this out for now
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -101,6 +69,19 @@ export const AuthProvider = ({ children }) => {
     setUser(updatedUser);
     localStorage.setItem("user", JSON.stringify(updatedUser));
 
+    return res.data;
+  };
+
+  // ==================== CHANGE PASSWORD ====================
+  const updatePassword = async (oldPassword, newPassword) => {
+    const token = localStorage.getItem("token");
+    const res = await API.post(
+      "/api/users/change-password",
+      { oldPassword, newPassword },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     return res.data;
   };
 
@@ -133,9 +114,9 @@ export const AuthProvider = ({ children }) => {
         saveUser,
         login,
         register,
-        // googleAuth,
         logout,
         updateProfile,
+        updatePassword, // ✅ new method exposed
         forgotPassword,
         resendOtp,
         resetPassword,
