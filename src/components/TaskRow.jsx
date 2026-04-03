@@ -1,13 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import pen from "../assets/Pen.svg";
 import del from "../assets/Del.svg";
 import { TaskContext } from "../context/TasksContext";
-import DeleteModal from "./DeleteModal"; // ✅ import
 
-const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal }) => {
-  const { deleteTask } = useContext(TaskContext);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [selectedTask, setLocalSelectedTask] = useState(null);
+const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal }) => {
+  const { getStatusLabel } = useContext(TaskContext);
 
   const getProgressColor = (status = 0) => {
     if (status === 0) return "bg-red-500";
@@ -15,17 +12,6 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal }) => {
     if (status <= 50) return "bg-blue-500";
     if (status <= 75) return "bg-[#77C2FF]";
     return "bg-green-500";
-  };
-
-  const handleDeleteTask = async () => {
-    try {
-      if (selectedTask?._id) {
-        await deleteTask(selectedTask._id);
-        setShowDeleteModal(false);
-      }
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   return (
@@ -38,7 +24,34 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal }) => {
               key={task._id}
               className="bg-white border rounded-3xl p-6 shadow-sm hover:shadow transition-all"
             >
-              {/* ...task info... */}
+              <div className="flex justify-between items-start mb-4">
+                <p className="font-semibold text-lg leading-tight pr-4">{task.title}</p>
+                <span
+                  className={`inline-block px-4 py-1 text-sm font-medium rounded-2xl border ${
+                    task.priority?.toLowerCase() === "high"
+                      ? "bg-red-50 border-red-500 text-red-600"
+                      : task.priority?.toLowerCase() === "medium"
+                      ? "bg-orange-50 border-orange-500 text-orange-600"
+                      : "bg-blue-50 border-blue-500 text-blue-600"
+                  }`}
+                >
+                  {task.priority || "—"}
+                </span>
+              </div>
+
+              <div className="flex justify-between text-sm mb-4">
+                <p className="text-gray-600">
+                  {task.createdAt ? new Date(task.createdAt).toLocaleDateString("en-GB") : "—"}
+                </p>
+                <p className="font-medium">{task.status || 0}%</p>
+              </div>
+
+              <div className="h-3 bg-gray-200 rounded-full overflow-hidden mb-5">
+                <div
+                  className={`h-3 rounded-full transition-all ${getProgressColor(task.status)}`}
+                  style={{ width: `${task.status || 0}%` }}
+                />
+              </div>
 
               <div className="flex gap-6">
                 <img
@@ -51,7 +64,7 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal }) => {
                   src={del}
                   alt="delete"
                   className="w-6 h-6 cursor-pointer hover:scale-110 transition"
-                  onClick={() => { setLocalSelectedTask(task); setShowDeleteModal(true); }}
+                  onClick={() => { setSelectedTask(task); openDeleteModal(); }}
                 />
               </div>
             </div>
@@ -71,8 +84,47 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal }) => {
                 index % 2 === 1 ? "bg-[#F8FBFF]" : "bg-white"
               }`}
             >
-              {/* ...task info... */}
+              {/* Task Name */}
+              <div className="flex-1 pr-6">
+                <p className="font-semibold text-[17px]">{task.title}</p>
+              </div>
 
+              {/* Priority */}
+              <div className="w-32">
+                <span
+                  className={`inline-block px-6 py-1.5 rounded-2xl text-sm font-medium border ${
+                    task.priority?.toLowerCase() === "high"
+                      ? "bg-red-50 border-red-500 text-red-600"
+                      : task.priority?.toLowerCase() === "medium"
+                      ? "bg-orange-50 border-orange-500 text-orange-600"
+                      : "bg-blue-50 border-blue-500 text-blue-600"
+                  }`}
+                >
+                  {task.priority || "—"}
+                </span>
+              </div>
+
+              {/* Date */}
+              <div className="w-44 text-gray-700">
+                {task.createdAt ? new Date(task.createdAt).toLocaleDateString("en-GB") : "—"}
+              </div>
+
+              {/* Status */}
+              <div className="w-44">
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div
+                      className={`h-2.5 rounded-full transition-all ${getProgressColor(task.status)}`}
+                      style={{ width: `${task.status || 0}%` }}
+                    />
+                  </div>
+                  <span className="font-medium text-sm whitespace-nowrap min-w-[45px] text-right">
+                    {task.status || 0}%
+                  </span>
+                </div>
+              </div>
+
+              {/* Actions */}
               <div className="w-24 flex justify-end gap-5">
                 <img
                   src={pen}
@@ -84,7 +136,7 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal }) => {
                   src={del}
                   alt="delete"
                   className="w-6 h-6 cursor-pointer hover:scale-110 transition"
-                  onClick={() => { setLocalSelectedTask(task); setShowDeleteModal(true); }}
+                  onClick={() => { setSelectedTask(task); openDeleteModal(); }}
                 />
               </div>
             </div>
@@ -93,16 +145,6 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal }) => {
           <div className="py-20 text-center text-gray-500">No tasks available</div>
         )}
       </div>
-
-      {/* ✅ Delete Modal */}
-      {showDeleteModal && selectedTask && (
-        <DeleteModal
-          title="Are you sure?"
-          message="This action cannot be undone. The task will be permanently deleted."
-          onConfirm={handleDeleteTask}
-          closeModal={() => setShowDeleteModal(false)}
-        />
-      )}
     </div>
   );
 };
