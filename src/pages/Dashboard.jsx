@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
@@ -21,10 +21,9 @@ const DashBoard = () => {
   const [showModal3, setShowModal3] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-
   const [openFilter, setOpenFilter] = useState(false);
-  const dropdownRef = useRef(null);
 
+  const dropdownRef = useRef(null);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -48,6 +47,7 @@ const DashBoard = () => {
     setPage(1);
   }, [priorityFilter, setPage]);
 
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -65,126 +65,150 @@ const DashBoard = () => {
   };
 
   return (
-    <div className="px-[100px] flex flex-col max-w-[1440px] gap-[50px] relative">
-      <div className="flex items-center py-[30px] justify-between">
-        <h3 className="font-[Caveat] font-bold text-[30px]">
-          Welcome! {user?.name || "User"}
-        </h3>
-        <div className="flex gap-4">
-          <button
-            className="w-[163px] h-[40px] rounded-[22px] bg-[#77C2FF] border shadow-[0_4px_0_0_black]"
-            onClick={() => setShowModal1(true)}
-          >
-            Create new task
-          </button>
+    <div className="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8 xl:px-12">
+      <div className="max-w-7xl mx-auto flex flex-col gap-8 lg:gap-12">
+        
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <h3 className="font-[Caveat] font-bold text-3xl md:text-4xl">
+            Welcome! {user?.name || "User"}
+          </h3>
 
-          {user?.role === "admin" && (
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <button
-              className="w-[163px] h-[40px] rounded-[22px] bg-[#FFB347] border shadow-[0_4px_0_0_black]"
-              onClick={() => navigate("/authdash")}
+              onClick={() => setShowModal1(true)}
+              className="w-full sm:w-[163px] h-11 rounded-2xl bg-[#77C2FF] border-2 border-black shadow-[0_4px_0_0_black] font-medium active:translate-y-0.5 active:shadow-none transition-all"
             >
-              Admin Dashboard
+              Create new task
             </button>
-          )}
-        </div>
-      </div>
 
-      <TaskSummaryCard />
-      <Carousel />
-
-      <div className="flex flex-col gap-[20px]">
-        <div className="flex justify-between items-center">
-          <h2 className="text-[30px] font-[Caveat] font-bold">
-            All Created Tasks
-          </h2>
-
-          {/* Priority Filter */}
-          <div ref={dropdownRef} className="relative flex items-center gap-3">
-            <p className="font-medium">Priority</p>
-            <div
-              className="border flex items-center justify-between w-[140px] h-[44px] px-4 rounded-[22px] cursor-pointer bg-white"
-              onClick={() => setOpenFilter(!openFilter)}
-            >
-              <p>{priorityFilter || "All"}</p>
-              <img
-                src={arr}
-                alt="arrow"
-                className={`w-5 transition-transform ${openFilter ? "rotate-180" : ""}`}
-              />
-            </div>
-
-            {openFilter && (
-              <div className="absolute top-14 right-0 w-[140px] bg-white border rounded-xl shadow-lg z-50 py-1">
-                {["All", "high", "medium", "low"].map((item) => (
-                  <p
-                    key={item}
-                    className={`px-4 py-2.5 hover:bg-gray-100 cursor-pointer text-center ${
-                      (priorityFilter || "All") === item
-                        ? "bg-gray-100 font-medium"
-                        : ""
-                    }`}
-                    onClick={() => handleFilterSelect(item)}
-                  >
-                    {item}
-                  </p>
-                ))}
-              </div>
+            {user?.role === "admin" && (
+              <button
+                onClick={() => navigate("/authdash")}
+                className="w-full sm:w-[163px] h-11 rounded-2xl bg-[#FFB347] border-2 border-black shadow-[0_4px_0_0_black] font-medium active:translate-y-0.5 active:shadow-none transition-all"
+              >
+                Admin Dashboard
+              </button>
             )}
           </div>
         </div>
 
-        <div className="h-[842px] mb-10 rounded-[30px] border border-b-4 shadow-[0_4px_0_0_black] overflow-hidden bg-white">
-          <div className="flex border-b bg-[#FBFBFB]">
-            <p className="w-[403px] py-5 px-8 font-semibold">Name</p>
-            <p className="w-[146px] py-5 px-8 font-semibold">Priority</p>
-            <p className="w-[236px] py-5 px-8 font-semibold">Date</p>
-            <p className="w-[236px] py-5 px-8 font-semibold">Status</p>
-            <p className="w-[237px] py-5 px-8 font-semibold">Action</p>
+        {/* Summary Cards */}
+        <TaskSummaryCard />
+
+        {/* Carousel */}
+        <Carousel />
+
+        {/* All Tasks Section */}
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <h2 className="text-3xl md:text-4xl font-[Caveat] font-bold">
+              All Created Tasks
+            </h2>
+
+            {/* Priority Filter */}
+            <div ref={dropdownRef} className="relative flex items-center gap-3">
+              <p className="font-medium text-sm sm:text-base">Priority</p>
+              <div
+                className="border border-gray-300 flex items-center justify-between w-full sm:w-[160px] h-11 px-4 rounded-2xl cursor-pointer bg-white hover:bg-gray-50 transition"
+                onClick={() => setOpenFilter(!openFilter)}
+              >
+                <p className="capitalize">{priorityFilter || "All"}</p>
+                <img
+                  src={arr}
+                  alt="arrow"
+                  className={`w-4 transition-transform ${openFilter ? "rotate-180" : ""}`}
+                />
+              </div>
+
+              {openFilter && (
+                <div className="absolute top-12 right-0 w-[160px] bg-white border rounded-xl shadow-lg z-50 py-1">
+                  {["All", "high", "medium", "low"].map((item) => (
+                    <p
+                      key={item}
+                      onClick={() => handleFilterSelect(item)}
+                      className={`px-5 py-3 hover:bg-gray-100 cursor-pointer text-center capitalize transition ${
+                        (priorityFilter || "All") === item ? "bg-gray-100 font-medium" : ""
+                      }`}
+                    >
+                      {item}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
-          <div className="h-[700px]">
-            <TaskRow
-              tasks={tasks}
-              setSelectedTask={setSelectedTask}
-              openUpdateModal={() => setShowModal2(true)}
-              openDeleteModal={() => setShowDeleteModal(true)}
-            />
-          </div>
+          {/* Tasks Table */}
+          <div className="bg-white border border-gray-200 rounded-3xl shadow overflow-hidden">
+            <div className="overflow-x-auto">
+              <div className="min-w-[900px]">
+                {/* Table Header */}
+                <div className="flex bg-[#FBFBFB] border-b font-semibold text-base">
+                  <p className="w-[38%] py-5 px-6">Name</p>
+                  <p className="w-[15%] py-5 px-6">Priority</p>
+                  <p className="w-[18%] py-5 px-6">Date</p>
+                  <p className="w-[15%] py-5 px-6">Status</p>
+                  <p className="w-[14%] py-5 px-6">Action</p>
+                </div>
 
-        
-            <div className="flex justify-between px-8 py-4 border-t">
-              <p>
+                {/* Table Body */}
+                <div className="min-h-[500px]">
+                  <TaskRow
+                    tasks={tasks}
+                    setSelectedTask={setSelectedTask}
+                    openUpdateModal={() => setShowModal2(true)}
+                    openDeleteModal={() => setShowDeleteModal(true)}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Pagination */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-6 py-5 border-t">
+              <p className="text-sm text-gray-600">
                 Page {page} of {totalPages || 1}
               </p>
-              <div className="flex items-center gap-3">
+
+              <div className="flex items-center gap-2">
                 <MdOutlineKeyboardArrowLeft
                   onClick={() => hasPrevPage && setPage(page - 1)}
-                  className={`text-2xl cursor-pointer ${!hasPrevPage ? "opacity-40" : ""}`}
+                  className={`text-3xl cursor-pointer transition ${
+                    !hasPrevPage ? "opacity-40 cursor-not-allowed" : "hover:text-blue-600"
+                  }`}
                 />
-                {Array.from({ length: totalPages || 1 }, (_, i) => i + 1).map(
-                  (num) => (
-                    <p
+
+                <div className="flex gap-1">
+                  {Array.from({ length: totalPages || 1 }, (_, i) => i + 1).map((num) => (
+                    <button
                       key={num}
                       onClick={() => setPage(num)}
-                      className={`cursor-pointer px-3 py-1 rounded ${num === page ? "font-bold underline" : ""}`}
+                      className={`px-4 py-2 rounded-xl text-sm transition ${
+                        num === page
+                          ? "bg-black text-white font-bold"
+                          : "hover:bg-gray-100"
+                      }`}
                     >
                       {num}
-                    </p>
-                  ),
-                )}
+                    </button>
+                  ))}
+                </div>
+
                 <MdOutlineKeyboardArrowRight
                   onClick={() => hasNextPage && setPage(page + 1)}
-                  className={`text-2xl cursor-pointer ${!hasNextPage ? "opacity-40" : ""}`}
+                  className={`text-3xl cursor-pointer transition ${
+                    !hasNextPage ? "opacity-40 cursor-not-allowed" : "hover:text-blue-600"
+                  }`}
                 />
               </div>
             </div>
-          
+          </div>
         </div>
       </div>
 
       {/* Modals */}
       {showModal1 && (
-        <div className="fixed overflow-y-auto inset-0 bg-black/50 flex items-center justify-center z-[999]">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[999] p-4">
           <CreateModal
             closeModal={() => setShowModal1(false)}
             openNextModal={() => setShowModal3(true)}
@@ -193,7 +217,7 @@ const DashBoard = () => {
       )}
 
       {showModal2 && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[999]">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[999] p-4">
           <UpdateModal
             task={selectedTask}
             closeModal={() => setShowModal2(false)}
@@ -203,7 +227,7 @@ const DashBoard = () => {
       )}
 
       {showDeleteModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[999]">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[999] p-4">
           <DeleteModal
             task={selectedTask}
             closeModal={() => setShowDeleteModal(false)}
@@ -213,7 +237,7 @@ const DashBoard = () => {
       )}
 
       {showModal3 && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[999]">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[999] p-4">
           <SuccessModal closeModal={() => setShowModal3(false)} />
         </div>
       )}

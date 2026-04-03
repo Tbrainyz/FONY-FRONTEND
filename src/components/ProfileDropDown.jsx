@@ -1,56 +1,48 @@
+import React from "react";
 import { HiOutlineUser, HiOutlineLogout } from "react-icons/hi";
 import profileImage from "../assets/FB_IMG_16265830618836469 1.png";
 import { useNavigate } from "react-router-dom";
 
 const ProfileDropDown = ({ setOpen }) => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    navigate("/login");
+    navigate("/login", { replace: true });
     setOpen(false);
   };
 
   return (
-    <div className="bg-white border border-gray-100 rounded-[30px] shadow-2xl p-5 w-80 flex flex-col">
-      {/* USER INFO */}
-      <div className="flex items-center gap-4 pb-5 border-b border-gray-100">
+    <div className="bg-white border rounded-3xl shadow-2xl p-6 w-72 md:w-80">
+      <div className="flex items-center gap-4 pb-5 border-b">
         <img
           src={user?.profilePicture || profileImage}
           alt="Profile"
-          className="w-16 h-16 rounded-full object-cover shadow-sm"
+          className="w-14 h-14 rounded-full object-cover"
         />
-        <div className="flex flex-col">
-          <p className="text-[22px] font-bold text-gray-900 leading-tight">
-            {user?.name || "User Name"}
-          </p>
-          <p className="text-gray-500 text-sm">
-            {user?.email || "user@email.com"}
-          </p>
+        <div>
+          <p className="font-bold text-lg">{user?.name || "User"}</p>
+          <p className="text-sm text-gray-500">{user?.email}</p>
         </div>
       </div>
 
-      {/* MENU */}
-      <div className="flex flex-col pt-4 gap-1">
+      <div className="pt-4 space-y-2">
         <button
-          onClick={() => {
-            navigate("/profile");
-            setOpen(false);
-          }}
-          className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition-all text-gray-800 shadow-sm"
+          onClick={() => { navigate("/profile"); setOpen(false); }}
+          className="flex items-center gap-4 w-full p-3 rounded-2xl hover:bg-gray-100 transition"
         >
-          <HiOutlineUser className="text-2xl text-gray-700" />
-          <span className="text-lg font-medium">View Profile</span>
+          <HiOutlineUser className="text-2xl" />
+          <span className="font-medium">View Profile</span>
         </button>
 
         <button
           onClick={handleLogout}
-          className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition-all text-gray-800 shadow-sm"
+          className="flex items-center gap-4 w-full p-3 rounded-2xl hover:bg-gray-100 text-red-600 transition"
         >
-          <HiOutlineLogout className="text-2xl text-gray-700" />
-          <span className="text-lg font-medium">Logout</span>
+          <HiOutlineLogout className="text-2xl" />
+          <span className="font-medium">Logout</span>
         </button>
       </div>
     </div>

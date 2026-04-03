@@ -1,12 +1,11 @@
 import { useState, useContext } from "react";
-import Logo from "../assets/Frame.svg";
-import Run from "../assets/run.svg";
-import Google from "../assets/material.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Logo from "../assets/Frame.svg";
+import Run from "../assets/run.svg";
+import Google from "../assets/material.svg";
 
 const SignUp = () => {
   const { register } = useContext(AuthContext);
@@ -14,7 +13,7 @@ const SignUp = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -25,38 +24,18 @@ const SignUp = () => {
   });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
 
-    // ✅ Validation
-    if (!formData.name) {
-      setErrors((prev) => ({ ...prev, name: "Name is required" }));
-      return;
-    }
-    if (!formData.email) {
-      setErrors((prev) => ({ ...prev, email: "Email is required" }));
-      return;
-    }
-    if (!formData.phone) {
-      setErrors((prev) => ({ ...prev, phone: "Phone number is required" }));
-      return;
-    }
-    if (!formData.password) {
-      setErrors((prev) => ({ ...prev, password: "Password is required" }));
-      return;
-    }
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match");
       return;
     }
 
+    setLoading(true);
     try {
       await register({
         name: formData.name,
@@ -64,193 +43,148 @@ const SignUp = () => {
         phone: formData.phone,
         password: formData.password,
       });
-
-      toast.success("Registration successful");
+      toast.success("Registration successful!");
       navigate("/login");
     } catch (error) {
-      console.error(error);
       toast.error(error?.response?.data?.message || "Signup failed");
+    } finally {
+      setLoading(false);
     }
   };
-
-  const iconClass = "text-gray-700 hover:text-gray-900 w-5 h-5";
 
   const handleGoogleRegister = () => {
     window.location.href = `${import.meta.env.VITE_API_URL}/api/users/google`;
   };
 
   return (
-    <div className="flex gap-[20px]">
-      {/* LEFT SIDE */}
-      <div className="flex flex-col pl-[100px] pb-[48px] pt-[40px]">
-        <div className="mb-6 mt-[70px] flex items-center gap-2">
-          <img src={Logo} alt="Logo" />
-        </div>
-
-        <h2 className="mb-6 text-[30px] font-bold text-black">
-          Create Account
-        </h2>
-
-        <p className="mb-6">Enter your details to sign up for an account.</p>
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-[11px]">
-          {/* NAME */}
-          <div>
-            <label>
-              Name <span className="text-[#A4003A]">*</span>
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Enter your name"
-              className="mt-1 mb-[5px] h-[56px] w-[484px] rounded-[48px] border px-4 py-3"
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm">{errors.name}</p>
-            )}
+    <div className="min-h-screen flex flex-col lg:flex-row">
+      {/* Left - Form */}
+      <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
+        <div className="w-full max-w-md">
+          <div className="flex items-center gap-2 mb-10">
+            <img src={Logo} alt="Logo" />
           </div>
 
-          {/* EMAIL */}
-          <div>
-            <label>
-              Email <span className="text-[#A4003A]">*</span>
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter Email"
-              className="mt-1 mb-[5px] h-[56px] w-[484px] rounded-[48px] border px-4 py-3"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email}</p>
-            )}
-          </div>
+          <h2 className="text-3xl font-bold mb-2">Create Account</h2>
+          <p className="text-gray-600 mb-8">Enter your details to sign up</p>
 
-          {/* PHONE */}
-          <div>
-            <label>
-              Phone <span className="text-[#A4003A]">*</span>
-            </label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="Enter phone number"
-              className="mt-1 mb-[5px] h-[56px] w-[484px] rounded-[48px] border px-4 py-3"
-            />
-            {errors.phone && (
-              <p className="text-red-500 text-sm">{errors.phone}</p>
-            )}
-          </div>
-
-          {/* PASSWORD */}
-          <div>
-            <label>
-              Password <span className="text-[#A4003A]">*</span>
-            </label>
-            <div className="relative mb-[5px]">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="block mb-1 font-medium">Name <span className="text-red-600">*</span></label>
               <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
+                type="text"
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
-                placeholder="Enter your password"
-                className="mt-1 h-[56px] w-[484px] rounded-[48px] border px-4 py-3 pr-12"
+                className="w-full h-14 px-5 border rounded-3xl focus:outline-none focus:border-blue-400"
+                placeholder="Enter your name"
+                required
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-4 top-1/2 z-50 -translate-y-1/2"
-              >
-                {showPassword ? (
-                  <AiOutlineEyeInvisible className={iconClass} />
-                ) : (
-                  <AiOutlineEye className={iconClass} />
-                )}
-              </button>
             </div>
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password}</p>
-            )}
-          </div>
 
-          {/* CONFIRM PASSWORD */}
-          <div>
-            <label>
-              Confirm Password <span className="text-[#A4003A]">*</span>
-            </label>
-            <div className="relative mb-[5px]">
+            <div>
+              <label className="block mb-1 font-medium">Email <span className="text-red-600">*</span></label>
               <input
-                type={showConfirmPassword ? "text" : "password"}
-                name="confirmPassword"
-                value={formData.confirmPassword}
+                type="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
-                placeholder="Re-enter password"
-                className="mt-1 h-[56px] w-[484px] rounded-[48px] border px-4 py-3 pr-12"
+                className="w-full h-14 px-5 border rounded-3xl focus:outline-none focus:border-blue-400"
+                placeholder="Enter Email"
+                required
               />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword((prev) => !prev)}
-                className="absolute right-4 top-1/2 z-50 -translate-y-1/2"
-              >
-                {showConfirmPassword ? (
-                  <AiOutlineEyeInvisible className={iconClass} />
-                ) : (
-                  <AiOutlineEye className={iconClass} />
-                )}
-              </button>
             </div>
-          </div>
 
-          {/* SUBMIT */}
-          <button
-            type="submit"
-            className="mt-[24px] mb-[30px] h-[56px] w-[484px] rounded-[48px] border-[2px] border-black bg-[#77C2FF] px-[12px] py-[19px] text-white shadow-[0_4px_0_0_black]"
-          >
-            Sign Up
-          </button>
+            <div>
+              <label className="block mb-1 font-medium">Phone <span className="text-red-600">*</span></label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                className="w-full h-14 px-5 border rounded-3xl focus:outline-none focus:border-blue-400"
+                placeholder="Enter phone number"
+                required
+              />
+            </div>
 
-          {/* OR */}
-          <div className="relative my-6">
-            <div className="border-t border-[#D9D9D9]" />
-            <span className="absolute left-1/2 -top-3 -translate-x-1/2 bg-white px-3 text-sm text-[#666666]">
-              Or
-            </span>
-          </div>
+            <div>
+              <label className="block mb-1 font-medium">Password <span className="text-red-600">*</span></label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full h-14 px-5 border rounded-3xl pr-12 focus:outline-none focus:border-blue-400"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500"
+                >
+                  {showPassword ? <AiOutlineEyeInvisible size={22} /> : <AiOutlineEye size={22} />}
+                </button>
+              </div>
+            </div>
 
-          {/* GOOGLE */}
-          <button
-            onClick={handleGoogleRegister}
-            type="button"
-            className="flex h-[60px] w-[484px] items-center justify-center rounded-[48px] border border-[#D9D9D9] hover:bg-[#D9D9D9]"
-          >
-            <img src={Google} alt="Google" className="mr-2 h-[24px] w-[24px]" />
-            Continue with Google
-          </button>
-        </form>
+            <div>
+              <label className="block mb-1 font-medium">Confirm Password <span className="text-red-600">*</span></label>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className="w-full h-14 px-5 border rounded-3xl pr-12 focus:outline-none focus:border-blue-400"
+                  placeholder="Re-enter password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500"
+                >
+                  {showConfirmPassword ? <AiOutlineEyeInvisible size={22} /> : <AiOutlineEye size={22} />}
+                </button>
+              </div>
+            </div>
 
-        <div className="m-6 flex items-center justify-center font-medium">
-          <p>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full h-14 mt-4 bg-[#77C2FF] text-white font-bold rounded-3xl border-2 border-black shadow-[0_4px_0_0_black] active:translate-y-0.5 disabled:opacity-70"
+            >
+              {loading ? "Creating Account..." : "Sign Up"}
+            </button>
+
+            <div className="relative my-6">
+              <div className="border-t border-gray-300" />
+              <span className="absolute left-1/2 -top-3 bg-white px-4 text-sm text-gray-500">Or</span>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleGoogleRegister}
+              className="w-full h-14 border border-gray-300 rounded-3xl flex items-center justify-center gap-3 hover:bg-gray-50"
+            >
+              <img src={Google} alt="Google" className="w-6 h-6" />
+              Continue with Google
+            </button>
+          </form>
+
+          <p className="text-center mt-8">
             Have an account?{" "}
-            <Link to="/login" className="text-[#77C2FF]">
-              Login
-            </Link>
+            <Link to="/login" className="text-[#77C2FF] font-medium">Login</Link>
           </p>
         </div>
       </div>
 
-      {/* RIGHT SIDE */}
-      <div className="mt-[30px]">
-        <img
-          src={Run}
-          alt="Illustration"
-          className="h-[900px] w-[836px] object-cover"
-        />
+      {/* Right - Image */}
+      <div className="hidden lg:block lg:flex-1 bg-gray-100">
+        <img src={Run} alt="Illustration" className="w-full h-full object-cover" />
       </div>
     </div>
   );

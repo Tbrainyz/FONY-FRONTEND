@@ -1,121 +1,109 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
+import { FaTasks, FaCheckCircle, FaCalendarAlt } from "react-icons/fa";
 import pen from "../assets/Pen.svg";
-import { TaskContext } from "../context/TasksContext";
 import UpdateModal from "./UpdateModal";
 import SuccessModal from "./SuccessModal";
 import CreateModal from "../components/CreateModal";
+import { TaskContext } from "../context/TasksContext";
 
 const Carousel = () => {
-  const { tasks = [], getStatusLabel } = useContext(TaskContext);
+  const { tasks = [], getStatusLabel } = React.useContext(TaskContext);
 
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [showModal1, setShowModal1] = useState(false);
-  const [showModal3, setShowModal3] = useState(false);
-  return (
-    <div className="Carousel font-[Caveat] w-full">
-      <h3 className="text-[30px] leading-[100px] font-bold">
-        Tasks In Progress
-      </h3>
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
-      <div className=" carousel flex w-full overflow-x-auto scrollbar-hidden scroll-smooth gap-[33px]">
-        {tasks && tasks.length > 0 ? (
-          tasks
-            .filter((task) => task && task.status >= 0 && task.status < 100)
-            .map((task, index) => (
-              <div
-                key={task._id || index}
-                className="flex flex-col w-[391px] gap-[17px] shadow-[0_4px_0_0_black] rounded-[22px] border-[1px] border-b-[4px]"
-              >
-                <div className="object-cover">
+  const inProgressTasks = tasks.filter((task) => task?.status >= 0 && task?.status < 100);
+
+  return (
+    <div className="w-full">
+      <h3 className="text-2xl md:text-3xl font-bold mb-6">Tasks In Progress</h3>
+
+      {inProgressTasks.length > 0 ? (
+        <div className="flex gap-6 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory">
+          {inProgressTasks.map((task, index) => (
+            <div
+              key={task._id || index}
+              className="min-w-[280px] sm:min-w-[340px] md:min-w-[380px] bg-white rounded-3xl border border-b-4 border-black shadow-md overflow-hidden snap-start"
+            >
+              {/* Image */}
+              <div className="relative">
+                <img
+                  src={task.image || "/default-image.png"}
+                  alt={task.title}
+                  className="w-full h-40 sm:h-44 object-cover"
+                />
+              </div>
+
+              {/* Content */}
+              <div className="p-5 space-y-4">
+                <div className="flex justify-between items-start">
+                  <span className="text-xs font-medium px-3 py-1 border border-red-500 text-red-600 rounded-full">
+                    {task.priority}
+                  </span>
+
                   <img
-                    src={task.image || "/default-image.png"}
-                    alt=""
-                    className="w-[391px] h-[159px] object-cover rounded-[22px]"
+                    src={pen}
+                    alt="edit"
+                    className="w-6 h-6 cursor-pointer hover:scale-110 transition"
+                    onClick={() => {
+                      setSelectedTask(task);
+                      setShowUpdateModal(true);
+                    }}
                   />
                 </div>
 
-                <div className="px-[22px] flex flex-col gap-[17px] py-[17px]">
-                  <div className="flex justify-between">
-                    <p className="leading-[20px] border-[1px] border-[#FF0000] rounded-[20px] text-[#FF0000] px-[10px] py-[4px]">
-                      {task.priority}
-                    </p>
+                <p className="text-lg font-semibold leading-tight line-clamp-2">
+                  {task.title}
+                </p>
 
-                    {/* ✅ UPDATE CLICK */}
-                    <img
-                      src={pen}
-                      alt=""
-                      className="w-[24px] h-[24px] cursor-pointer"
-                      onClick={() => {
-                        setSelectedTask(task);
-                        setShowUpdateModal(true);
-                      }}
+                {/* Progress Bar */}
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-[#77C2FF] rounded-full transition-all"
+                      style={{ width: `${task.status || 0}%` }}
                     />
                   </div>
-
-                  <p className="text-[22.5px] w-full font-semibold font-[Montserrat] tracking-[-3%] leading-[20px]">
-                    {task.title}
+                  <p className="text-sm font-medium whitespace-nowrap">
+                    {task.status || 0}% 
                   </p>
-
-                  <div className="flex gap-[4px] w-[347px] h-[28px]">
-                    <div className="w-[304px] h-[26px] border-[1px] rounded-[170px]">
-                      <div
-                        className="bg-[#77C2FF] h-[26px] rounded-[170px]"
-                        style={{ width: `${task.status || 0}%` }}
-                      ></div>
-                    </div>
-                    <p className="font-md text-[20px] leading-[20px]">
-                      {task.status || 0}% ({getStatusLabel(task.status)})
-                    </p>
-                  </div>
                 </div>
               </div>
-            ))
-        ) : (
-          <div className="flex flex-col py-6 px-6">
-            <p className="mt-4 text-sm font-medium">No Task in Progress yet</p>
-
-            <button
-            onClick={() => setShowModal1(true)}
-              type="button"
-              className="mt-4 w-[7.5rem] inline-flex items-center gap-2 rounded-full bg-[#77C2FF] px-4 py-2 text-xs font-medium text-black shadow-md shadow-black border border-black"
-            >
-              Create new task
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* ✅ UPDATE MODAL */}
-      {showUpdateModal && (
-        <div className="fixed top-[100px] left-0 right-0 mx-auto z-50">
-          <UpdateModal
-            task={selectedTask}
-            closeModal={() => setShowUpdateModal(false)}
-            openNextModal={() => setShowSuccessModal(true)}
-          />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="bg-white border border-dashed border-gray-300 rounded-3xl p-10 text-center">
+          <p className="text-gray-500 mb-4">No tasks in progress yet</p>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="bg-[#77C2FF] text-black px-6 py-3 rounded-2xl font-medium border border-black shadow-md hover:bg-[#66b3f0]"
+          >
+            Create New Task
+          </button>
         </div>
       )}
 
-      {/* ✅ SUCCESS MODAL */}
+      {/* Modals */}
+      {showUpdateModal && selectedTask && (
+        <UpdateModal
+          task={selectedTask}
+          closeModal={() => setShowUpdateModal(false)}
+          openNextModal={() => setShowSuccessModal(true)}
+        />
+      )}
+
       {showSuccessModal && (
-        <div className="fixed top-[100px] left-0 right-0 mx-auto z-50">
-          <SuccessModal closeModal={() => setShowSuccessModal(false)} />
-        </div>
+        <SuccessModal closeModal={() => setShowSuccessModal(false)} />
       )}
-      {showModal1 && (
-        <div className="fixed overflow-y-auto inset-0 bg-black/50 flex items-center justify-center z-[999]">
-          <CreateModal
-            closeModal={() => setShowModal1(false)}
-            openNextModal={() => setShowModal3(true)}
-          />
-        </div>
-      )}
-      {showModal3 && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[999]">
-          <SuccessModal closeModal={() => setShowModal3(false)} />
-        </div>
+
+      {showCreateModal && (
+        <CreateModal
+          closeModal={() => setShowCreateModal(false)}
+          openNextModal={() => setShowSuccessModal(true)}
+        />
       )}
     </div>
   );

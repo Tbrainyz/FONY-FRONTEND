@@ -1,70 +1,78 @@
 import React, { useState, useContext } from "react";
-import img from "../assets/run.svg";
-import arrow from "../assets/Arrow.svg";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import arrow from "../assets/Arrow.svg";
+import img from "../assets/run.svg";
+import { toast } from "react-toastify";
 
 const ForgetPassword = () => {
   const navigate = useNavigate();
   const { forgotPassword } = useContext(AuthContext);
-
   const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    setError("");
+    if (!email) {
+      toast.error("Please enter your email");
+      return;
+    }
+
     setLoading(true);
     try {
-      const res = await forgotPassword(email);
-      // ✅ If successful, navigate to code verification page
+      await forgotPassword(email);
+      toast.success("Reset instructions sent to your email");
       navigate("/codeverification", { state: { email } });
     } catch (err) {
-      setError(err.message || "Failed to send reset instructions");
+      toast.error(err.message || "Failed to send reset instructions");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex h-screen font-[Montserrat]">
-      <div className="gap-8 flex flex-col w-1/2 px-[7%] pt-30">
-        <div className="flex gap-2 items-center cursor-pointer" onClick={() => navigate(-1)}>
-          <img src={arrow} alt="" className="w-4" />
-          <p className="font-medium font-[Mona_Sans]">Back</p>
-        </div>
+    <div className="min-h-screen flex flex-col lg:flex-row">
+      {/* Left - Form */}
+      <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
+        <div className="w-full max-w-md">
+          <div
+            className="flex gap-2 items-center cursor-pointer mb-10"
+            onClick={() => navigate(-1)}
+          >
+            <img src={arrow} alt="back" className="w-5" />
+            <p className="font-medium">Back</p>
+          </div>
 
-        <div>
-          <p className="text-[38px] font-bold">Forgot your password?</p>
-          <p className="font-[Mona_Sans]">
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">Forgot your password?</h2>
+          <p className="text-gray-600 mb-8">
             We will send instructions to your email to reset your password.
           </p>
-        </div>
 
-        <div className="flex flex-col gap-4 font-semibold">
-          <p>Email</p>
-          <input
-            className="border rounded-4xl p-4"
-            type="email"
-            placeholder="Enter email used to create account"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <div className="space-y-6">
+            <div>
+              <label className="block mb-2 font-medium">Email</label>
+              <input
+                type="email"
+                className="w-full h-14 px-5 border rounded-3xl focus:outline-none focus:border-blue-400"
+                placeholder="Enter email used to create account"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-
-          <button
-            onClick={handleSubmit}
-            disabled={loading}
-            className="bg-[#77C2FF] p-2 border-b-5 rounded-4xl cursor-pointer font-[Montserrat] font-bold disabled:opacity-50"
-          >
-            {loading ? "Sending..." : "Confirm"}
-          </button>
+            <button
+              onClick={handleSubmit}
+              disabled={loading}
+              className="w-full h-14 bg-[#77C2FF] text-white font-bold rounded-3xl border-2 border-black shadow-[0_4px_0_0_black] active:translate-y-0.5 disabled:opacity-70"
+            >
+              {loading ? "Sending..." : "Confirm"}
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="w-[54.5%]">
-        <img src={img} alt="" className="object-cover" />
+      {/* Right - Image */}
+      <div className="hidden lg:block lg:flex-1 bg-gray-100">
+        <img src={img} alt="Illustration" className="w-full h-full object-cover" />
       </div>
     </div>
   );

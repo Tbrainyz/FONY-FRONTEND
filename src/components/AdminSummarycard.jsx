@@ -12,16 +12,16 @@ const AdminSummaryCard = ({ stats }) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
       {summaryItems.map((item, i) => (
         <div
           key={i}
-          className={`flex items-center gap-4 p-6 rounded-xl shadow border-l-4 ${item.color}`}
+          className={`flex items-center gap-4 p-5 md:p-6 rounded-2xl shadow border-l-4 ${item.color}`}
         >
-          <div className="text-2xl">{item.icon}</div>
+          <div className="text-3xl md:text-4xl flex-shrink-0">{item.icon}</div>
           <div>
-            <p className="text-sm font-medium">{item.label}</p>
-            <p className="text-2xl font-bold">{item.value}</p>
+            <p className="text-sm font-medium text-gray-600">{item.label}</p>
+            <p className="text-2xl md:text-3xl font-bold mt-1">{item.value}</p>
           </div>
         </div>
       ))}

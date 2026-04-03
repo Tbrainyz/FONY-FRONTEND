@@ -3,43 +3,26 @@ import pic from "../assets/list.svg";
 import { TaskContext } from "../context/TasksContext";
 
 const TaskSummaryCard = () => {
-  const { totalTasks, completedCount, ongoingCount, loading } =
-    useContext(TaskContext);
+  const { totalTasks, completedCount, ongoingCount, loading } = useContext(TaskContext);
 
-  const taskSummary = [
-    {
-      label: "Total Task",
-      value: totalTasks,
-      color: "text-black",
-    },
-    {
-      label: "Ongoing Task",
-      value: ongoingCount, // status < 100
-      color: "text-orange-600",
-    },
-    {
-      label: "Completed Task",
-      value: completedCount, // status === 100
-      color: "text-green-600",
-    },
+  const summaries = [
+    { label: "Total Task", value: totalTasks, color: "text-black" },
+    { label: "Ongoing Task", value: ongoingCount, color: "text-orange-600" },
+    { label: "Completed Task", value: completedCount, color: "text-green-600" },
   ];
 
   return (
-    <div className="flex gap-[33px]">
-      {taskSummary.map((summary, index) => (
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      {summaries.map((item, i) => (
         <div
-          key={index}
-          className="w-[391px] h-[111px] border-[1px] shadow-[0_4px_0_0_black] rounded-[22px] px-[22px] py-[35px] flex gap-[5px] bg-white"
+          key={i}
+          className="bg-white border border-b-4 border-black rounded-3xl p-6 flex gap-5 shadow-sm"
         >
-          <img src={pic} alt="" className="w-[40px] h-[40px] rounded-[12px]" />
-
-          <div className="leading-[20px] h-[50px]">
-            <p className="text-gray-600 text-[15px] font-medium">
-              {summary.label}
-            </p>
-
-            <p className={`font-bold text-[28px] mt-1 ${summary.color}`}>
-              {loading ? "..." : summary.value}
+          <img src={pic} alt="" className="w-12 h-12" />
+          <div>
+            <p className="text-gray-600 text-sm">{item.label}</p>
+            <p className={`text-3xl font-bold mt-1 ${item.color}`}>
+              {loading ? "..." : item.value}
             </p>
           </div>
         </div>

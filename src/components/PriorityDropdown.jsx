@@ -5,45 +5,39 @@ const PriorityDropdown = ({ selected, onSelect }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
 
-  // ✅ close on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) {
-        setOpen(false);
-      }
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const options = ["All", "high", "medium", "low"];
 
   return (
-    <div ref={ref} className="relative">
-      {/* BUTTON */}
+    <div ref={ref} className="relative w-full sm:w-auto">
       <div
-        className="border flex justify-center items-center w-[120px] h-[44px] rounded-[22px] gap-1 cursor-pointer"
+        className="border flex items-center justify-between px-4 py-3 rounded-2xl cursor-pointer bg-white hover:border-gray-400 transition"
         onClick={() => setOpen(!open)}
       >
-        <p>{selected || "All"}</p>
-        <RiArrowDropDownLine className="w-6 h-6 text-gray-500" />
+        <span className="capitalize">{selected || "All"}</span>
+        <RiArrowDropDownLine className={`text-2xl transition ${open ? "rotate-180" : ""}`} />
       </div>
 
-      {/* DROPDOWN */}
       {open && (
-        <div className="absolute  top-[50px] w-full bg-white border rounded-[12px] shadow-lg z-50">
+        <div className="absolute mt-2 w-full bg-white border rounded-2xl shadow-lg z-50 py-2">
           {options.map((item) => (
-            <p
+            <div
               key={item}
               onClick={() => {
                 onSelect(item === "All" ? "" : item);
                 setOpen(false);
               }}
-              className="px-4 py-2 hover:bg-[#F6FBFF] cursor-pointer"
+              className="px-5 py-3 hover:bg-gray-100 cursor-pointer capitalize"
             >
               {item}
-            </p>
+            </div>
           ))}
         </div>
       )}

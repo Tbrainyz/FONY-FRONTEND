@@ -1,41 +1,29 @@
 import { useState, useContext } from "react";
-// import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate, Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 import Logo from "../assets/Frame.svg";
 import Run from "../assets/run.svg";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Google from "../assets/material.svg";
 
 const Signin = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
-
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const iconClass = "text-gray-700 hover:text-gray-900 w-5 h-5";
-
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-
-    // Validation
-    if (!form.email) {
-      setErrors((prev) => ({ ...prev, email: "Email is required" }));
-      return;
-    }
-    if (!form.password) {
-      setErrors((prev) => ({ ...prev, password: "Password is required" }));
+    if (!form.email || !form.password) {
+      toast.error("Please fill all fields");
       return;
     }
 
@@ -51,141 +39,94 @@ const Signin = () => {
     }
   };
 
-  //   const handleGoogleSuccess = async (credentialResponse) => {
-  //     setLoading(true);
-  //     try {
-  //       const { credential } = credentialResponse;
-  //       await googleAuth({ token: credential });
-  //       toast.success("Google Login Successful!");
-  //       navigate("/dashboard");
-  //     } catch (error) {
-  //       toast.error(error?.response?.data?.message || "Google login failed");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   const handleGoogleError = () => {
-  //     toast.error("Google login failed. Please try again.");
-  //   };
   const handleGoogleLogin = () => {
     window.location.href = `${import.meta.env.VITE_API_URL}/api/users/google`;
   };
 
   return (
-    <div className="flex gap-[20px]">
-      {/* LEFT SIDE */}
-      <div className="flex flex-col pl-[100px]">
-        <div className="flex items-center gap-2 mt-[70px]">
-          <img src={Logo} alt="Logo" />
-        </div>
-
-        <h2 className="text-[30px] font-bold mb-6 text-[#000000]">
-          Welcome Back
-        </h2>
-        <p className="mb-6">Enter your details to sign in to your account.</p>
-
-        <form onSubmit={handleSubmit}>
-          {/* Email */}
-          <div className="mb-[11px]">
-            <label>
-              Email <span className="text-[#A4003A]">*</span>
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="Enter Email"
-              className="w-[484px] h-[56px] mt-1 px-4 py-3 border rounded-[48px]"
-              disabled={loading}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email}</p>
-            )}
+    <div className="min-h-screen flex flex-col lg:flex-row">
+      {/* Left - Form */}
+      <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
+        <div className="w-full max-w-md">
+          <div className="flex items-center gap-2 mb-10">
+            <img src={Logo} alt="Logo" />
           </div>
 
-          {/* Password */}
-          <div className="mb-[11px]">
-            <label>
-              Password <span className="text-[#A4003A]">*</span>
-            </label>
-            <div className="relative mt-1">
+          <h2 className="text-3xl font-bold mb-2">Welcome Back</h2>
+          <p className="text-gray-600 mb-8">Enter your details to sign in</p>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block mb-1 font-medium">Email <span className="text-red-600">*</span></label>
               <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={form.password}
+                type="email"
+                name="email"
+                value={form.email}
                 onChange={handleChange}
-                placeholder="Enter Your Password"
-                className="w-[484px] h-[56px] px-4 py-3 border rounded-[48px] pr-12"
-                disabled={loading}
+                className="w-full h-14 px-5 border rounded-3xl focus:outline-none focus:border-blue-400"
+                placeholder="Enter Email"
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-12 top-1/2 -translate-y-1/2"
-                disabled={loading}
-              >
-                {showPassword ? (
-                  <AiOutlineEyeInvisible className={iconClass} />
-                ) : (
-                  <AiOutlineEye className={iconClass} />
-                )}
-              </button>
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password}</p>
-            )}
-          </div>
 
-          <Link to="/forgot-password">
-            <p className="mb-[20px] text-sm font-medium">Forgot password?</p>
-          </Link>
+            <div>
+              <label className="block mb-1 font-medium">Password <span className="text-red-600">*</span></label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  className="w-full h-14 px-5 border rounded-3xl pr-12 focus:outline-none focus:border-blue-400"
+                  placeholder="Enter Your Password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500"
+                >
+                  {showPassword ? <AiOutlineEyeInvisible size={22} /> : <AiOutlineEye size={22} />}
+                </button>
+              </div>
+            </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-[484px] h-[56px] bg-[#77C2FF] text-white rounded-[48px] border-2 border-black shadow-[0_4px_0_0_black] mb-[30px] font-bold disabled:opacity-70"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-
-          {/* OR Divider */}
-          <div className="relative my-6">
-            <div className="border-t border-[#D9D9D9]" />
-            <span className="absolute left-1/2 -top-3 -translate-x-1/2 bg-white px-3 text-sm text-[#666666]">
-              Or
-            </span>
-          </div>
-
-          {/* Google Button */}
-          <button
-            onClick={handleGoogleLogin}
-            type="button"
-            className="flex h-[60px] w-[484px] items-center justify-center rounded-[48px] border border-[#D9D9D9] hover:bg-[#D9D9D9]"
-          >
-            <img src={Google} alt="Google" className="mr-2 h-[24px] w-[24px]" />
-            Continue with Google
-          </button>
-        </form>
-
-        <div className="flex justify-center font-medium m-6">
-          <p>
-            Don’t have an account?{" "}
-            <Link to="/register" className="text-[#77C2FF]">
-              Sign Up
+            <Link to="/forgot-password" className="text-sm text-blue-600 block text-right">
+              Forgot password?
             </Link>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full h-14 bg-[#77C2FF] text-white font-bold rounded-3xl border-2 border-black shadow-[0_4px_0_0_black] active:translate-y-0.5 disabled:opacity-70"
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button>
+
+            <div className="relative my-6">
+              <div className="border-t border-gray-300" />
+              <span className="absolute left-1/2 -top-3 bg-white px-4 text-sm text-gray-500">Or</span>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              className="w-full h-14 border border-gray-300 rounded-3xl flex items-center justify-center gap-3 hover:bg-gray-50"
+            >
+              <img src={Google} alt="Google" className="w-6 h-6" />
+              Continue with Google
+            </button>
+          </form>
+
+          <p className="text-center mt-8">
+            Don’t have an account?{" "}
+            <Link to="/register" className="text-[#77C2FF] font-medium">Sign Up</Link>
           </p>
         </div>
       </div>
 
-      {/* RIGHT SIDE */}
-      <div className="mt-[30px]">
-        <img
-          src={Run}
-          alt="Illustration"
-          className="w-[836px] h-[724px] object-cover"
-        />
+      {/* Right - Image */}
+      <div className="hidden lg:block lg:flex-1 bg-gray-100">
+        <img src={Run} alt="Illustration" className="w-full h-full object-cover" />
       </div>
     </div>
   );
