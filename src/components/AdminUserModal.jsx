@@ -1,12 +1,23 @@
 import React from "react";
 import { MdCancel } from "react-icons/md";
+import { toast } from "react-toastify";
 
-const AdminUserModal = ({ user, closeModal, onBlock, onUnblock, onMakeAdmin }) => {
+const AdminUserModal = ({
+  user,
+  closeModal,
+  onBlock,
+  onUnblock,
+  onMakeAdmin,
+}) => {
   if (!user) return null;
+
+  const isBlocked = user.blocked;
+  const isAdmin = user.role === "admin";
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-3xl shadow-xl w-full max-w-lg mx-auto overflow-hidden">
+        
         {/* Header */}
         <div className="flex justify-between items-center border-b px-6 py-4">
           <h2 className="text-xl font-bold">User Details</h2>
@@ -17,6 +28,8 @@ const AdminUserModal = ({ user, closeModal, onBlock, onUnblock, onMakeAdmin }) =
         </div>
 
         <div className="p-6 space-y-5">
+          
+          {/* Profile */}
           <div className="flex items-center gap-4">
             <img
               src={user.profilePicture || "/default-avatar.png"}
@@ -30,33 +43,87 @@ const AdminUserModal = ({ user, closeModal, onBlock, onUnblock, onMakeAdmin }) =
             </div>
           </div>
 
+          {/* Info */}
           <div className="space-y-2 text-sm">
-            <p><span className="font-medium">Role:</span> {user.role || "User"}</p>
-            <p><span className="font-medium">Total Tasks:</span> {user.totalTasks || 0}</p>
-            <p><span className="font-medium">Completed Tasks:</span> {user.completedTasks || 0}</p>
-            <p><span className="font-medium">Joined:</span> {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}</p>
+            <p>
+              <span className="font-medium">Role:</span>{" "}
+              {user.role || "User"}
+            </p>
+            <p>
+              <span className="font-medium">Status:</span>{" "}
+              <span
+                className={`font-medium ${
+                  isBlocked ? "text-red-600" : "text-green-600"
+                }`}
+              >
+                {isBlocked ? "Blocked" : "Active"}
+              </span>
+            </p>
+            <p>
+              <span className="font-medium">Total Tasks:</span>{" "}
+              {user.totalTasks || 0}
+            </p>
+            <p>
+              <span className="font-medium">Completed Tasks:</span>{" "}
+              {user.completedTasks || 0}
+            </p>
+            <p>
+              <span className="font-medium">Joined:</span>{" "}
+              {user.createdAt
+                ? new Date(user.createdAt).toLocaleDateString()
+                : "N/A"}
+            </p>
           </div>
         </div>
 
         {/* Actions */}
         <div className="p-6 border-t flex flex-col sm:flex-row gap-3">
+
+          {/* 🔴 Block / Unblock */}
+          {!isBlocked ? (
+            <button
+              onClick={() => {
+                if (isAdmin) {
+                  toast.error("You cannot block an admin");
+                  return;
+                }
+                onBlock(user);
+                toast.success(`${user.name} has been blocked`);
+                closeModal();
+              }}
+              className="flex-1 bg-red-600 text-white py-3 rounded-2xl font-medium hover:bg-red-700 transition"
+            >
+              Block User
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                onUnblock(user);
+                toast.success(`${user.name} has been unblocked`);
+                closeModal();
+              }}
+              className="flex-1 bg-green-600 text-white py-3 rounded-2xl font-medium hover:bg-green-700 transition"
+            >
+              Unblock User
+            </button>
+          )}
+
+          {/* 🔵 Make Admin */}
           <button
-            onClick={() => { onBlock(user); closeModal(); }}
-            className="flex-1 bg-red-600 text-white py-3 rounded-2xl font-medium hover:bg-red-700 transition"
+            onClick={() => {
+              if (isAdmin) return;
+              onMakeAdmin(user);
+              toast.success(`${user.name} is now an admin`);
+              closeModal();
+            }}
+            disabled={isAdmin}
+            className={`flex-1 py-3 rounded-2xl font-medium transition ${
+              isAdmin
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
           >
-            Block User
-          </button>
-          <button
-            onClick={() => { onUnblock(user); closeModal(); }}
-            className="flex-1 bg-green-600 text-white py-3 rounded-2xl font-medium hover:bg-green-700 transition"
-          >
-            Unblock User
-          </button>
-          <button
-            onClick={() => { onMakeAdmin(user); closeModal(); }}
-            className="flex-1 bg-blue-600 text-white py-3 rounded-2xl font-medium hover:bg-blue-700 transition"
-          >
-            Make Admin
+            {isAdmin ? "Already Admin" : "Make Admin"}
           </button>
         </div>
       </div>
