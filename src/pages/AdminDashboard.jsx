@@ -3,11 +3,11 @@ import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
+import { toast } from "react-toastify";
 import API from "../api/axios";
 import AdminSummaryCard from "../components/AdminSummarycard";
 import AdminUsersRow from "../components/AdminUsersRow";
 import DeleteModal from "../components/DeleteModal";
-import { toast } from "react-toastify";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
@@ -16,67 +16,117 @@ const AdminDashboard = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  // ✅ DELETE STATE
   const [selectedUser, setSelectedUser] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const token = localStorage.getItem("token");
 
-  // ================= FETCH USERS =================
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      const res = await API.get(`/api/admin/users?page=${page}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUsers(res.data.users || []);
-      setTotalPages(res.data.totalPages || 1);
-    } catch (err) {
-      console.error("Error fetching users:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // ================= FETCH STATS =================
-  const fetchStats = async () => {
-    try {
-      const res = await API.get("/api/admin/dashboard", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setStats(res.data);
-    } catch (err) {
-      console.error("Error fetching stats:", err);
-    }
-  };
-
+  // ================= FETCH =================
   useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await API.get("/api/admin/dashboard", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setStats(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        const res = await API.get(`/api/admin/users?page=${page}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUsers(res.data.users || []);
+        setTotalPages(res.data.totalPages || 1);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchStats();
     fetchUsers();
   }, [page]);
 
-  // ================= REFRESH USERS =================
-  const refreshUsers = () => {
-    fetchUsers();
+  // ================= ACTIONS =================
+
+  const handleBlockUser = async (user) => {
+    try {
+      await API.put(`/api/admin/block/${user._id}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setUsers((prev) =>
+        prev.map((u) =>
+          u._id === user._id ? { ...u, blocked: true } : u
+        )
+      );
+
+      toast.success("User blocked successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to block user");
+    }
   };
 
-  // ================= DELETE USER =================
+  const handleUnblockUser = async (user) => {
+    try {
+      await API.put(`/api/admin/unblock/${user._id}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setUsers((prev) =>
+        prev.map((u) =>
+          u._id === user._id ? { ...u, blocked: false } : u
+        )
+      );
+
+      toast.success("User unblocked successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to unblock user");
+    }
+  };
+
+  const handleMakeAdmin = async (user) => {
+    try {
+      await API.put(`/api/admin/make-admin/${user._id}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setUsers((prev) =>
+        prev.map((u) =>
+          u._id === user._id ? { ...u, role: "admin" } : u
+        )
+      );
+
+      toast.success("User promoted to admin");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update role");
+    }
+  };
+
   const handleDeleteUser = async () => {
     try {
       await API.delete(`/api/admin/delete/${selectedUser._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // ✅ instant UI update
       setUsers((prev) =>
         prev.filter((u) => u._id !== selectedUser._id)
       );
 
-      toast.success("User deleted successfully");
       setShowDeleteModal(false);
+      toast.success("User deleted successfully");
     } catch (err) {
-      console.error("Delete error:", err);
-      toast.error("Failed to delete user");
+      console.error(err);
+      toast.error("Delete failed");
     }
   };
 
@@ -90,7 +140,6 @@ const AdminDashboard = () => {
 
         <AdminSummaryCard stats={stats} />
 
-        {/* ================= USERS TABLE ================= */}
         <div className="bg-white border rounded-3xl shadow overflow-hidden">
 
           {/* Header */}
@@ -120,15 +169,17 @@ const AdminDashboard = () => {
                   index={index}
                   setSelectedUser={setSelectedUser}
                   openDeleteModal={() => setShowDeleteModal(true)}
-                  refreshUsers={refreshUsers}   // ✅ FIXED
+                  onBlock={handleBlockUser}
+                  onUnblock={handleUnblockUser}
+                  onMakeAdmin={handleMakeAdmin}
                 />
               ))
             )}
           </div>
 
-          {/* ================= PAGINATION ================= */}
+          {/* Pagination */}
           {!loading && (
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-6 py-5 border-t">
+            <div className="flex justify-between items-center px-6 py-5 border-t">
               <p className="text-sm text-gray-600">
                 Page {page} of {totalPages}
               </p>
@@ -136,19 +187,15 @@ const AdminDashboard = () => {
               <div className="flex items-center gap-3">
                 <MdOutlineKeyboardArrowLeft
                   onClick={() => page > 1 && setPage(page - 1)}
-                  className={`text-3xl cursor-pointer ${
-                    page === 1 ? "opacity-40" : ""
-                  }`}
+                  className={`text-3xl cursor-pointer ${page === 1 ? "opacity-40" : ""}`}
                 />
 
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
                   <p
                     key={num}
                     onClick={() => setPage(num)}
-                    className={`cursor-pointer px-4 py-2 rounded-xl text-sm ${
-                      num === page
-                        ? "bg-black text-white font-bold"
-                        : "hover:bg-gray-100"
+                    className={`cursor-pointer px-4 py-2 rounded-xl ${
+                      num === page ? "bg-black text-white" : "hover:bg-gray-100"
                     }`}
                   >
                     {num}
@@ -157,9 +204,7 @@ const AdminDashboard = () => {
 
                 <MdOutlineKeyboardArrowRight
                   onClick={() => page < totalPages && setPage(page + 1)}
-                  className={`text-3xl cursor-pointer ${
-                    page === totalPages ? "opacity-40" : ""
-                  }`}
+                  className={`text-3xl cursor-pointer ${page === totalPages ? "opacity-40" : ""}`}
                 />
               </div>
             </div>
@@ -167,7 +212,7 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* ================= DELETE MODAL ================= */}
+      {/* DELETE MODAL */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[999] p-4">
           <DeleteModal
