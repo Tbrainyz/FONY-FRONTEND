@@ -1,4 +1,3 @@
-
 import React, { useContext } from "react";
 import trash from "../assets/Del.svg";
 import { MdCancel } from "react-icons/md";
@@ -10,47 +9,51 @@ const DeleteModal = ({ task, closeModal }) => {
 
   const handleDelete = async () => {
     try {
-      if (task?._id) {
-        await deleteTask(task._id);
-        closeModal();
-      }
+      if (!task?._id) return;
+
+      await deleteTask(task._id);
+      closeModal();
     } catch (err) {
-      console.error(err);
-      alert("Failed to delete task");
+      console.log(err);
+      alert("Delete failed");
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#FBFBFB] w-full max-w-md rounded-3xl border border-b-8 border-black p-8">
-        <div className="flex justify-between items-center mb-6">
-          <img src={trash} alt="delete" className="w-12" />
-          <MdCancel 
-            className="text-3xl cursor-pointer text-gray-500 hover:text-black" 
-            onClick={closeModal} 
-          />
-        </div>
-
-        <h1 className="text-2xl md:text-3xl font-bold mb-3">Are you sure?</h1>
-        <p className="text-gray-600 mb-8">This action cannot be undone. The task will be permanently deleted.</p>
-
-        <div className="flex flex-col gap-3">
-          <button
-            onClick={handleDelete}
-            className="w-full bg-[#FF3B3B] text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-red-600 transition"
-          >
-            <RiDeleteBinLine size={22} />
-            Yes, Delete Task
-          </button>
-
-          <button
-            onClick={closeModal}
-            className="w-full border border-gray-300 py-4 rounded-2xl font-medium hover:bg-gray-100 transition"
-          >
-            Cancel
-          </button>
-        </div>
+    <div className="w-182 h-90.75 rounded-[30px] border bg-[#FBFBFB] flex flex-col mx-auto mt-20 px-10 py-5">
+      
+      <div className="flex justify-between mb-5">
+        <img src={trash} alt="" />
+        <MdCancel
+          className="text-gray-500 w-6 h-6 cursor-pointer"
+          onClick={closeModal}   // ✅ CLOSE
+        />
       </div>
+
+      <h1 className="text-left font-bold font-[Caveat] text-[30px] text-[#000000] mb-1.75">
+        Are you sure you want to delete?
+      </h1>
+
+      <p className="text-left text-[16px] text-[#666666] font-medium mb-8.75">
+        This action cannot be undone. This Task field will be lost.
+      </p>
+
+      <button
+        onClick={handleDelete}   // ✅ DELETE FUNCTION
+        className="px-9.5 bg-[#FF3B3B] h-14 rounded-[48px] flex items-center justify-center gap-2.5 mb-3 shadow-[0_4px_6px_rgba(0,0,0,1)]"
+      >
+        <RiDeleteBinLine className="text-white" />
+        <p className="text-white font-[Montserrat] font-bold text-[16px]">
+          Delete Task
+        </p>
+      </button>
+
+      <button
+        onClick={closeModal}   // ✅ CANCEL
+        className="px-9.5 border border-[#D9D9D9] h-14 rounded-[48px] text-center text-[#666666] font-medium font-[Mona_Sans]"
+      >
+        Cancel
+      </button>
     </div>
   );
 };
