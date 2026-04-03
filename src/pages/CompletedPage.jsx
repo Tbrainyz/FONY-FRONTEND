@@ -17,8 +17,8 @@ const CompletedPage = () => {
     page,
     totalPages,
     hasNextPage,
-    hasPrevPage,
     loading,
+    hasPrevPage,
     priorityFilter,
     setPriorityFilter,
   } = useContext(TaskContext);
@@ -157,7 +157,6 @@ const CompletedPage = () => {
         </div>
 
         {/* Pagination */}
-        {!loading && (
           <div className="flex justify-between px-8 py-4 items-center border-t">
             <p className="text-sm">
               Page {page} of {totalPages || 1}
@@ -195,7 +194,6 @@ const CompletedPage = () => {
               />
             </div>
           </div>
-        )}
       </div>
 
       {/* View Modal */}

@@ -35,7 +35,6 @@ const DashBoard = () => {
     totalPages,
     hasNextPage,
     hasPrevPage,
-    loading,
     priorityFilter,
     setPriorityFilter,
     setPage,
@@ -151,8 +150,6 @@ const DashBoard = () => {
               openDeleteModal={() => setShowDeleteModal(true)}
             />
           </div>
-
-          {loading && <div className="py-10 text-center">Loading tasks...</div>}
 
         
             <div className="flex justify-between px-8 py-4 border-t">
