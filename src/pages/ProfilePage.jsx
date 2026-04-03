@@ -54,6 +54,12 @@ const ProfilePage = () => {
     setPreview(user?.profilePicture || ProfileImage);
     setIsEditing(false);
   };
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+    setOpen(false);
+  };
 
   return (
     <div className="w-full flex justify-center items-center bg-gray-50">
@@ -166,7 +172,7 @@ const ProfilePage = () => {
           {/* LOGOUT */}
           <button
             type="button"
-            onClick={logout}
+            onClick={handleLogout}
             className="w-full flex items-center justify-center gap-2 bg-white border border-gray-400 text-red-500 py-4 rounded-2xl font-semibold hover:bg-gray-50 transition"
           >
             <AiOutlineLogout /> Log out
