@@ -154,7 +154,7 @@ const DashBoard = () => {
 
           {loading && <div className="py-10 text-center">Loading tasks...</div>}
 
-          {!loading && (
+        
             <div className="flex justify-between px-8 py-4 border-t">
               <p>
                 Page {page} of {totalPages || 1}
@@ -181,7 +181,7 @@ const DashBoard = () => {
                 />
               </div>
             </div>
-          )}
+          
         </div>
       </div>
 
