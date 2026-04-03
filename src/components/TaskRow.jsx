@@ -6,29 +6,28 @@ import { TaskContext } from "../context/TasksContext";
 const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal }) => {
   const { getStatusLabel } = useContext(TaskContext);
 
-  // Progress bar color based on percentage
   const getProgressColor = (status = 0) => {
     if (status === 0) return "bg-red-500";
     if (status <= 25) return "bg-yellow-500";
     if (status <= 50) return "bg-blue-500";
     if (status <= 75) return "bg-[#77C2FF]";
-    return "bg-green-500"; // 76-100%
+    return "bg-green-500";
   };
 
   return (
     <div>
-      {/* Mobile View - Cards */}
-      <div className="lg:hidden space-y-4">
+      {/* ==================== MOBILE: CARD VIEW ==================== */}
+      <div className="lg:hidden space-y-4 p-4">
         {tasks.length > 0 ? (
           tasks.map((task) => (
             <div
               key={task._id}
-              className="bg-white border rounded-3xl p-5 shadow-sm hover:shadow-md transition-all"
+              className="bg-white border rounded-3xl p-6 shadow-sm hover:shadow transition-all"
             >
               <div className="flex justify-between items-start mb-4">
-                <p className="font-semibold text-lg leading-tight flex-1">{task.title}</p>
+                <p className="font-semibold text-lg leading-tight pr-4">{task.title}</p>
                 <span
-                  className={`inline-block px-4 py-1 text-xs font-medium rounded-2xl border ${
+                  className={`inline-block px-4 py-1 text-sm font-medium rounded-2xl border ${
                     task.priority?.toLowerCase() === "high"
                       ? "bg-red-50 border-red-500 text-red-600"
                       : task.priority?.toLowerCase() === "medium"
@@ -47,32 +46,25 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
                 <p className="font-medium">{task.status || 0}%</p>
               </div>
 
-              {/* Progress Bar */}
-              <div className="h-2.5 bg-gray-200 rounded-full overflow-hidden mb-5">
+              <div className="h-3 bg-gray-200 rounded-full overflow-hidden mb-5">
                 <div
-                  className={`h-2.5 rounded-full transition-all ${getProgressColor(task.status)}`}
+                  className={`h-3 rounded-full transition-all ${getProgressColor(task.status)}`}
                   style={{ width: `${task.status || 0}%` }}
                 />
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex gap-6">
                 <img
                   src={pen}
                   alt="edit"
-                  className="w-6 h-6 cursor-pointer hover:scale-110"
-                  onClick={() => {
-                    setSelectedTask(task);
-                    openUpdateModal();
-                  }}
+                  className="w-6 h-6 cursor-pointer hover:scale-110 transition"
+                  onClick={() => { setSelectedTask(task); openUpdateModal(); }}
                 />
                 <img
                   src={del}
                   alt="delete"
-                  className="w-6 h-6 cursor-pointer hover:scale-110"
-                  onClick={() => {
-                    setSelectedTask(task);
-                    openDeleteModal();
-                  }}
+                  className="w-6 h-6 cursor-pointer hover:scale-110 transition"
+                  onClick={() => { setSelectedTask(task); openDeleteModal(); }}
                 />
               </div>
             </div>
@@ -82,21 +74,25 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
         )}
       </div>
 
-      {/* Desktop & Tablet View - Table Row */}
+      {/* ==================== DESKTOP: TABLE ROW ==================== */}
       <div className="hidden lg:block">
         {tasks.length > 0 ? (
           tasks.map((task, index) => (
             <div
               key={task._id}
-              className={`flex items-center gap-6 px-6 py-5 border-b hover:bg-gray-50 ${
+              className={`flex items-center px-8 py-5 border-b hover:bg-gray-50 ${
                 index % 2 === 1 ? "bg-[#F8FBFF]" : "bg-white"
               }`}
             >
-              <div className="flex-1 font-semibold text-[17px]">{task.title}</div>
+              {/* Task Name - Takes more space */}
+              <div className="flex-1 pr-6">
+                <p className="font-semibold text-[17px]">{task.title}</p>
+              </div>
 
-              <div className="w-28">
+              {/* Priority */}
+              <div className="w-32">
                 <span
-                  className={`inline-block px-5 py-1.5 rounded-2xl text-sm font-medium border ${
+                  className={`inline-block px-6 py-1.5 rounded-2xl text-sm font-medium border ${
                     task.priority?.toLowerCase() === "high"
                       ? "bg-red-50 border-red-500 text-red-600"
                       : task.priority?.toLowerCase() === "medium"
@@ -108,11 +104,13 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
                 </span>
               </div>
 
-              <div className="w-40 text-gray-700">
+              {/* Date */}
+              <div className="w-44 text-gray-700">
                 {task.createdAt ? new Date(task.createdAt).toLocaleDateString("en-GB") : "—"}
               </div>
 
-              <div className="w-40">
+              {/* Status */}
+              <div className="w-44">
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
                     <div
@@ -120,30 +118,25 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
                       style={{ width: `${task.status || 0}%` }}
                     />
                   </div>
-                  <span className="font-medium text-sm whitespace-nowrap">
+                  <span className="font-medium text-sm whitespace-nowrap min-w-[45px] text-right">
                     {task.status || 0}%
                   </span>
                 </div>
               </div>
 
-              <div className="flex gap-5">
+              {/* Actions */}
+              <div className="w-24 flex justify-end gap-5">
                 <img
                   src={pen}
                   alt="edit"
                   className="w-6 h-6 cursor-pointer hover:scale-110 transition"
-                  onClick={() => {
-                    setSelectedTask(task);
-                    openUpdateModal();
-                  }}
+                  onClick={() => { setSelectedTask(task); openUpdateModal(); }}
                 />
                 <img
                   src={del}
                   alt="delete"
                   className="w-6 h-6 cursor-pointer hover:scale-110 transition"
-                  onClick={() => {
-                    setSelectedTask(task);
-                    openDeleteModal();
-                  }}
+                  onClick={() => { setSelectedTask(task); openDeleteModal(); }}
                 />
               </div>
             </div>

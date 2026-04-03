@@ -58,17 +58,22 @@ const CreateModal = ({ closeModal, openNextModal }) => {
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#FBFBFB] rounded-3xl border border-b-8 border-black w-full max-w-lg md:max-w-2xl overflow-hidden">
-        {/* Header */}
-        <div className="flex justify-between items-start px-6 pt-6 pb-4 border-b">
+      <div className="bg-[#FBFBFB] w-full max-w-lg md:max-w-xl rounded-3xl border border-b-8 border-black overflow-hidden">
+        
+        {/* Header - Same as Update Modal */}
+        <div className="flex justify-between items-start px-8 pt-8 pb-6 border-b">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold">Create New Task</h1>
+            <h1 className="text-2xl font-bold">Create New Task</h1>
             <p className="text-gray-600 mt-1">Enter description about this task</p>
           </div>
-          <MdCancel className="text-3xl cursor-pointer" onClick={closeModal} />
+          <MdCancel 
+            className="text-3xl cursor-pointer text-gray-500 hover:text-black" 
+            onClick={closeModal} 
+          />
         </div>
 
-        <div className="p-6 space-y-6">
+        {/* Scrollable Content */}
+        <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto">
           {/* Title */}
           <div>
             <label className="text-sm font-medium">Task Name <span className="text-red-600">*</span></label>
@@ -77,7 +82,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full mt-1 h-12 px-5 rounded-2xl border focus:border-[#77C2FF]"
+              className="w-full mt-1 h-12 px-5 rounded-2xl border focus:border-[#77C2FF] focus:outline-none"
               placeholder="Enter your task name"
             />
           </div>
@@ -90,7 +95,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full mt-1 h-12 px-5 rounded-2xl border focus:border-[#77C2FF]"
+              className="w-full mt-1 h-12 px-5 rounded-2xl border focus:border-[#77C2FF] focus:outline-none"
               placeholder="What is this task about?"
             />
           </div>
@@ -103,7 +108,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
                 <button
                   key={level}
                   onClick={() => handlePriority(level)}
-                  className={`h-12 rounded-2xl border capitalize font-medium transition ${
+                  className={`h-12 rounded-2xl border capitalize font-medium transition-all ${
                     formData.priority === level
                       ? "bg-black text-white border-black"
                       : "hover:border-gray-400"
@@ -118,14 +123,24 @@ const CreateModal = ({ closeModal, openNextModal }) => {
           {/* Image Upload */}
           <div>
             <label className="text-sm font-medium">Upload Image (Optional)</label>
-            <div className="border-2 border-dashed border-gray-300 rounded-2xl p-6 mt-2 hover:border-[#77C2FF]">
-              <input type="file" accept="image/*" onChange={handleImage} className="hidden" id="image-upload" />
+            <div className="border-2 border-dashed border-gray-300 rounded-2xl p-8 mt-2 hover:border-[#77C2FF] transition-colors">
+              <input 
+                type="file" 
+                accept="image/*" 
+                onChange={handleImage} 
+                className="hidden" 
+                id="image-upload" 
+              />
               <label htmlFor="image-upload" className="cursor-pointer block text-center">
                 {previewUrl ? (
-                  <img src={previewUrl} alt="preview" className="mx-auto max-h-40 rounded-xl" />
+                  <img 
+                    src={previewUrl} 
+                    alt="preview" 
+                    className="mx-auto max-h-48 rounded-xl object-contain" 
+                  />
                 ) : (
                   <div>
-                    <img src={pic} alt="upload" className="mx-auto w-12 mb-3" />
+                    <img src={pic} alt="upload" className="mx-auto w-14 mb-4" />
                     <p className="text-sm text-gray-600">Click to upload image</p>
                   </div>
                 )}
@@ -134,12 +149,12 @@ const CreateModal = ({ closeModal, openNextModal }) => {
           </div>
         </div>
 
-        {/* Submit Button */}
-        <div className="p-6 border-t bg-white">
+        {/* Footer Button */}
+        <div className="p-8 border-t bg-white">
           <button
             onClick={handleSubmit}
             disabled={loading || !formData.title || !formData.description || !formData.priority}
-            className="w-full h-12 bg-[#77C2FF] text-black font-bold rounded-2xl disabled:bg-gray-400"
+            className="w-full h-12 bg-[#77C2FF] rounded-2xl font-bold border border-b-4 border-black disabled:bg-gray-400 disabled:cursor-not-allowed active:translate-y-0.5 transition-all"
           >
             {loading ? "Creating..." : "Create New Task"}
           </button>
