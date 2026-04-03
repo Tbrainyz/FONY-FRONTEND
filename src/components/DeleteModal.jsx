@@ -4,15 +4,23 @@ import { MdCancel } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { TaskContext } from "../context/TasksContext";
 
-const DeleteModal = ({ task, closeModal }) => {
+const DeleteModal = ({ task, user, closeModal, onConfirm }) => {
   const { deleteTask } = useContext(TaskContext);
 
   const handleDelete = async () => {
     try {
-      if (!task?._id) return;
+      // ✅ For USERS
+      if (onConfirm) {
+        await onConfirm();
+        closeModal();
+        return;
+      }
 
-      await deleteTask(task._id);
-      closeModal();
+      // ✅ For TASKS (fallback)
+      if (task?._id) {
+        await deleteTask(task._id);
+        closeModal();
+      }
     } catch (err) {
       console.log(err);
       alert("Delete failed");
@@ -26,30 +34,30 @@ const DeleteModal = ({ task, closeModal }) => {
         <img src={trash} alt="" />
         <MdCancel
           className="text-gray-500 w-6 h-6 cursor-pointer"
-          onClick={closeModal}   // ✅ CLOSE
+          onClick={closeModal}
         />
       </div>
 
       <h1 className="text-left font-bold font-[Caveat] text-[30px] text-[#000000] mb-1.75">
-        Are you sure you want to delete?
+        Are you sure you want to delete {user ? "this user" : "this task"}?
       </h1>
 
       <p className="text-left text-[16px] text-[#666666] font-medium mb-8.75">
-        This action cannot be undone. This Task field will be lost.
+        This {user ? "user" : "task"} will be permanently removed.
       </p>
 
       <button
-        onClick={handleDelete}   // ✅ DELETE FUNCTION
+        onClick={handleDelete}
         className="px-9.5 bg-[#FF3B3B] h-14 rounded-[48px] flex items-center justify-center gap-2.5 mb-3 shadow-[0_4px_6px_rgba(0,0,0,1)]"
       >
         <RiDeleteBinLine className="text-white" />
         <p className="text-white font-[Montserrat] font-bold text-[16px]">
-          Delete Task
+          Delete {user ? "User" : "Task"}
         </p>
       </button>
 
       <button
-        onClick={closeModal}   // ✅ CANCEL
+        onClick={closeModal}
         className="px-9.5 border border-[#D9D9D9] h-14 rounded-[48px] text-center text-[#666666] font-medium font-[Mona_Sans]"
       >
         Cancel
