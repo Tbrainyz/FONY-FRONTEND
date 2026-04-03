@@ -16,6 +16,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     const fetchStats = async () => {
       try {
         const res = await API.get("/api/admin/dashboard", {
@@ -46,6 +47,11 @@ const AdminDashboard = () => {
     fetchUsers();
   }, [page]);
 
+  // ✅ Callback to remove user from state after deletion
+  const handleUserDeleted = (email) => {
+    setUsers((prevUsers) => prevUsers.filter((u) => u.email !== email));
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 md:px-8 lg:px-12">
       <div className="max-w-7xl mx-auto flex flex-col gap-10">
@@ -72,7 +78,12 @@ const AdminDashboard = () => {
               <div className="py-16 text-center text-gray-500">Loading users...</div>
             ) : (
               users.map((user, index) => (
-                <AdminUsersRow key={user._id} user={user} index={index} />
+                <AdminUsersRow
+                  key={user._id}
+                  user={user}
+                  index={index}
+                  onUserDeleted={handleUserDeleted} // ✅ pass callback
+                />
               ))
             )}
           </div>
