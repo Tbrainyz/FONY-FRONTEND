@@ -47,7 +47,6 @@ const DashBoard = () => {
     setPage(1);
   }, [priorityFilter, setPage]);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -69,7 +68,7 @@ const DashBoard = () => {
       <div className="max-w-7xl mx-auto flex flex-col gap-8 lg:gap-12">
         
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h3 className="font-[Caveat] font-bold text-3xl md:text-4xl">
             Welcome! {user?.name || "User"}
           </h3>
@@ -77,15 +76,14 @@ const DashBoard = () => {
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <button
               onClick={() => setShowModal1(true)}
-              className="w-full sm:w-[163px] h-11 rounded-2xl bg-[#77C2FF] border-2 border-black shadow-[0_4px_0_0_black] font-medium active:translate-y-0.5 active:shadow-none transition-all"
+              className="w-full sm:w-[170px] h-11 rounded-2xl bg-[#77C2FF] border-2 border-black shadow-[0_4px_0_0_black] font-medium active:translate-y-0.5 transition-all"
             >
               Create new task
             </button>
-
             {user?.role === "admin" && (
               <button
                 onClick={() => navigate("/authdash")}
-                className="w-full sm:w-[163px] h-11 rounded-2xl bg-[#FFB347] border-2 border-black shadow-[0_4px_0_0_black] font-medium active:translate-y-0.5 active:shadow-none transition-all"
+                className="w-full sm:w-[170px] h-11 rounded-2xl bg-[#FFB347] border-2 border-black shadow-[0_4px_0_0_black] font-medium active:translate-y-0.5 transition-all"
               >
                 Admin Dashboard
               </button>
@@ -93,24 +91,21 @@ const DashBoard = () => {
           </div>
         </div>
 
-        {/* Summary Cards */}
         <TaskSummaryCard />
-
-        {/* Carousel */}
         <Carousel />
 
         {/* All Tasks Section */}
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <h2 className="text-3xl md:text-4xl font-[Caveat] font-bold">
               All Created Tasks
             </h2>
 
             {/* Priority Filter */}
             <div ref={dropdownRef} className="relative flex items-center gap-3">
-              <p className="font-medium text-sm sm:text-base">Priority</p>
+              <p className="font-medium">Priority</p>
               <div
-                className="border border-gray-300 flex items-center justify-between w-full sm:w-[160px] h-11 px-4 rounded-2xl cursor-pointer bg-white hover:bg-gray-50 transition"
+                className="border flex items-center justify-between w-full sm:w-[160px] h-11 px-4 rounded-2xl cursor-pointer bg-white"
                 onClick={() => setOpenFilter(!openFilter)}
               >
                 <p className="capitalize">{priorityFilter || "All"}</p>
@@ -127,7 +122,7 @@ const DashBoard = () => {
                     <p
                       key={item}
                       onClick={() => handleFilterSelect(item)}
-                      className={`px-5 py-3 hover:bg-gray-100 cursor-pointer text-center capitalize transition ${
+                      className={`px-5 py-3 hover:bg-gray-100 cursor-pointer text-center capitalize ${
                         (priorityFilter || "All") === item ? "bg-gray-100 font-medium" : ""
                       }`}
                     >
@@ -139,29 +134,24 @@ const DashBoard = () => {
             </div>
           </div>
 
-          {/* Tasks Table */}
-          <div className="bg-white border border-gray-200 rounded-3xl shadow overflow-hidden">
-            <div className="overflow-x-auto">
-              <div className="min-w-[900px]">
-                {/* Table Header */}
-                <div className="flex bg-[#FBFBFB] border-b font-semibold text-base">
-                  <p className="w-[38%] py-5 px-6">Name</p>
-                  <p className="w-[15%] py-5 px-6">Priority</p>
-                  <p className="w-[18%] py-5 px-6">Date</p>
-                  <p className="w-[15%] py-5 px-6">Status</p>
-                  <p className="w-[14%] py-5 px-6">Action</p>
-                </div>
+          <div className="bg-white border rounded-3xl shadow overflow-hidden">
+            {/* Desktop Header */}
+            <div className="hidden lg:flex bg-[#FBFBFB] border-b font-semibold text-base">
+              <p className="flex-1 py-5 px-6">Task Name</p>
+              <p className="w-28 py-5 px-6">Priority</p>
+              <p className="w-40 py-5 px-6">Date</p>
+              <p className="w-40 py-5 px-6">Status</p>
+              <p className="w-24 py-5 px-6">Actions</p>
+            </div>
 
-                {/* Table Body */}
-                <div className="min-h-[500px]">
-                  <TaskRow
-                    tasks={tasks}
-                    setSelectedTask={setSelectedTask}
-                    openUpdateModal={() => setShowModal2(true)}
-                    openDeleteModal={() => setShowDeleteModal(true)}
-                  />
-                </div>
-              </div>
+            {/* Task Rows */}
+            <div className="min-h-[500px]">
+              <TaskRow
+                tasks={tasks}
+                setSelectedTask={setSelectedTask}
+                openUpdateModal={() => setShowModal2(true)}
+                openDeleteModal={() => setShowDeleteModal(true)}
+              />
             </div>
 
             {/* Pagination */}
@@ -169,36 +159,25 @@ const DashBoard = () => {
               <p className="text-sm text-gray-600">
                 Page {page} of {totalPages || 1}
               </p>
-
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <MdOutlineKeyboardArrowLeft
                   onClick={() => hasPrevPage && setPage(page - 1)}
-                  className={`text-3xl cursor-pointer transition ${
-                    !hasPrevPage ? "opacity-40 cursor-not-allowed" : "hover:text-blue-600"
-                  }`}
+                  className={`text-3xl cursor-pointer ${!hasPrevPage ? "opacity-40" : ""}`}
                 />
-
-                <div className="flex gap-1">
-                  {Array.from({ length: totalPages || 1 }, (_, i) => i + 1).map((num) => (
-                    <button
-                      key={num}
-                      onClick={() => setPage(num)}
-                      className={`px-4 py-2 rounded-xl text-sm transition ${
-                        num === page
-                          ? "bg-black text-white font-bold"
-                          : "hover:bg-gray-100"
-                      }`}
-                    >
-                      {num}
-                    </button>
-                  ))}
-                </div>
-
+                {Array.from({ length: totalPages || 1 }, (_, i) => i + 1).map((num) => (
+                  <p
+                    key={num}
+                    onClick={() => setPage(num)}
+                    className={`cursor-pointer px-4 py-2 rounded-xl text-sm ${
+                      num === page ? "bg-black text-white font-bold" : "hover:bg-gray-100"
+                    }`}
+                  >
+                    {num}
+                  </p>
+                ))}
                 <MdOutlineKeyboardArrowRight
                   onClick={() => hasNextPage && setPage(page + 1)}
-                  className={`text-3xl cursor-pointer transition ${
-                    !hasNextPage ? "opacity-40 cursor-not-allowed" : "hover:text-blue-600"
-                  }`}
+                  className={`text-3xl cursor-pointer ${!hasNextPage ? "opacity-40" : ""}`}
                 />
               </div>
             </div>

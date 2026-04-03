@@ -39,34 +39,75 @@ const AdminUsersRow = ({ user, index }) => {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-0 px-4 md:px-6 py-5 border-b hover:bg-gray-50 bg-white">
-        {/* User Info */}
-        <div className="flex items-center gap-3 w-full lg:w-[30%]">
+      {/* Mobile Card View */}
+      <div className="lg:hidden bg-white border rounded-3xl p-5 mb-4 shadow-sm">
+        <div className="flex items-center gap-3 mb-4">
           <img
             src={user.profilePicture || pic}
             alt=""
-            className="w-10 h-10 rounded-full border object-cover"
+            className="w-12 h-12 rounded-full border"
           />
-          <div>
-            <p className="font-semibold text-[17px]">{user.name}</p>
-            <span className="text-xs px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 font-medium">
+          <div className="flex-1">
+            <p className="font-semibold text-lg">{user.name}</p>
+            <span className="text-xs px-3 py-1 rounded-full bg-indigo-100 text-indigo-700">
               {user.role || "User"}
             </span>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="flex flex-wrap lg:flex-nowrap gap-x-8 gap-y-4 w-full lg:w-[55%] mt-4 lg:mt-0 text-sm">
+        <div className="grid grid-cols-3 gap-4 text-sm">
+          <div className="flex flex-col items-center">
+            <FaTasks className="text-blue-600 mb-1" />
+            <span className="font-bold">{user.totalTasks || 0}</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <FaCheckCircle className="text-green-600 mb-1" />
+            <span className="font-bold">{user.completedTasks || 0}</span>
+          </div>
+          <div className="flex flex-col items-center text-gray-600">
+            <FaCalendarAlt className="mb-1" />
+            <span className="text-xs">
+              {user.createdAt ? new Date(user.createdAt).toLocaleDateString("en-GB") : "—"}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex gap-6 mt-6">
+          <img
+            onClick={() => setShowModal(true)}
+            src={pen}
+            alt="edit"
+            className="w-6 h-6 cursor-pointer hover:scale-110"
+          />
+          <img src={del} alt="delete" className="w-6 h-6 cursor-pointer hover:scale-110" />
+        </div>
+      </div>
+
+      {/* Desktop Table Row */}
+      <div className="hidden lg:flex items-center gap-6 px-6 py-5 border-b hover:bg-gray-50 bg-white">
+        <div className="flex items-center gap-3 flex-1">
+          <img
+            src={user.profilePicture || pic}
+            alt=""
+            className="w-10 h-10 rounded-full border"
+          />
+          <div>
+            <p className="font-semibold">{user.name}</p>
+            <span className="text-xs px-3 py-1 rounded-full bg-indigo-100 text-indigo-700">
+              {user.role || "User"}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-8 flex-1">
           <div className="flex items-center gap-2">
             <FaTasks className="text-blue-600" />
             <span className="font-bold">{user.totalTasks || 0}</span>
           </div>
-
           <div className="flex items-center gap-2">
             <FaCheckCircle className="text-green-600" />
             <span className="font-bold">{user.completedTasks || 0}</span>
           </div>
-
           <div className="flex items-center gap-2 text-gray-600">
             <FaCalendarAlt />
             <span>
@@ -75,19 +116,14 @@ const AdminUsersRow = ({ user, index }) => {
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex gap-6 lg:ml-auto pt-4 lg:pt-0">
+        <div className="flex gap-6">
           <img
             onClick={() => setShowModal(true)}
             src={pen}
             alt="edit"
-            className="w-6 h-6 cursor-pointer hover:scale-110 transition-transform"
+            className="w-6 h-6 cursor-pointer hover:scale-110"
           />
-          <img
-            src={del}
-            alt="delete"
-            className="w-6 h-6 cursor-pointer hover:scale-110 transition-transform"
-          />
+          <img src={del} alt="delete" className="w-6 h-6 cursor-pointer hover:scale-110" />
         </div>
       </div>
 
