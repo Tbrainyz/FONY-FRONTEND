@@ -4,13 +4,11 @@ import pen from "../assets/Pen.svg";
 import del from "../assets/Del.svg";
 import pic from "../assets/profile.svg";
 import AdminUserModal from "./AdminUserModal";
-import DeleteModal from "./DeleteModal"; // ✅ import
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const AdminUsersRow = ({ user, index, onUserDeleted }) => {
+const AdminUsersRow = ({ user, index }) => {
   const [showModal, setShowModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleBlock = async () => {
     try {
@@ -36,19 +34,6 @@ const AdminUsersRow = ({ user, index, onUserDeleted }) => {
       toast.success(`${user.name} is now admin`);
     } catch (err) {
       toast.error("Failed to make admin");
-    }
-  };
-
-  const handleDeleteUser = async () => {
-    try {
-      await axios.delete("http://localhost:5000/api/users/delete-user", {
-        data: { email: user.email },
-      });
-      toast.success(`${user.name} deleted successfully`);
-      setShowDeleteModal(false);
-      if (onUserDeleted) onUserDeleted(user.email); // ✅ notify parent dashboard
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to delete user");
     }
   };
 
@@ -95,7 +80,6 @@ const AdminUsersRow = ({ user, index, onUserDeleted }) => {
             className="w-6 h-6 cursor-pointer hover:scale-110"
           />
           <img
-            onClick={() => setShowDeleteModal(true)} // ✅ open delete modal
             src={del}
             alt="delete"
             className="w-6 h-6 cursor-pointer hover:scale-110"
@@ -147,7 +131,6 @@ const AdminUsersRow = ({ user, index, onUserDeleted }) => {
             className="w-6 h-6 cursor-pointer hover:scale-110 transition"
           />
           <img
-            onClick={() => setShowDeleteModal(true)} // ✅ open delete modal
             src={del}
             alt="delete"
             className="w-6 h-6 cursor-pointer hover:scale-110 transition"
@@ -164,17 +147,9 @@ const AdminUsersRow = ({ user, index, onUserDeleted }) => {
           onMakeAdmin={handleMakeAdmin}
         />
       )}
-
-      {showDeleteModal && (
-        <DeleteModal
-          title="Delete User"
-          message={`Are you sure you want to delete ${user.name}? This action cannot be undone.`}
-          onConfirm={handleDeleteUser}
-          closeModal={() => setShowDeleteModal(false)}
-        />
-      )}
     </>
   );
 };
 
 export default AdminUsersRow;
+

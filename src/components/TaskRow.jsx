@@ -84,7 +84,7 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
                 index % 2 === 1 ? "bg-[#F8FBFF]" : "bg-white"
               }`}
             >
-              {/* Task Name */}
+              {/* Task Name - Takes more space */}
               <div className="flex-1 pr-6">
                 <p className="font-semibold text-[17px]">{task.title}</p>
               </div>
