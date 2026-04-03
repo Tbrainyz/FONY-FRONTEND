@@ -3,6 +3,7 @@ import pen from "../assets/Pen.svg";
 import { TaskContext } from "../context/TasksContext";
 import UpdateModal from "./UpdateModal";
 import SuccessModal from "./SuccessModal";
+import CreateModal from "../components/CreateModal";
 
 const Carousel = () => {
   const { tasks = [], getStatusLabel } = useContext(TaskContext);
@@ -10,7 +11,8 @@ const Carousel = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-
+  const [showModal1, setShowModal1] = useState(false);
+  const [showModal3, setShowModal3] = useState(false);
   return (
     <div className="Carousel font-[Caveat] w-full">
       <h3 className="text-[30px] leading-[100px] font-bold">
@@ -71,7 +73,17 @@ const Carousel = () => {
               </div>
             ))
         ) : (
-          <p>No tasks in progress</p>
+          <div className="flex flex-col py-6 px-6">
+            <p className="mt-4 text-sm font-medium">No Task in Progress yet</p>
+
+            <button
+            onClick={() => setShowModal1(true)}
+              type="button"
+              className="mt-4 w-[7.5rem] inline-flex items-center gap-2 rounded-full bg-[#77C2FF] px-4 py-2 text-xs font-medium text-black shadow-md shadow-black border border-black"
+            >
+              Create new task
+            </button>
+          </div>
         )}
       </div>
 
@@ -90,6 +102,19 @@ const Carousel = () => {
       {showSuccessModal && (
         <div className="fixed top-[100px] left-0 right-0 mx-auto z-50">
           <SuccessModal closeModal={() => setShowSuccessModal(false)} />
+        </div>
+      )}
+      {showModal1 && (
+        <div className="fixed overflow-y-auto inset-0 bg-black/50 flex items-center justify-center z-[999]">
+          <CreateModal
+            closeModal={() => setShowModal1(false)}
+            openNextModal={() => setShowModal3(true)}
+          />
+        </div>
+      )}
+      {showModal3 && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[999]">
+          <SuccessModal closeModal={() => setShowModal3(false)} />
         </div>
       )}
     </div>
