@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 import ProfileImage from "../assets/FB_IMG_16265830618836469 1.png";
 
 const ProfilePage = () => {
-  const { user, updateProfile, logout } = useContext(AuthContext);
+  const { user, updateProfile } = useContext(AuthContext);
   const navigate = useNavigate();
+  user = JSON.parse(localStorage.getItem("user"));
 
   const [formData, setFormData] = useState({
     name: user?.name || "",
