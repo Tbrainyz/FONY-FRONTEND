@@ -45,33 +45,18 @@ const AdminUserModal = ({
 
           {/* Info */}
           <div className="space-y-2 text-sm">
-            <p>
-              <span className="font-medium">Role:</span>{" "}
-              {user.role || "User"}
-            </p>
+            <p><span className="font-medium">Role:</span> {user.role || "User"}</p>
             <p>
               <span className="font-medium">Status:</span>{" "}
-              <span
-                className={`font-medium ${
-                  isBlocked ? "text-red-600" : "text-green-600"
-                }`}
-              >
+              <span className={`font-medium ${isBlocked ? "text-red-600" : "text-green-600"}`}>
                 {isBlocked ? "Blocked" : "Active"}
               </span>
             </p>
-            <p>
-              <span className="font-medium">Total Tasks:</span>{" "}
-              {user.totalTasks || 0}
-            </p>
-            <p>
-              <span className="font-medium">Completed Tasks:</span>{" "}
-              {user.completedTasks || 0}
-            </p>
+            <p><span className="font-medium">Total Tasks:</span> {user.totalTasks || 0}</p>
+            <p><span className="font-medium">Completed Tasks:</span> {user.completedTasks || 0}</p>
             <p>
               <span className="font-medium">Joined:</span>{" "}
-              {user.createdAt
-                ? new Date(user.createdAt).toLocaleDateString()
-                : "N/A"}
+              {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
             </p>
           </div>
         </div>
@@ -87,8 +72,7 @@ const AdminUserModal = ({
                   toast.error("You cannot block an admin");
                   return;
                 }
-                onBlock(user);
-                toast.success(`${user.name} has been blocked`);
+                onBlock(); // ✅ NO TOAST HERE
                 closeModal();
               }}
               className="flex-1 bg-red-600 text-white py-3 rounded-2xl font-medium hover:bg-red-700 transition"
@@ -98,8 +82,7 @@ const AdminUserModal = ({
           ) : (
             <button
               onClick={() => {
-                onUnblock(user);
-                toast.success(`${user.name} has been unblocked`);
+                onUnblock(); // ✅ NO TOAST HERE
                 closeModal();
               }}
               className="flex-1 bg-green-600 text-white py-3 rounded-2xl font-medium hover:bg-green-700 transition"
@@ -112,8 +95,7 @@ const AdminUserModal = ({
           <button
             onClick={() => {
               if (isAdmin) return;
-              onMakeAdmin(user);
-              toast.success(`${user.name} is now an admin`);
+              onMakeAdmin(); // ✅ NO TOAST HERE
               closeModal();
             }}
             disabled={isAdmin}

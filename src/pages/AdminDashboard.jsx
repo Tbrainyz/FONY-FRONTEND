@@ -7,6 +7,7 @@ import API from "../api/axios";
 import AdminSummaryCard from "../components/AdminSummarycard";
 import AdminUsersRow from "../components/AdminUsersRow";
 import DeleteModal from "../components/DeleteModal";
+import { toast } from "react-toastify";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
@@ -15,44 +16,51 @@ const AdminDashboard = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  // ✅ NEW STATE (for delete)
+  // ✅ DELETE STATE
   const [selectedUser, setSelectedUser] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const token = localStorage.getItem("token");
 
+  // ================= FETCH USERS =================
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const res = await API.get(`/api/admin/users?page=${page}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUsers(res.data.users || []);
+      setTotalPages(res.data.totalPages || 1);
+    } catch (err) {
+      console.error("Error fetching users:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ================= FETCH STATS =================
+  const fetchStats = async () => {
+    try {
+      const res = await API.get("/api/admin/dashboard", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setStats(res.data);
+    } catch (err) {
+      console.error("Error fetching stats:", err);
+    }
+  };
+
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await API.get("/api/admin/dashboard", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setStats(res.data);
-      } catch (err) {
-        console.error("Error fetching stats:", err);
-      }
-    };
-
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const res = await API.get(`/api/admin/users?page=${page}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUsers(res.data.users || []);
-        setTotalPages(res.data.totalPages || 1);
-      } catch (err) {
-        console.error("Error fetching users:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchStats();
     fetchUsers();
   }, [page]);
 
-  // ✅ DELETE HANDLER
+  // ================= REFRESH USERS =================
+  const refreshUsers = () => {
+    fetchUsers();
+  };
+
+  // ================= DELETE USER =================
   const handleDeleteUser = async () => {
     try {
       await API.delete(`/api/admin/delete/${selectedUser._id}`, {
@@ -64,26 +72,28 @@ const AdminDashboard = () => {
         prev.filter((u) => u._id !== selectedUser._id)
       );
 
+      toast.success("User deleted successfully");
       setShowDeleteModal(false);
     } catch (err) {
       console.error("Delete error:", err);
+      toast.error("Failed to delete user");
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 md:px-8 lg:px-12">
       <div className="max-w-7xl mx-auto flex flex-col gap-10">
-        
+
         <h3 className="font-[Caveat] font-bold text-3xl md:text-4xl">
           Admin Dashboard
         </h3>
 
         <AdminSummaryCard stats={stats} />
 
-        {/* Users Table */}
+        {/* ================= USERS TABLE ================= */}
         <div className="bg-white border rounded-3xl shadow overflow-hidden">
-          
-          {/* Desktop Header */}
+
+          {/* Header */}
           <div className="hidden lg:flex bg-[#FBFBFB] font-semibold text-lg border-b">
             <p className="flex-1 px-6 py-5">User</p>
             <p className="w-40 px-6 py-5">Total Tasks</p>
@@ -92,7 +102,7 @@ const AdminDashboard = () => {
             <p className="w-32 px-6 py-5">Actions</p>
           </div>
 
-          {/* User Rows */}
+          {/* Rows */}
           <div>
             {loading ? (
               <div className="py-16 text-center text-gray-500">
@@ -108,14 +118,15 @@ const AdminDashboard = () => {
                   key={user._id}
                   user={user}
                   index={index}
-                  setSelectedUser={setSelectedUser}   // ✅ NEW
-                  openDeleteModal={() => setShowDeleteModal(true)} // ✅ NEW
+                  setSelectedUser={setSelectedUser}
+                  openDeleteModal={() => setShowDeleteModal(true)}
+                  refreshUsers={refreshUsers}   // ✅ FIXED
                 />
               ))
             )}
           </div>
 
-          {/* Pagination */}
+          {/* ================= PAGINATION ================= */}
           {!loading && (
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-6 py-5 border-t">
               <p className="text-sm text-gray-600">
@@ -156,7 +167,7 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* ✅ DELETE MODAL (REUSED) */}
+      {/* ================= DELETE MODAL ================= */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[999] p-4">
           <DeleteModal
