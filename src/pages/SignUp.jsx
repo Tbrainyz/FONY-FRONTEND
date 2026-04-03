@@ -43,7 +43,7 @@ const SignUp = () => {
         phone: formData.phone,
         password: formData.password,
       });
-      toast.success("Registration successful!");
+      toast.success("Registration successful! Please login.");
       navigate("/login");
     } catch (error) {
       toast.error(error?.response?.data?.message || "Signup failed");
@@ -57,16 +57,16 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
-      {/* Left - Form */}
+    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-50">
+      {/* Left Side - Form */}
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-md">
           <div className="flex items-center gap-2 mb-10">
-            <img src={Logo} alt="Logo" />
+            <img src={Logo} alt="Logo" className="h-10" />
           </div>
 
           <h2 className="text-3xl font-bold mb-2">Create Account</h2>
-          <p className="text-gray-600 mb-8">Enter your details to sign up</p>
+          <p className="text-gray-600 mb-8">Enter your details to sign up for an account.</p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
@@ -76,8 +76,8 @@ const SignUp = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full h-14 px-5 border rounded-3xl focus:outline-none focus:border-blue-400"
                 placeholder="Enter your name"
+                className="w-full h-14 px-5 border border-gray-300 rounded-3xl focus:outline-none focus:border-[#77C2FF]"
                 required
               />
             </div>
@@ -89,8 +89,8 @@ const SignUp = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full h-14 px-5 border rounded-3xl focus:outline-none focus:border-blue-400"
                 placeholder="Enter Email"
+                className="w-full h-14 px-5 border border-gray-300 rounded-3xl focus:outline-none focus:border-[#77C2FF]"
                 required
               />
             </div>
@@ -102,8 +102,8 @@ const SignUp = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full h-14 px-5 border rounded-3xl focus:outline-none focus:border-blue-400"
                 placeholder="Enter phone number"
+                className="w-full h-14 px-5 border border-gray-300 rounded-3xl focus:outline-none focus:border-[#77C2FF]"
                 required
               />
             </div>
@@ -116,8 +116,8 @@ const SignUp = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full h-14 px-5 border rounded-3xl pr-12 focus:outline-none focus:border-blue-400"
                   placeholder="Enter your password"
+                  className="w-full h-14 px-5 border border-gray-300 rounded-3xl pr-12 focus:outline-none focus:border-[#77C2FF]"
                   required
                 />
                 <button
@@ -138,8 +138,8 @@ const SignUp = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="w-full h-14 px-5 border rounded-3xl pr-12 focus:outline-none focus:border-blue-400"
                   placeholder="Re-enter password"
+                  className="w-full h-14 px-5 border border-gray-300 rounded-3xl pr-12 focus:outline-none focus:border-[#77C2FF]"
                   required
                 />
                 <button
@@ -155,36 +155,36 @@ const SignUp = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-14 mt-4 bg-[#77C2FF] text-white font-bold rounded-3xl border-2 border-black shadow-[0_4px_0_0_black] active:translate-y-0.5 disabled:opacity-70"
+              className="w-full h-14 mt-4 bg-[#77C2FF] text-white font-bold rounded-3xl border-2 border-black shadow-[0_4px_0_0_black] active:translate-y-0.5 disabled:opacity-70 transition-all"
             >
               {loading ? "Creating Account..." : "Sign Up"}
             </button>
 
             <div className="relative my-6">
               <div className="border-t border-gray-300" />
-              <span className="absolute left-1/2 -top-3 bg-white px-4 text-sm text-gray-500">Or</span>
+              <span className="absolute left-1/2 -top-3 bg-gray-50 px-4 text-sm text-gray-500">Or</span>
             </div>
 
             <button
               type="button"
               onClick={handleGoogleRegister}
-              className="w-full h-14 border border-gray-300 rounded-3xl flex items-center justify-center gap-3 hover:bg-gray-50"
+              className="w-full h-14 border border-gray-300 rounded-3xl flex items-center justify-center gap-3 hover:bg-gray-100 transition"
             >
               <img src={Google} alt="Google" className="w-6 h-6" />
               Continue with Google
             </button>
           </form>
 
-          <p className="text-center mt-8">
+          <p className="text-center mt-8 text-sm">
             Have an account?{" "}
-            <Link to="/login" className="text-[#77C2FF] font-medium">Login</Link>
+            <Link to="/login" className="text-[#77C2FF] font-medium hover:underline">Login</Link>
           </p>
         </div>
       </div>
 
-      {/* Right - Image */}
-      <div className="hidden lg:block lg:flex-1 bg-gray-100">
-        <img src={Run} alt="Illustration" className="w-full h-full object-cover" />
+      {/* Right Side - Image */}
+      <div className="hidden lg:flex lg:flex-1 bg-gray-100 items-center justify-center">
+        <img src={Run} alt="Illustration" className="max-h-[90%] object-contain" />
       </div>
     </div>
   );

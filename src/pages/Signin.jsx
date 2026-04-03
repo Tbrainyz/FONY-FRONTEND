@@ -10,8 +10,8 @@ import Google from "../assets/material.svg";
 const Signin = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
+
   const [form, setForm] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +21,6 @@ const Signin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
     if (!form.email || !form.password) {
       toast.error("Please fill all fields");
       return;
@@ -44,89 +43,95 @@ const Signin = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
-      {/* Left - Form */}
+    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-50">
+      {/* Left Side - Form */}
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-md">
           <div className="flex items-center gap-2 mb-10">
-            <img src={Logo} alt="Logo" />
+            <img src={Logo} alt="Logo" className="h-10" />
           </div>
 
           <h2 className="text-3xl font-bold mb-2">Welcome Back</h2>
-          <p className="text-gray-600 mb-8">Enter your details to sign in</p>
+          <p className="text-gray-600 mb-8">Enter your details to sign in to your account.</p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block mb-1 font-medium">Email <span className="text-red-600">*</span></label>
+              <label className="block mb-1 font-medium">
+                Email <span className="text-red-600">*</span>
+              </label>
               <input
                 type="email"
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                className="w-full h-14 px-5 border rounded-3xl focus:outline-none focus:border-blue-400"
                 placeholder="Enter Email"
+                className="w-full h-14 px-5 border border-gray-300 rounded-3xl focus:outline-none focus:border-[#77C2FF]"
+                disabled={loading}
               />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Password <span className="text-red-600">*</span></label>
+              <label className="block mb-1 font-medium">
+                Password <span className="text-red-600">*</span>
+              </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   value={form.password}
                   onChange={handleChange}
-                  className="w-full h-14 px-5 border rounded-3xl pr-12 focus:outline-none focus:border-blue-400"
                   placeholder="Enter Your Password"
+                  className="w-full h-14 px-5 border border-gray-300 rounded-3xl pr-12 focus:outline-none focus:border-[#77C2FF]"
+                  disabled={loading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500"
+                  disabled={loading}
                 >
                   {showPassword ? <AiOutlineEyeInvisible size={22} /> : <AiOutlineEye size={22} />}
                 </button>
               </div>
             </div>
 
-            <Link to="/forgot-password" className="text-sm text-blue-600 block text-right">
+            <Link to="/forgot-password" className="text-sm text-[#77C2FF] block text-right hover:underline">
               Forgot password?
             </Link>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-14 bg-[#77C2FF] text-white font-bold rounded-3xl border-2 border-black shadow-[0_4px_0_0_black] active:translate-y-0.5 disabled:opacity-70"
+              className="w-full h-14 bg-[#77C2FF] text-white font-bold rounded-3xl border-2 border-black shadow-[0_4px_0_0_black] active:translate-y-0.5 disabled:opacity-70 transition-all"
             >
               {loading ? "Logging in..." : "Login"}
             </button>
 
             <div className="relative my-6">
               <div className="border-t border-gray-300" />
-              <span className="absolute left-1/2 -top-3 bg-white px-4 text-sm text-gray-500">Or</span>
+              <span className="absolute left-1/2 -top-3 bg-gray-50 px-4 text-sm text-gray-500">Or</span>
             </div>
 
             <button
               type="button"
               onClick={handleGoogleLogin}
-              className="w-full h-14 border border-gray-300 rounded-3xl flex items-center justify-center gap-3 hover:bg-gray-50"
+              className="w-full h-14 border border-gray-300 rounded-3xl flex items-center justify-center gap-3 hover:bg-gray-100 transition"
             >
               <img src={Google} alt="Google" className="w-6 h-6" />
               Continue with Google
             </button>
           </form>
 
-          <p className="text-center mt-8">
+          <p className="text-center mt-8 text-sm">
             Don’t have an account?{" "}
-            <Link to="/register" className="text-[#77C2FF] font-medium">Sign Up</Link>
+            <Link to="/register" className="text-[#77C2FF] font-medium hover:underline">Sign Up</Link>
           </p>
         </div>
       </div>
 
-      {/* Right - Image */}
-      <div className="hidden lg:block lg:flex-1 bg-gray-100">
-        <img src={Run} alt="Illustration" className="w-full h-full object-cover" />
+      {/* Right Side - Image */}
+      <div className="hidden lg:flex lg:flex-1 bg-gray-100 items-center justify-center">
+        <img src={Run} alt="Illustration" className="max-h-[90%] object-contain" />
       </div>
     </div>
   );
