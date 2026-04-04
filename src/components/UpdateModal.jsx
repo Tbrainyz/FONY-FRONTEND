@@ -154,7 +154,7 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
                 <button
                   key={val}
                   onClick={() => handleStatus(val)}
-                  className={`px-4 py-2 w-[16%] rounded-2xl border ${
+                  className={`px-4 py-2 w-[18.5%] rounded-2xl border ${
                     formData.status === val
                       ? "bg-black text-white"
                       : ""
