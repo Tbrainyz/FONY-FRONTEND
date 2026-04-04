@@ -110,7 +110,7 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
               </div>
 
               {/* Status */}
-              <div className="w-[20%] text-center">
+              <div className="w-[20%] ">
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
                     <div
