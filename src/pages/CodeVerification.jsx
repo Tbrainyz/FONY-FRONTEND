@@ -59,21 +59,23 @@ const CodeVerification = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col lg:flex-row transition-colors">
       {/* Left - Form */}
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-md">
           <div
             onClick={() => navigate("/")}
-            className="flex gap-2 items-center cursor-pointer mb-10"
+            className="flex gap-2 items-center cursor-pointer mb-10 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             <img src={arrow} alt="" className="w-5" />
             <p className="font-medium">Back</p>
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-bold mb-3">Enter 6-Digit Code</h2>
-          <p className="text-gray-600 mb-8">
-            Enter the 6-digit code sent to <span className="font-medium">{email}</span>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 text-gray-900 dark:text-white">
+            Enter 6-Digit Code
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">
+            Enter the 6-digit code sent to <span className="font-medium text-gray-900 dark:text-white">{email}</span>
           </p>
 
           <div className="flex justify-center gap-3 mb-8">
@@ -86,7 +88,9 @@ const CodeVerification = () => {
                 value={digit}
                 onChange={(e) => handleChange(e.target.value, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
-                className="w-12 h-14 text-center text-2xl border-2 border-gray-300 rounded-2xl focus:border-blue-500 focus:outline-none"
+                className="w-12 h-14 text-center text-2xl border-2 border-gray-300 dark:border-gray-600 
+                           bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-2xl 
+                           focus:border-blue-500 focus:outline-none"
               />
             ))}
           </div>
@@ -95,26 +99,28 @@ const CodeVerification = () => {
 
           <button
             onClick={handleSubmit}
-            className="w-full h-14 bg-[#77C2FF] text-white font-bold rounded-3xl border-2 border-black shadow-[0_4px_0_0_black] active:translate-y-0.5"
+            className="w-full h-14 bg-[#77C2FF] hover:bg-blue-500 text-white font-bold rounded-3xl 
+                       border-2 border-black dark:border-white shadow-[0_4px_0_0_black] 
+                       dark:shadow-[0_4px_0_0_white] active:translate-y-0.5 transition-all"
           >
             Continue
           </button>
 
-          <p className="text-center mt-8 text-sm">
+          <p className="text-center mt-8 text-sm text-gray-600 dark:text-gray-400">
             Didn't receive the code?{" "}
             <span
               onClick={handleResend}
-              className="text-blue-600 cursor-pointer font-medium"
+              className="text-blue-600 dark:text-blue-400 cursor-pointer font-medium hover:underline"
             >
               {loading ? "Resending..." : "Resend"}
             </span>
           </p>
 
-          <p className="text-center mt-4 text-sm">
+          <p className="text-center mt-4 text-sm text-gray-600 dark:text-gray-400">
             Remember your password?{" "}
             <span
               onClick={() => navigate("/login")}
-              className="text-blue-600 cursor-pointer font-medium"
+              className="text-blue-600 dark:text-blue-400 cursor-pointer font-medium hover:underline"
             >
               Sign In
             </span>
@@ -123,7 +129,7 @@ const CodeVerification = () => {
       </div>
 
       {/* Right - Image */}
-      <div className="hidden lg:block lg:flex-1 bg-gray-100">
+      <div className="hidden lg:block lg:flex-1 bg-gray-100 dark:bg-gray-900">
         <img src={img} alt="" className="w-full h-full object-cover" />
       </div>
     </div>

@@ -41,28 +41,35 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col lg:flex-row transition-colors">
       {/* Left - Form */}
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-md">
           <div
-            className="flex gap-2 items-center cursor-pointer mb-10"
+            className="flex gap-2 items-center cursor-pointer mb-10 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
             onClick={() => navigate(-1)}
           >
             <img src={arrow} alt="" className="w-5" />
             <p className="font-medium">Back</p>
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-bold mb-3">Change Password</h2>
-          <p className="text-gray-600 mb-8">Update your password by filling the form below</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 text-gray-900 dark:text-white">
+            Change Password
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">
+            Update your password by filling the form below
+          </p>
 
           <div className="space-y-6">
             <div>
-              <label className="block mb-2 font-medium">Current Password <span className="text-red-600">*</span></label>
+              <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
+                Current Password <span className="text-red-600">*</span>
+              </label>
               <div className="relative">
                 <input
                   type={showOld ? "text" : "password"}
-                  className="w-full h-14 px-5 border rounded-3xl pr-12"
+                  className="w-full h-14 px-5 border border-gray-300 dark:border-gray-600 rounded-3xl pr-12 
+                             bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
                   placeholder="Enter current password"
                   value={oldPassword}
                   onChange={(e) => setOldPassword(e.target.value)}
@@ -77,11 +84,14 @@ const ChangePassword = () => {
             </div>
 
             <div>
-              <label className="block mb-2 font-medium">New Password <span className="text-red-600">*</span></label>
+              <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
+                New Password <span className="text-red-600">*</span>
+              </label>
               <div className="relative">
                 <input
                   type={showNew ? "text" : "password"}
-                  className="w-full h-14 px-5 border rounded-3xl pr-12"
+                  className="w-full h-14 px-5 border border-gray-300 dark:border-gray-600 rounded-3xl pr-12 
+                             bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
                   placeholder="Enter new password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
@@ -96,11 +106,14 @@ const ChangePassword = () => {
             </div>
 
             <div>
-              <label className="block mb-2 font-medium">Confirm New Password <span className="text-red-600">*</span></label>
+              <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
+                Confirm New Password <span className="text-red-600">*</span>
+              </label>
               <div className="relative">
                 <input
                   type={showConfirm ? "text" : "password"}
-                  className="w-full h-14 px-5 border rounded-3xl pr-12"
+                  className="w-full h-14 px-5 border border-gray-300 dark:border-gray-600 rounded-3xl pr-12 
+                             bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
                   placeholder="Re-enter new password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
@@ -117,7 +130,9 @@ const ChangePassword = () => {
             <button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full h-14 bg-[#77C2FF] text-white font-bold rounded-3xl border-2 border-black shadow-[0_4px_0_0_black] active:translate-y-0.5 disabled:opacity-70"
+              className="w-full h-14 bg-[#77C2FF] hover:bg-blue-500 text-white font-bold rounded-3xl 
+                         border-2 border-black dark:border-white shadow-[0_4px_0_0_black] 
+                         dark:shadow-[0_4px_0_0_white] active:translate-y-0.5 disabled:opacity-70 transition-all"
             >
               {loading ? "Processing..." : "Confirm"}
             </button>
@@ -126,7 +141,7 @@ const ChangePassword = () => {
       </div>
 
       {/* Right - Image */}
-      <div className="hidden lg:block lg:flex-1 bg-gray-100">
+      <div className="hidden lg:block lg:flex-1 bg-gray-100 dark:bg-gray-900">
         <img src={img} alt="" className="w-full h-full object-cover" />
       </div>
     </div>
