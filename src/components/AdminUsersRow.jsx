@@ -81,7 +81,7 @@ const AdminUsersRow = ({
           </div>
 
           {/* DATE (NOW STYLED ✨) */}
-          <div className="w-[40%] flex justify-start pl-6">
+          <div className="w-[40%] flex justify-center pl-6">
             <span className="flex items-center gap-2 px-3 py-1 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm">
               <FaCalendarAlt className="text-gray-500" />
               {new Date(user.createdAt).toLocaleDateString("en-GB")}
