@@ -68,23 +68,32 @@ export const TaskProvider = ({ children }) => {
 
   // ================= UPDATE TASK =================
   const updateTask = async (id, data) => {
-    try {
-      const formData = new FormData();
-      formData.append("title", data.title);
-      formData.append("description", data.description);
-      formData.append("priority", data.priority);
-      formData.append("status", data.status);
-      if (data.image) formData.append("image", data.image);
+  try {
+    const formData = new FormData();
 
-      await API.put(`/api/tasks/${id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("priority", data.priority);
+    formData.append("status", data.status);
 
-      await fetchTasks(page, priorityFilter);
-    } catch (error) {
-      console.error("Update task error:", error.response?.data || error.message || error);
+    // ✅ VERY IMPORTANT
+    if (data.image) {
+      formData.append("image", data.image);
     }
-  };
+
+    await API.put(`/api/tasks/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    await fetchTasks(page, priorityFilter);
+
+  } catch (error) {
+    console.error("Update task error:", error.response?.data || error.message);
+    throw error; // ✅ important so modal catches it
+  }
+};
 
   // ================= DELETE TASK =================
   const deleteTask = async (id) => {

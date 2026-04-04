@@ -16,6 +16,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // ================= INPUT HANDLERS =================
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -24,20 +25,23 @@ const CreateModal = ({ closeModal, openNextModal }) => {
     setFormData({ ...formData, priority: level });
   };
 
+  // ================= IMAGE HANDLER =================
   const handleImage = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImageFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
+      setPreviewUrl(URL.createObjectURL(file)); // ✅ instant preview
     }
   };
 
+  // cleanup memory
   useEffect(() => {
     return () => {
       if (previewUrl) URL.revokeObjectURL(previewUrl);
     };
   }, [previewUrl]);
 
+  // ================= SUBMIT =================
   const handleSubmit = async () => {
     if (!formData.title || !formData.description || !formData.priority) {
       alert("Please fill all required fields");
@@ -49,18 +53,13 @@ const CreateModal = ({ closeModal, openNextModal }) => {
 
       const data = {
         ...formData,
-        image: imageFile,
+        image: imageFile, // ✅ important
       };
 
       await createTask(data);
 
       closeModal();
-
-      // ✅ PASS CORRECT MESSAGE
-      openNextModal({
-        message: "Task Created Successfully",
-      });
-
+      if (openNextModal) openNextModal("Task created successfully"); // ✅ FIXED
     } catch (error) {
       alert("Failed to create task");
     } finally {
@@ -80,13 +79,14 @@ const CreateModal = ({ closeModal, openNextModal }) => {
               Enter description about this task
             </p>
           </div>
+
           <MdCancel
             className="text-3xl cursor-pointer text-gray-500 hover:text-black"
             onClick={closeModal}
           />
         </div>
 
-        {/* ✅ SCROLLABLE BODY */}
+        {/* 🔥 SCROLLABLE BODY (same as update) */}
         <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto">
 
           {/* TITLE */}
@@ -156,10 +156,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
                 id="image-upload"
               />
 
-              <label
-                htmlFor="image-upload"
-                className="cursor-pointer block text-center"
-              >
+              <label htmlFor="image-upload" className="cursor-pointer block text-center">
                 {previewUrl ? (
                   <img
                     src={previewUrl}
@@ -177,8 +174,8 @@ const CreateModal = ({ closeModal, openNextModal }) => {
               </label>
             </div>
           </div>
-        </div>
 
+          
         {/* FOOTER */}
         <div className="p-8 border-t bg-white">
           <button
@@ -194,6 +191,8 @@ const CreateModal = ({ closeModal, openNextModal }) => {
             {loading ? "Creating..." : "Create New Task"}
           </button>
         </div>
+        </div>
+
       </div>
     </div>
   );
