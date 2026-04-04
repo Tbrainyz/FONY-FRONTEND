@@ -17,7 +17,7 @@ const Carousel = () => {
   const inProgressTasks = tasks.filter((task) => task?.status >= 0 && task?.status < 100);
 
   return (
-    <div className="w-full">
+    <div className="carousel w-full">
       <h3 className="text-2xl md:text-3xl font-bold mb-6">Tasks In Progress</h3>
 
       {inProgressTasks.length > 0 ? (

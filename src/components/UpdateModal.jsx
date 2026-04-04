@@ -100,7 +100,7 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
         </div>
 
         {/* SCROLLABLE CONTENT */}
-        <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto">
+        <div className="scrollable-content p-8 space-y-6 max-h-[70vh] overflow-y-auto">
 
           {/* TITLE */}
           <div>
@@ -154,7 +154,7 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
                 <button
                   key={val}
                   onClick={() => handleStatus(val)}
-                  className={`px-4 py-2 rounded-2xl border ${
+                  className={`px-4 py-2 w-[20%] rounded-2xl border ${
                     formData.status === val
                       ? "bg-black text-white"
                       : ""

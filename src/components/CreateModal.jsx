@@ -87,7 +87,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
         </div>
 
         {/* 🔥 SCROLLABLE BODY (same as update) */}
-        <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto">
+        <div className="scrollable-content p-8 space-y-6 max-h-[70vh] overflow-y-auto">
 
           {/* TITLE */}
           <div>

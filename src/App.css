@@ -15,12 +15,12 @@
 }
 
 /* Hide scrollbar for Chrome, Safari, Opera */
-.create-task-modal::-webkit-scrollbar {
+.scrollable-content::-webkit-scrollbar {
   display: none;
 }
 
 /* Hide scrollbar for IE, Edge, Firefox */
-.create-task-modal {
+.scrollable-content {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;     /* Firefox */
 }
