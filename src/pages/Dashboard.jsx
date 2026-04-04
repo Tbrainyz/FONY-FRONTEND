@@ -137,11 +137,11 @@ const DashBoard = () => {
           <div className="bg-white border rounded-3xl shadow overflow-hidden">
             {/* Desktop Header */}
             <div className="hidden lg:flex bg-[#FBFBFB] border-b font-semibold text-base">
-              <p className="flex-1 py-5 px-6">Task Name</p>
-              <p className="w-28 py-5 px-6">Priority</p>
-              <p className="w-40 py-5 px-6">Date</p>
-              <p className="w-40 py-5 px-6">Status</p>
-              <p className="w-24 py-5 px-6">Actions</p>
+              <p className=" w-[30%] py-5 px-6">Task Name</p>
+              <p className="w-[15%] text-center py-5 px-6">Priority</p>
+              <p className=" w-[20%] text-center py-5 px-6">Date</p>
+              <p className=" w-[20%] text-center py-5 px-6">Status</p>
+              <p className="w-[15%] text-center py-5 px-6">Actions</p>
             </div>
 
             {/* Task Rows */}

@@ -85,12 +85,12 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
               }`}
             >
               {/* Task Name - Takes more space */}
-              <div className="flex-1 pr-6">
+              <div className="w-[30%] pr-6">
                 <p className="font-semibold text-[17px]">{task.title}</p>
               </div>
 
               {/* Priority */}
-              <div className="w-32">
+              <div className="w-[15%] text-center">
                 <span
                   className={`inline-block px-6 py-1.5 rounded-2xl text-sm font-medium border ${
                     task.priority?.toLowerCase() === "high"
@@ -105,12 +105,12 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
               </div>
 
               {/* Date */}
-              <div className="w-44 text-gray-700">
+              <div className=" w-[20%] text-center text-gray-700">
                 {task.createdAt ? new Date(task.createdAt).toLocaleDateString("en-GB") : "—"}
               </div>
 
               {/* Status */}
-              <div className="w-44">
+              <div className="w-[20%] text-center">
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
                     <div
@@ -125,7 +125,7 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
               </div>
 
               {/* Actions */}
-              <div className="w-24 flex justify-end gap-5">
+              <div className="w-[15%] flex justify-end gap-5">
                 <img
                   src={pen}
                   alt="edit"
