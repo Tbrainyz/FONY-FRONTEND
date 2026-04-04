@@ -73,8 +73,8 @@ const AdminUsersRow = ({
       </div>
 
       {/* DESKTOP */}
-      <div className="hidden lg:flex items-center px-8 py-5 border-b bg-white">
-        <div className="flex items-center gap-4 w-[30%]">
+      <div className="hidden lg:flex w-full items-center px-8 py-5 border-b bg-white">
+        <div className="flex w-[30%] items-center gap-4 ">
           <img
             src={user.profilePicture || pic}
             alt=""
@@ -88,10 +88,10 @@ const AdminUsersRow = ({
           </div>
         </div>
 
-        <div className="flex gap-12  text-center">
-          <span className="w-[20%]">{user.totalTasks} </span>
-          <span className="w-[20%]">{user.completedTasks} </span>
-          <span className="w-[30%]">
+        <div className="flex gap-12 w-[70%] text-center">
+          <span className="w-[30%]">{user.totalTasks} </span>
+          <span className="w-[30%]">{user.completedTasks} </span>
+          <span className="w-[40%]">
             {new Date(user.createdAt).toLocaleDateString("en-GB")}
           </span>
         </div>
