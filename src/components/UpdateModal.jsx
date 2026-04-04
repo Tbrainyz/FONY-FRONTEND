@@ -168,9 +168,7 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
               </label>
             </div>
           </div>
-        </div>
-
-        {/* FOOTER */}
+              {/* FOOTER */}
         <div className="p-8 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
           <button
             onClick={handleSubmit}
@@ -180,6 +178,9 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
             {loading ? "Updating..." : "Update Task"}
           </button>
         </div>
+        </div>
+
+    
       </div>
     </div>
   );

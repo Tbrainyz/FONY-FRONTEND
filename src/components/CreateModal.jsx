@@ -157,9 +157,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
               </label>
             </div>
           </div>
-        </div>
-
-        {/* FOOTER */}
+           {/* FOOTER */}
         <div className="p-8 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
           <button
             onClick={handleSubmit}
@@ -169,6 +167,9 @@ const CreateModal = ({ closeModal, openNextModal }) => {
             {loading ? "Creating..." : "Create New Task"}
           </button>
         </div>
+        </div>
+
+       
       </div>
     </div>
   );
