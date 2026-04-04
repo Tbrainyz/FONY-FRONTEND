@@ -4,7 +4,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import ProfileDropDown from "./ProfileDropDown";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { useTheme } from "../context/Themecontext";    // Fixed import name (was Themecontext)
+import { useTheme } from "../context/ThemeContext";    // Fixed import name (was Themecontext)
 import ThemeToggle from "./ThemeToggle";
 
 const NavBar = () => {
