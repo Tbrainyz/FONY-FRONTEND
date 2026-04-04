@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import arrow from "../assets/Arrow.svg";
 import img from "../assets/Frame-2.svg";
+import { toast } from "react-toastify";
 
 const CodeVerification = () => {
   const navigate = useNavigate();
@@ -48,8 +49,9 @@ const CodeVerification = () => {
     setLoading(true);
     try {
       await resendOtp(email);
-      alert("OTP resent successfully!");
+      toast.success("OTP resent successfully!");
     } catch (err) {
+      toast.error(err.message || "Failed to resend OTP");
       setError(err.message || "Failed to resend OTP");
     } finally {
       setLoading(false);

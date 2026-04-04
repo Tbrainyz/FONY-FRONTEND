@@ -14,7 +14,9 @@ const Carousel = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const inProgressTasks = tasks.filter((task) => task?.status >= 0 && task?.status < 100);
+  const inProgressTasks = tasks.filter(
+    (task) => task?.status >= 0 && task?.status < 100,
+  );
 
   return (
     <div className=" w-full">
@@ -30,7 +32,11 @@ const Carousel = () => {
               {/* Image */}
               <div className="relative">
                 <img
-                  src={task.image || "/default-image.png"}
+                  src={
+                    task.image
+                      ? `${task.image}?t=${new Date(task.updatedAt || Date.now()).getTime()}`
+                      : "/default-image.png"
+                  }
                   alt={task.title}
                   className="w-full h-40 sm:h-44 object-cover"
                 />
@@ -67,7 +73,7 @@ const Carousel = () => {
                     />
                   </div>
                   <p className="text-sm font-medium whitespace-nowrap">
-                    {task.status || 0}% 
+                    {task.status || 0}%
                   </p>
                 </div>
               </div>

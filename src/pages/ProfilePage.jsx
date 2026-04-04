@@ -5,6 +5,7 @@ import { MdOutlineLockOpen } from "react-icons/md";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import ProfileImage from "../assets/FB_IMG_16265830618836469 1.png";
+import { toast } from "react-toastify";
 
 const ProfilePage = () => {
   const { user, updateProfile, logout } = useContext(AuthContext);
@@ -49,15 +50,16 @@ const ProfilePage = () => {
     setLoading(true);
     try {
       await updateProfile(formData);
-      alert("Profile updated successfully");
+      toast.success("Profile updated successfully");
       setIsEditing(false);
     } catch (err) {
       console.error(err);
-      alert("Update failed");
+      toast.error("Update failed");
     } finally {
       setLoading(false);
     }
   };
+
 
   const handleCancel = () => {
     if (user) {
