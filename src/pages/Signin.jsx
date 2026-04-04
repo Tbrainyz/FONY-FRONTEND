@@ -52,7 +52,9 @@ const Signin = () => {
           </div>
 
           <h2 className="text-3xl font-bold mb-2">Welcome Back</h2>
-          <p className="text-gray-600 mb-8">Enter your details to sign in to your account.</p>
+          <p className="text-gray-600 mb-8">
+            Enter your details to sign in to your account.
+          </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -62,6 +64,7 @@ const Signin = () => {
               <input
                 type="email"
                 name="email"
+                autoComplete="email"
                 value={form.email}
                 onChange={handleChange}
                 placeholder="Enter Email"
@@ -90,12 +93,19 @@ const Signin = () => {
                   className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500"
                   disabled={loading}
                 >
-                  {showPassword ? <AiOutlineEyeInvisible size={22} /> : <AiOutlineEye size={22} />}
+                  {showPassword ? (
+                    <AiOutlineEyeInvisible size={22} />
+                  ) : (
+                    <AiOutlineEye size={22} />
+                  )}
                 </button>
               </div>
             </div>
 
-            <Link to="/forgot-password" className="text-sm text-[#77C2FF] block text-right hover:underline">
+            <Link
+              to="/forgot-password"
+              className="text-sm text-[#77C2FF] block text-right hover:underline"
+            >
               Forgot password?
             </Link>
 
@@ -109,7 +119,9 @@ const Signin = () => {
 
             <div className="relative my-6">
               <div className="border-t border-gray-300" />
-              <span className="absolute left-1/2 -top-3 bg-gray-50 px-4 text-sm text-gray-500">Or</span>
+              <span className="absolute left-1/2 -top-3 bg-gray-50 px-4 text-sm text-gray-500">
+                Or
+              </span>
             </div>
 
             <button
@@ -124,14 +136,23 @@ const Signin = () => {
 
           <p className="text-center mt-8 text-sm">
             Don’t have an account?{" "}
-            <Link to="/register" className="text-[#77C2FF] font-medium hover:underline">Sign Up</Link>
+            <Link
+              to="/register"
+              className="text-[#77C2FF] font-medium hover:underline"
+            >
+              Sign Up
+            </Link>
           </p>
         </div>
       </div>
 
       {/* Right Side - Image */}
       <div className="hidden lg:flex lg:flex-1 bg-gray-100 items-center justify-center">
-        <img src={Run} alt="Illustration" className="max-h-[90%] object-contain" />
+        <img
+          src={Run}
+          alt="Illustration"
+          className="max-h-[90%] object-contain"
+        />
       </div>
     </div>
   );
