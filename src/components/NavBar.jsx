@@ -4,12 +4,15 @@ import { IoIosArrowDown } from "react-icons/io";
 import ProfileDropDown from "./ProfileDropDown";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { useTheme } from "../context/Themecontext";    // Fixed import name (was Themecontext)
+import ThemeToggle from "./ThemeToggle";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useContext(AuthContext);
+  const { theme } = useTheme();
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -23,60 +26,84 @@ const NavBar = () => {
   }, []);
 
   return (
-    <nav className="border-b bg-white sticky top-0 z-50">
+    <nav className="border-b bg-white dark:bg-gray-900 sticky top-0 z-50 shadow-sm transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         {/* Logo */}
-        <img src={logo} alt="Logo" className="h-9 md:h-10" />
+        <img 
+          src={logo} 
+          alt="Logo" 
+          className="h-9 md:h-10" 
+        />
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-3">
           <button
             onClick={() => navigate("/dashboard")}
-            className={`px-6 py-2 rounded-2xl font-medium transition ${location.pathname === "/dashboard" ? "bg-[#77C2FF] text-black" : "bg-gray-100 hover:bg-gray-200"}`}
+            className={`px-6 py-2 rounded-2xl font-medium transition 
+              ${location.pathname === "/dashboard" 
+                ? "bg-[#77C2FF] text-black dark:bg-blue-500 dark:text-white" 
+                : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white"}`}
           >
             Dashboard
           </button>
           <button
             onClick={() => navigate("/completed")}
-            className={`px-6 py-2 rounded-2xl font-medium transition ${location.pathname === "/completed" ? "bg-[#77C2FF] text-black" : "bg-gray-100 hover:bg-gray-200"}`}
+            className={`px-6 py-2 rounded-2xl font-medium transition 
+              ${location.pathname === "/completed" 
+                ? "bg-[#77C2FF] text-black dark:bg-blue-500 dark:text-white" 
+                : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white"}`}
           >
             Completed
           </button>
         </div>
 
-        {/* Profile */}
-        <div ref={dropdownRef} className="relative">
-          <div
-            className="flex items-center gap-3 cursor-pointer"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            <img
-              src={user?.profilePicture || "/default-avatar.png"}
-              alt="Profile"
-              className="w-9 h-9 rounded-full object-cover border"
-            />
-            <IoIosArrowDown className={`transition ${isOpen ? "rotate-180" : ""}`} />
-          </div>
+        {/* Right Side: Theme Toggle + Profile */}
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
 
-          {isOpen && (
-            <div className="absolute right-0 mt-3 z-50">
-              <ProfileDropDown setOpen={setIsOpen} />
+          {/* Profile */}
+          <div ref={dropdownRef} className="relative">
+            <div
+              className="flex items-center gap-3 cursor-pointer"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <img
+                src={user?.profilePicture || "/default-avatar.png"}
+                alt="Profile"
+                className="w-9 h-9 rounded-full object-cover border border-gray-300 dark:border-gray-600"
+              />
+              <IoIosArrowDown 
+                className={`transition ${isOpen ? "rotate-180" : ""} 
+                           text-gray-600 dark:text-gray-400`} 
+              />
             </div>
-          )}
+
+            {isOpen && (
+              <div className="absolute right-0 mt-3 z-50">
+                <ProfileDropDown setOpen={setIsOpen} />
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Mobile Navigation */}
-      <div className="md:hidden border-t px-4 py-3 flex gap-2 bg-white">
+      <div className="md:hidden border-t px-4 py-3 flex gap-2 bg-white dark:bg-gray-900">
         <button
           onClick={() => navigate("/dashboard")}
-          className={`flex-1 py-2 rounded-2xl text-sm font-medium ${location.pathname === "/dashboard" ? "bg-[#77C2FF]" : "bg-gray-100"}`}
+          className={`flex-1 py-2 rounded-2xl text-sm font-medium transition
+            ${location.pathname === "/dashboard" 
+              ? "bg-[#77C2FF] text-black dark:bg-blue-500 dark:text-white" 
+              : "bg-gray-100 dark:bg-gray-800 dark:text-white"}`}
         >
           Dashboard
         </button>
         <button
           onClick={() => navigate("/completed")}
-          className={`flex-1 py-2 rounded-2xl text-sm font-medium ${location.pathname === "/completed" ? "bg-[#77C2FF]" : "bg-gray-100"}`}
+          className={`flex-1 py-2 rounded-2xl text-sm font-medium transition
+            ${location.pathname === "/completed" 
+              ? "bg-[#77C2FF] text-black dark:bg-blue-500 dark:text-white" 
+              : "bg-gray-100 dark:bg-gray-800 dark:text-white"}`}
         >
           Completed
         </button>

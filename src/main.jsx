@@ -4,15 +4,20 @@ import "./index.css";
 import App from "./App.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { TaskProvider } from "./context/TasksContext.jsx";
+import { ThemeProvider } from "./context/Themecontext.jsx";  // ← Add this
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     {/* <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}> */}
-    <AuthProvider>
-      <TaskProvider>
-        <App />
-      </TaskProvider>
-    </AuthProvider>
+    
+    <ThemeProvider>           {/* ← Wrap everything with ThemeProvider */}
+      <AuthProvider>
+        <TaskProvider>
+          <App />
+        </TaskProvider>
+      </AuthProvider>
+    </ThemeProvider>
+
     {/* </GoogleOAuthProvider> */}
   </StrictMode>,
 );
