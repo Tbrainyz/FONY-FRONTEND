@@ -17,11 +17,11 @@ const Carousel = () => {
   const inProgressTasks = tasks.filter((task) => task?.status >= 0 && task?.status < 100);
 
   return (
-    <div className="carousel w-full">
+    <div className=" w-full">
       <h3 className="text-2xl md:text-3xl font-bold mb-6">Tasks In Progress</h3>
 
       {inProgressTasks.length > 0 ? (
-        <div className="flex gap-6 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory">
+        <div className="carousel flex gap-6 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory">
           {inProgressTasks.map((task, index) => (
             <div
               key={task._id || index}
