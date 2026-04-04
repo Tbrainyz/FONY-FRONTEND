@@ -11,6 +11,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
     description: "",
     priority: "",
   });
+
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -45,10 +46,21 @@ const CreateModal = ({ closeModal, openNextModal }) => {
 
     try {
       setLoading(true);
-      const data = { ...formData, image: imageFile };
+
+      const data = {
+        ...formData,
+        image: imageFile,
+      };
+
       await createTask(data);
+
       closeModal();
-      if (openNextModal) openNextModal();
+
+      // ✅ PASS CORRECT MESSAGE
+      openNextModal({
+        message: "Task Created Successfully",
+      });
+
     } catch (error) {
       alert("Failed to create task");
     } finally {
@@ -57,26 +69,31 @@ const CreateModal = ({ closeModal, openNextModal }) => {
   };
 
   return (
-    <div className="fixed  inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
       <div className="bg-[#FBFBFB] w-full max-w-lg md:max-w-xl rounded-3xl border border-b-8 border-black overflow-hidden">
         
-        {/* Header - Same as Update Modal */}
+        {/* HEADER */}
         <div className="flex justify-between items-start px-8 pt-8 pb-6 border-b">
           <div>
             <h1 className="text-2xl font-bold">Create New Task</h1>
-            <p className="text-gray-600 mt-1">Enter description about this task</p>
+            <p className="text-gray-600 mt-1">
+              Enter description about this task
+            </p>
           </div>
-          <MdCancel 
-            className="text-3xl cursor-pointer text-gray-500 hover:text-black" 
-            onClick={closeModal} 
+          <MdCancel
+            className="text-3xl cursor-pointer text-gray-500 hover:text-black"
+            onClick={closeModal}
           />
         </div>
 
-        {/* Scrollable Content */}
-        <div className="create-task-modal  p-8 space-y-6 max-h-[70vh] overflow-y-auto">
-          {/* Title */}
+        {/* ✅ SCROLLABLE BODY */}
+        <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto">
+
+          {/* TITLE */}
           <div>
-            <label className="text-sm font-medium">Task Name <span className="text-red-600">*</span></label>
+            <label className="text-sm font-medium">
+              Task Name <span className="text-red-600">*</span>
+            </label>
             <input
               type="text"
               name="title"
@@ -87,9 +104,11 @@ const CreateModal = ({ closeModal, openNextModal }) => {
             />
           </div>
 
-          {/* Description */}
+          {/* DESCRIPTION */}
           <div>
-            <label className="text-sm font-medium">Task Description <span className="text-red-600">*</span></label>
+            <label className="text-sm font-medium">
+              Task Description <span className="text-red-600">*</span>
+            </label>
             <input
               type="text"
               name="description"
@@ -100,9 +119,11 @@ const CreateModal = ({ closeModal, openNextModal }) => {
             />
           </div>
 
-          {/* Priority */}
+          {/* PRIORITY */}
           <div>
-            <label className="text-sm font-medium">Select Task Priority <span className="text-red-600">*</span></label>
+            <label className="text-sm font-medium">
+              Select Task Priority <span className="text-red-600">*</span>
+            </label>
             <div className="grid grid-cols-3 gap-3 mt-3">
               {["low", "medium", "high"].map((level) => (
                 <button
@@ -120,46 +141,59 @@ const CreateModal = ({ closeModal, openNextModal }) => {
             </div>
           </div>
 
-          {/* Image Upload */}
+          {/* IMAGE UPLOAD */}
           <div>
-            <label className="text-sm font-medium">Upload Image (Optional)</label>
+            <label className="text-sm font-medium">
+              Upload Image (Optional)
+            </label>
+
             <div className="border-2 border-dashed border-gray-300 rounded-2xl p-8 mt-2 hover:border-[#77C2FF] transition-colors">
-              <input 
-                type="file" 
-                accept="image/*" 
-                onChange={handleImage} 
-                className="hidden" 
-                id="image-upload" 
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImage}
+                className="hidden"
+                id="image-upload"
               />
-              <label htmlFor="image-upload" className="cursor-pointer block text-center">
+
+              <label
+                htmlFor="image-upload"
+                className="cursor-pointer block text-center"
+              >
                 {previewUrl ? (
-                  <img 
-                    src={previewUrl} 
-                    alt="preview" 
-                    className="mx-auto max-h-48 rounded-xl object-contain" 
+                  <img
+                    src={previewUrl}
+                    alt="preview"
+                    className="mx-auto max-h-48 rounded-xl object-contain"
                   />
                 ) : (
                   <div>
                     <img src={pic} alt="upload" className="mx-auto w-14 mb-4" />
-                    <p className="text-sm text-gray-600">Click to upload image</p>
+                    <p className="text-sm text-gray-600">
+                      Click to upload image
+                    </p>
                   </div>
                 )}
               </label>
             </div>
           </div>
-            {/* Footer Button */}
+        </div>
+
+        {/* FOOTER */}
         <div className="p-8 border-t bg-white">
           <button
             onClick={handleSubmit}
-            disabled={loading || !formData.title || !formData.description || !formData.priority}
+            disabled={
+              loading ||
+              !formData.title ||
+              !formData.description ||
+              !formData.priority
+            }
             className="w-full h-12 bg-[#77C2FF] rounded-2xl font-bold border border-b-4 border-black disabled:bg-gray-400 disabled:cursor-not-allowed active:translate-y-0.5 transition-all"
           >
             {loading ? "Creating..." : "Create New Task"}
           </button>
         </div>
-        </div>
-
-      
       </div>
     </div>
   );
