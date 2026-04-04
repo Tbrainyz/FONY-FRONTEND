@@ -89,14 +89,14 @@ const AdminUsersRow = ({
         </div>
 
         <div className="flex gap-12 w-[70%] text-center">
-          <span className="w-[30%]">{user.totalTasks} </span>
-          <span className="w-[30%]">{user.completedTasks} </span>
-          <span className="w-[40%]">
+          <span className="w-[30%] text-center">{user.totalTasks} </span>
+          <span className="w-[30%] text-center">{user.completedTasks} </span>
+          <span className="w-[40%] text-center">
             {new Date(user.createdAt).toLocaleDateString("en-GB")}
           </span>
         </div>
 
-        <div className="flex w-[20%] gap-6">
+        <div className="flex items-center justify-center w-[20%] gap-6">
           <img src={pen} onClick={() => setShowModal(true)} className="w-6 cursor-pointer" />
           <img
             src={del}
