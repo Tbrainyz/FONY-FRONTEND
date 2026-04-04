@@ -149,7 +149,7 @@ const handleUnblockUser = async (user) => {
             <p className="w-[20%] text-center py-5">Total Tasks</p>
             <p className="w-[20%] text-center py-5">Completed</p>
             <p className="w-[30%] text-center py-5">Date Joined</p>
-            <p className="w-[20%]  py-5">Actions</p>
+            <p className="w-[20%]  py-5" px-4>Actions</p>
           </div>
 
           {/* Rows */}
