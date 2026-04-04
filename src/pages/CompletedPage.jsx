@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import del from "../assets/Del.svg";
 import { IoEye } from "react-icons/io5";
 import ViewModal from "../components/ViewModal";
-import PriorityDropdown from "../components/PriorityDropdown";
+import arr from "../assets/AltArrow.svg";   // ← Make sure this asset exists (same as Dashboard)
 import { TaskContext } from "../context/TasksContext";
 
 const CompletedPage = () => {
@@ -17,25 +17,41 @@ const CompletedPage = () => {
     page,
     totalPages,
     hasNextPage,
-    loading,
     hasPrevPage,
+    loading,
     priorityFilter,
     setPriorityFilter,
   } = useContext(TaskContext);
 
   const [selectedTask, setSelectedTask] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [openFilter, setOpenFilter] = useState(false);
+
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpenFilter(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
-    fetchTasks(currentPage, priorityFilter || "", 100);
+    fetchTasks(currentPage, priorityFilter || "", 100); // 100 is likely your status filter for completed
   }, [currentPage, priorityFilter, fetchTasks]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [priorityFilter]);
 
-  const handleFilter = (value) => {
-    setPriorityFilter(value === "All" ? "" : value);
+  const handleFilterSelect = (value) => {
+    const newFilter = value === "All" ? "" : value;
+    setPriorityFilter(newFilter);
+    setOpenFilter(false);
   };
 
   const getPriorityClass = (priority) => {
@@ -63,12 +79,42 @@ const CompletedPage = () => {
           <h2 className="text-3xl md:text-4xl font-[Caveat] font-extrabold text-gray-900 dark:text-white">
             Completed Tasks
           </h2>
-          <div className="flex gap-3 items-center">
+
+          {/* Priority Filter - Same as Dashboard */}
+          <div ref={dropdownRef} className="relative flex items-center gap-3">
             <p className="font-medium text-gray-700 dark:text-gray-300">Priority</p>
-            <PriorityDropdown
-              selected={priorityFilter || "All"}
-              onSelect={handleFilter}
-            />
+            <div
+              className="border border-gray-300 dark:border-gray-700 flex items-center justify-between 
+                         w-full sm:w-[160px] h-11 px-4 rounded-2xl cursor-pointer 
+                         bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+              onClick={() => setOpenFilter(!openFilter)}
+            >
+              <p className="capitalize">{priorityFilter || "All"}</p>
+              <img
+                src={arr}
+                alt="arrow"
+                className={`w-4 transition-transform ${openFilter ? "rotate-180" : ""}`}
+              />
+            </div>
+
+            {openFilter && (
+              <div className="absolute top-12 right-0 w-[160px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 
+                             rounded-xl shadow-lg z-50 py-1">
+                {["All", "high", "medium", "low"].map((item) => (
+                  <p
+                    key={item}
+                    onClick={() => handleFilterSelect(item)}
+                    className={`px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer text-center capitalize 
+                      text-gray-700 dark:text-gray-300
+                      ${(priorityFilter || "All") === item 
+                        ? "bg-gray-100 dark:bg-gray-800 font-medium" 
+                        : ""}`}
+                  >
+                    {item}
+                  </p>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -232,7 +278,7 @@ const CompletedPage = () => {
               <MdOutlineKeyboardArrowRight
                 onClick={() => hasNextPage && setCurrentPage((p) => p + 1)}
                 className={`w-8 h-8 cursor-pointer text-gray-700 dark:text-gray-300 
-                  ${!hasNextPage ? "opacity-40" : "hover:text-black dark:hover:text-white"}`}
+                  ${!hasPrevPage ? "opacity-40" : "hover:text-black dark:hover:text-white"}`}
               />
             </div>
           </div>
