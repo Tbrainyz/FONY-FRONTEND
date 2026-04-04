@@ -57,7 +57,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+    <div className="fixed  inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
       <div className="bg-[#FBFBFB] w-full max-w-lg md:max-w-xl rounded-3xl border border-b-8 border-black overflow-hidden">
         
         {/* Header - Same as Update Modal */}
@@ -73,7 +73,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
         </div>
 
         {/* Scrollable Content */}
-        <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto">
+        <div className="create-task-modal  p-8 space-y-6 max-h-[70vh] overflow-y-auto">
           {/* Title */}
           <div>
             <label className="text-sm font-medium">Task Name <span className="text-red-600">*</span></label>
@@ -147,9 +147,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
               </label>
             </div>
           </div>
-        </div>
-
-        {/* Footer Button */}
+            {/* Footer Button */}
         <div className="p-8 border-t bg-white">
           <button
             onClick={handleSubmit}
@@ -159,6 +157,9 @@ const CreateModal = ({ closeModal, openNextModal }) => {
             {loading ? "Creating..." : "Create New Task"}
           </button>
         </div>
+        </div>
+
+      
       </div>
     </div>
   );

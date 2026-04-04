@@ -11,6 +11,9 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
     priority: "",
     status: 0,
   });
+
+  const [imageFile, setImageFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -21,6 +24,8 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
         priority: task.priority || "",
         status: task.status || 0,
       });
+
+      setPreviewUrl(task.image || null);
     }
   }, [task]);
 
@@ -28,15 +33,32 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handlePriority = (priority) => setFormData({ ...formData, priority });
-  const handleStatus = (value) => setFormData({ ...formData, status: value });
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
 
   const handleSubmit = async () => {
-    setLoading(true);
     try {
-      await updateTask(task._id, formData);
+      setLoading(true);
+
+      const data = {
+        ...formData,
+        image: imageFile, // ✅ include image
+      };
+
+      await updateTask(task._id, data);
+
       closeModal();
-      if (openNextModal) openNextModal();
+
+      openNextModal({
+        title: "Task Updated Successfully",
+        message: "Your task has been updated successfully.",
+      });
+
     } catch (err) {
       alert("Failed to update task");
     } finally {
@@ -46,85 +68,73 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#FBFBFB] w-full max-w-lg md:max-w-xl rounded-3xl border border-b-8 border-black overflow-hidden">
-        <div className="flex justify-between items-start px-8 pt-8 pb-6 border-b">
-          <div>
-            <h1 className="text-2xl font-bold">Update Task</h1>
-            <p className="text-gray-600 mt-1">Update your task details</p>
-          </div>
-          <MdCancel 
-            className="text-3xl cursor-pointer text-gray-500 hover:text-black" 
-            onClick={closeModal} 
+      <div className="bg-[#FBFBFB] w-full max-w-lg rounded-3xl border border-b-8 border-black overflow-hidden">
+
+        {/* Header */}
+        <div className="flex justify-between px-8 pt-8 pb-6 border-b">
+          <h1 className="text-2xl font-bold">Update Task</h1>
+          <MdCancel className="text-3xl cursor-pointer" onClick={closeModal} />
+        </div>
+
+        <div className="p-8 space-y-6">
+
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            className="w-full h-12 px-4 rounded-xl border"
           />
-        </div>
 
-        <div className="p-8 space-y-6 max-h-[75vh] overflow-y-auto">
-          <div>
-            <label className="block text-sm font-medium mb-1">Task Name <span className="text-red-600">*</span></label>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              className="w-full h-12 px-5 rounded-2xl border focus:border-[#77C2FF] focus:outline-none"
-            />
+          <input
+            type="text"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            className="w-full h-12 px-4 rounded-xl border"
+          />
+
+          {/* Priority */}
+          <div className="flex gap-3">
+            {["low", "medium", "high"].map((p) => (
+              <button
+                key={p}
+                onClick={() => setFormData({ ...formData, priority: p })}
+                className={`px-4 py-2 rounded-xl border ${
+                  formData.priority === p ? "bg-black text-white" : ""
+                }`}
+              >
+                {p}
+              </button>
+            ))}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Description <span className="text-red-600">*</span></label>
-            <input
-              type="text"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              className="w-full h-12 px-5 rounded-2xl border focus:border-[#77C2FF] focus:outline-none"
-            />
+          {/* Status */}
+          <div className="flex gap-2">
+            {[0, 25, 50, 75, 100].map((s) => (
+              <button
+                key={s}
+                onClick={() => setFormData({ ...formData, status: s })}
+                className={`px-3 py-1 rounded ${
+                  formData.status === s ? "bg-black text-white" : "border"
+                }`}
+              >
+                {s}%
+              </button>
+            ))}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-2">Priority</label>
-            <div className="grid grid-cols-3 gap-3">
-              {["low", "medium", "high"].map((level) => (
-                <button
-                  key={level}
-                  onClick={() => handlePriority(level)}
-                  className={`h-12 rounded-2xl border capitalize font-medium transition-all ${
-                    formData.priority === level 
-                      ? "bg-black text-white border-black" 
-                      : "hover:border-gray-400"
-                  }`}
-                >
-                  {level}
-                </button>
-              ))}
-            </div>
-          </div>
+          {/* Image Upload */}
+          <input type="file" onChange={handleImage} />
 
-          <div>
-            <label className="block text-sm font-medium mb-2">Progress</label>
-            <div className="flex flex-wrap gap-2">
-              {[0, 25, 50, 75, 100].map((val) => (
-                <button
-                  key={val}
-                  onClick={() => handleStatus(val)}
-                  className={`px-6 py-2.5 rounded-2xl border text-sm font-medium transition-all ${
-                    formData.status === val 
-                      ? "bg-black text-white border-black" 
-                      : "bg-white hover:border-gray-400"
-                  }`}
-                >
-                  {val}%
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
+          {previewUrl && (
+            <img src={previewUrl} className="w-32 rounded-xl" />
+          )}
 
-        <div className="p-8 border-t bg-white">
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full h-12 bg-[#77C2FF] rounded-2xl font-bold border border-b-4 border-black disabled:opacity-70 active:translate-y-0.5 transition-all"
+            className="w-full bg-[#77C2FF] py-3 rounded-xl border border-b-4 border-black"
           >
             {loading ? "Updating..." : "Update Task"}
           </button>
