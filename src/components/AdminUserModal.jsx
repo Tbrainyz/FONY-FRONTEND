@@ -17,7 +17,7 @@ const AdminUserModal = ({
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-3xl shadow-xl w-full max-w-lg mx-auto overflow-hidden">
-        
+
         {/* Header */}
         <div className="flex justify-between items-center border-b px-6 py-4">
           <h2 className="text-xl font-bold">User Details</h2>
@@ -29,6 +29,7 @@ const AdminUserModal = ({
 
         {/* Body */}
         <div className="p-6 space-y-5">
+          
           {/* Profile */}
           <div className="flex items-center gap-4">
             <img
@@ -45,17 +46,31 @@ const AdminUserModal = ({
 
           {/* Info */}
           <div className="space-y-2 text-sm">
-            <p><span className="font-medium">Role:</span> {user.role || "User"}</p>
+            <p>
+              <span className="font-medium">Role:</span>{" "}
+              {user.role || "User"}
+            </p>
 
             <p>
               <span className="font-medium">Status:</span>{" "}
-              <span className={`font-medium ${isBlocked ? "text-red-600" : "text-green-600"}`}>
+              <span
+                className={`font-medium ${
+                  isBlocked ? "text-red-600" : "text-green-600"
+                }`}
+              >
                 {isBlocked ? "Blocked" : "Active"}
               </span>
             </p>
 
-            <p><span className="font-medium">Total Tasks:</span> {user.totalTasks || 0}</p>
-            <p><span className="font-medium">Completed Tasks:</span> {user.completedTasks || 0}</p>
+            <p>
+              <span className="font-medium">Total Tasks:</span>{" "}
+              {user.totalTasks || 0}
+            </p>
+
+            <p>
+              <span className="font-medium">Completed Tasks:</span>{" "}
+              {user.completedTasks || 0}
+            </p>
 
             <p>
               <span className="font-medium">Joined:</span>{" "}
@@ -77,7 +92,8 @@ const AdminUserModal = ({
                   toast.error("You cannot block an admin");
                   return;
                 }
-                onBlock();
+                onBlock(user); // ✅ FIXED
+                toast.success(`${user.name} blocked`);
                 closeModal();
               }}
               className="flex-1 bg-red-600 text-white py-3 rounded-2xl font-medium hover:bg-red-700 transition"
@@ -87,7 +103,8 @@ const AdminUserModal = ({
           ) : (
             <button
               onClick={() => {
-                onUnblock();
+                onUnblock(user); // ✅ FIXED
+                toast.success(`${user.name} unblocked`);
                 closeModal();
               }}
               className="flex-1 bg-green-600 text-white py-3 rounded-2xl font-medium hover:bg-green-700 transition"
@@ -100,7 +117,8 @@ const AdminUserModal = ({
           <button
             onClick={() => {
               if (isAdmin) return;
-              onMakeAdmin();
+              onMakeAdmin(user); // ✅ FIXED
+              toast.success(`${user.name} is now an admin`);
               closeModal();
             }}
             disabled={isAdmin}
