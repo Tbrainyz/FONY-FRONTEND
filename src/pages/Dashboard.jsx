@@ -141,7 +141,7 @@ const DashBoard = () => {
               <p className="w-[15%] text-center py-5 px-6">Priority</p>
               <p className=" w-[20%] text-center py-5 px-6">Date</p>
               <p className=" w-[20%]  py-5 px-6">Status</p>
-              <p className="w-[15%] py-5 px-6">Actions</p>
+              <p className="w-[15%] text-end py-5 px-6">Actions</p>
             </div>
 
             {/* Task Rows */}

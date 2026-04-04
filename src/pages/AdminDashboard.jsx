@@ -145,11 +145,11 @@ const handleUnblockUser = async (user) => {
 
           {/* Header */}
           <div className="hidden lg:flex bg-[#FBFBFB] font-semibold text-lg border-b">
-            <p className="flex-1 px-6 py-5">User</p>
-            <p className="w-40 px-6 py-5">Total Tasks</p>
-            <p className="w-40 px-6 py-5">Completed</p>
-            <p className="w-52 px-6 py-5">Date Joined</p>
-            <p className="w-32 px-6 py-5">Actions</p>
+            <p className="w-[30%] px-6 py-5">User</p>
+            <p className="w-[20%] px-6 py-5">Total Tasks</p>
+            <p className="w-[20%] px-6 py-5">Completed</p>
+            <p className="w-[30%] px-6 py-5">Date Joined</p>
+            <p className="w-[20%] px-6 py-5">Actions</p>
           </div>
 
           {/* Rows */}

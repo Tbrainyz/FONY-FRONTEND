@@ -74,7 +74,7 @@ const AdminUsersRow = ({
 
       {/* DESKTOP */}
       <div className="hidden lg:flex items-center px-8 py-5 border-b bg-white">
-        <div className="flex items-center gap-4 flex-1">
+        <div className="flex items-center gap-4 w-[30%]">
           <img
             src={user.profilePicture || pic}
             alt=""
@@ -88,15 +88,15 @@ const AdminUsersRow = ({
           </div>
         </div>
 
-        <div className="flex gap-12 flex-1">
-          <span>{user.totalTasks}</span>
-          <span>{user.completedTasks}</span>
-          <span>
+        <div className="flex gap-12  text-center">
+          <span className="w-[20%]">{user.totalTasks} </span>
+          <span className="w-[20%]">{user.completedTasks} </span>
+          <span className="w-[30%]">
             {new Date(user.createdAt).toLocaleDateString("en-GB")}
           </span>
         </div>
 
-        <div className="flex gap-6">
+        <div className="flex w-[20%] gap-6">
           <img src={pen} onClick={() => setShowModal(true)} className="w-6 cursor-pointer" />
           <img
             src={del}
