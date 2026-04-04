@@ -148,7 +148,7 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
 
           {/* STATUS */}
           <div>
-            <label className="text-sm font-medium">Progress</label>
+            <label className="text-sm w-full font-medium">Progress</label>
             <div className="flex flex-wrap gap-2 mt-2">
               {[0, 25, 50, 75, 100].map((val) => (
                 <button
