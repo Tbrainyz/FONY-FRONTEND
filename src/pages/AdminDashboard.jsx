@@ -54,44 +54,45 @@ const AdminDashboard = () => {
   }, [page]);
 
   // ================= ACTIONS =================
+// ================= BLOCK =================
+const handleBlockUser = async (user) => {
+  try {
+    await API.put(`/api/admin/block/${user._id}`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-  const handleBlockUser = async (user) => {
-    try {
-      await API.put(`/api/admin/block/${user._id}`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+    setUsers((prev) =>
+      prev.map((u) =>
+        u._id === user._id ? { ...u, isBlocked: true } : u
+      )
+    );
 
-      setUsers((prev) =>
-        prev.map((u) =>
-          u._id === user._id ? { ...u, blocked: true } : u
-        )
-      );
+    toast.success("User blocked successfully");
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    toast.error(err.response?.data?.message || "Failed to block user");
+  }
+};
 
-      toast.success("User blocked successfully");
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to block user");
-    }
-  };
+// ================= UNBLOCK =================
+const handleUnblockUser = async (user) => {
+  try {
+    await API.put(`/api/admin/unblock/${user._id}`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-  const handleUnblockUser = async (user) => {
-    try {
-      await API.put(`/api/admin/unblock/${user._id}`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+    setUsers((prev) =>
+      prev.map((u) =>
+        u._id === user._id ? { ...u, isBlocked: false } : u
+      )
+    );
 
-      setUsers((prev) =>
-        prev.map((u) =>
-          u._id === user._id ? { ...u, blocked: false } : u
-        )
-      );
-
-      toast.success("User unblocked successfully");
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to unblock user");
-    }
-  };
+    toast.success("User unblocked successfully");
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    toast.error(err.response?.data?.message || "Failed to unblock user");
+  }
+};
 
   const handleMakeAdmin = async (user) => {
     try {

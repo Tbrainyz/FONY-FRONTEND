@@ -11,7 +11,7 @@ const AdminUserModal = ({
 }) => {
   if (!user) return null;
 
-  const isBlocked = user.blocked;
+  const isBlocked = user.isBlocked;
   const isAdmin = user.role === "admin";
 
   return (
