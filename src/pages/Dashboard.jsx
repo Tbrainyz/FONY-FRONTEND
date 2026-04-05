@@ -11,6 +11,7 @@ import UpdateModal from "../components/UpdateModal";
 import SuccessModal from "../components/SuccessModal";
 import DeleteModal from "../components/DeleteModal";
 import TaskRow from "../components/TaskRow";
+import TaskViewModal from "../components/TaskViewModal";   // ← New Import
 import { TaskContext } from "../context/TasksContext";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +21,9 @@ const DashBoard = () => {
   const [showModal2, setShowModal2] = useState(false);
   const [showModal3, setShowModal3] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);     // ← New State
   const [selectedTask, setSelectedTask] = useState(null);
+  const [viewedTask, setViewedTask] = useState(null);            // ← New State for View Modal
   const [openFilter, setOpenFilter] = useState(false);
 
   const dropdownRef = useRef(null);
@@ -61,6 +64,12 @@ const DashBoard = () => {
     const newFilter = value === "All" ? "" : value;
     setPriorityFilter(newFilter);
     setOpenFilter(false);
+  };
+
+  // New function to open View Modal
+  const openViewModal = (task) => {
+    setViewedTask(task);
+    setShowViewModal(true);
   };
 
   return (
@@ -161,6 +170,7 @@ const DashBoard = () => {
                 setSelectedTask={setSelectedTask}
                 openUpdateModal={() => setShowModal2(true)}
                 openDeleteModal={() => setShowDeleteModal(true)}
+                openViewModal={openViewModal}           // ← Passed here
               />
             </div>
 
@@ -198,7 +208,7 @@ const DashBoard = () => {
         </div>
       </div>
 
-      {/* Modals - Improved backdrop */}
+      {/* Existing Modals */}
       {showModal1 && (
         <div className="fixed inset-0 bg-black/70 dark:bg-black/80 flex items-center justify-center z-[999] p-4">
           <CreateModal
@@ -232,6 +242,17 @@ const DashBoard = () => {
         <div className="fixed inset-0 bg-black/70 dark:bg-black/80 flex items-center justify-center z-[999] p-4">
           <SuccessModal closeModal={() => setShowModal3(false)} />
         </div>
+      )}
+
+      {/* New Task View Modal - Scrollable */}
+      {showViewModal && viewedTask && (
+        <TaskViewModal
+          task={viewedTask}
+          onClose={() => {
+            setShowViewModal(false);
+            setViewedTask(null);
+          }}
+        />
       )}
     </div>
   );
