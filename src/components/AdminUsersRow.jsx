@@ -77,12 +77,14 @@ const AdminUsersRow = ({
           </div>
         </div>
 
-        {/* Actions */}
+        {/* Actions - Improved Dark Mode Visibility */}
         <div className="flex items-center justify-center w-[20%] gap-6">
           <img
             src={pen}
             onClick={() => setShowModal(true)}
-            className="w-6 cursor-pointer hover:scale-110 hover:rotate-6 transition"
+            className="w-6 h-6 cursor-pointer hover:scale-110 hover:rotate-6 transition-all 
+                       dark:brightness-90 dark:hover:brightness-110"
+            alt="edit"
           />
           <img
             src={del}
@@ -90,7 +92,9 @@ const AdminUsersRow = ({
               setSelectedUser(user);
               openDeleteModal();
             }}
-            className="w-6 cursor-pointer hover:scale-110 hover:-rotate-6 transition"
+            className="w-6 h-6 cursor-pointer hover:scale-110 hover:-rotate-6 transition-all 
+                       dark:brightness-90 dark:hover:brightness-110"
+            alt="delete"
           />
         </div>
       </div>
@@ -137,11 +141,14 @@ const AdminUsersRow = ({
           </div>
         </div>
 
+        {/* Mobile Actions - Improved Dark Mode */}
         <div className="flex gap-6 mt-6 pt-4 border-t dark:border-gray-700">
           <img
             onClick={() => setShowModal(true)}
             src={pen}
-            className="w-6 cursor-pointer hover:scale-110 transition"
+            className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
+                       dark:brightness-90 dark:hover:brightness-110"
+            alt="edit"
           />
           <img
             src={del}
@@ -149,7 +156,9 @@ const AdminUsersRow = ({
               setSelectedUser(user);
               openDeleteModal();
             }}
-            className="w-6 cursor-pointer hover:scale-110 transition"
+            className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
+                       dark:brightness-90 dark:hover:brightness-110"
+            alt="delete"
           />
         </div>
       </div>

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import del from "../assets/Del.svg";
 import { IoEye } from "react-icons/io5";
 import ViewModal from "../components/ViewModal";
-import arr from "../assets/AltArrow.svg";   // ← Make sure this asset exists (same as Dashboard)
+import arr from "../assets/AltArrow.svg";
 import { TaskContext } from "../context/TasksContext";
 
 const CompletedPage = () => {
@@ -41,7 +41,7 @@ const CompletedPage = () => {
   }, []);
 
   useEffect(() => {
-    fetchTasks(currentPage, priorityFilter || "", 100); // 100 is likely your status filter for completed
+    fetchTasks(currentPage, priorityFilter || "", 100);
   }, [currentPage, priorityFilter, fetchTasks]);
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const CompletedPage = () => {
             Completed Tasks
           </h2>
 
-          {/* Priority Filter - Same as Dashboard */}
+          {/* Priority Filter */}
           <div ref={dropdownRef} className="relative flex items-center gap-3">
             <p className="font-medium text-gray-700 dark:text-gray-300">Priority</p>
             <div
@@ -169,15 +169,17 @@ const CompletedPage = () => {
                         />
                       </div>
 
+                      {/* Mobile Actions - Improved for Dark Mode */}
                       <div className="flex gap-6">
                         <IoEye
                           onClick={() => setSelectedTask(task)}
-                          className="w-6 h-6 cursor-pointer text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white"
+                          className="w-6 h-6 cursor-pointer text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors"
                         />
                         <img
                           src={del}
                           alt="delete"
-                          className="w-6 h-6 cursor-pointer hover:scale-110 transition"
+                          className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
+                                     dark:brightness-90 dark:hover:brightness-110"
                           onClick={() => {}}
                         />
                       </div>
@@ -226,15 +228,17 @@ const CompletedPage = () => {
                         </div>
                       </div>
 
+                      {/* Desktop Actions - Improved for Dark Mode */}
                       <div className="flex gap-6 w-32">
                         <IoEye
                           onClick={() => setSelectedTask(task)}
-                          className="w-6 h-6 cursor-pointer text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white"
+                          className="w-6 h-6 cursor-pointer text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors"
                         />
                         <img
                           src={del}
                           alt="delete"
-                          className="w-6 h-6 cursor-pointer hover:scale-110 transition"
+                          className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
+                                     dark:brightness-90 dark:hover:brightness-110"
                           onClick={() => {}}
                         />
                       </div>
@@ -278,7 +282,7 @@ const CompletedPage = () => {
               <MdOutlineKeyboardArrowRight
                 onClick={() => hasNextPage && setCurrentPage((p) => p + 1)}
                 className={`w-8 h-8 cursor-pointer text-gray-700 dark:text-gray-300 
-                  ${!hasPrevPage ? "opacity-40" : "hover:text-black dark:hover:text-white"}`}
+                  ${!hasNextPage ? "opacity-40" : "hover:text-black dark:hover:text-white"}`}
               />
             </div>
           </div>

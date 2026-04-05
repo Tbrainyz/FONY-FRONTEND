@@ -56,17 +56,20 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
                 />
               </div>
 
+              {/* Mobile Actions - Improved Dark Mode */}
               <div className="flex gap-6">
                 <img
                   src={pen}
                   alt="edit"
-                  className="w-6 h-6 cursor-pointer hover:scale-110 transition dark:brightness-110"
+                  className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
+                             dark:brightness-90 dark:hover:brightness-110"
                   onClick={() => { setSelectedTask(task); openUpdateModal(); }}
                 />
                 <img
                   src={del}
                   alt="delete"
-                  className="w-6 h-6 cursor-pointer hover:scale-110 transition dark:brightness-110"
+                  className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
+                             dark:brightness-90 dark:hover:brightness-110"
                   onClick={() => { setSelectedTask(task); openDeleteModal(); }}
                 />
               </div>
@@ -117,17 +120,20 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
                 </div>
               </div>
 
+              {/* Desktop Actions - Improved Dark Mode */}
               <div className="w-[15%] flex justify-end gap-5">
                 <img
                   src={pen}
                   alt="edit"
-                  className="w-6 h-6 cursor-pointer hover:scale-110 transition dark:brightness-110"
+                  className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
+                             dark:brightness-90 dark:hover:brightness-110"
                   onClick={() => { setSelectedTask(task); openUpdateModal(); }}
                 />
                 <img
                   src={del}
                   alt="delete"
-                  className="w-6 h-6 cursor-pointer hover:scale-110 transition dark:brightness-110"
+                  className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
+                             dark:brightness-90 dark:hover:brightness-110"
                   onClick={() => { setSelectedTask(task); openDeleteModal(); }}
                 />
               </div>
