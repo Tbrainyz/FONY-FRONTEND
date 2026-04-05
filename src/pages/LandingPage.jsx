@@ -30,13 +30,13 @@ const LandingPage = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 mt-10">
             <button
-              onClick={() => navigate("/signup")}
+              onClick={() => navigate("/register")}
               className="w-full sm:w-auto px-10 py-4 bg-[#77C2FF] rounded-[48px] border-2 border-b-4 border-black shadow-2xl font-semibold text-lg active:translate-y-0.5 transition-all"
             >
               Get Started
             </button>
             <button
-              onClick={() => navigate("/signin")}
+              onClick={() => navigate("/login")}
               className="w-full sm:w-auto px-10 py-4 bg-white rounded-[48px] border-2 border-b-4 border-black font-semibold text-lg active:translate-y-0.5 transition-all"
             >
               Login
