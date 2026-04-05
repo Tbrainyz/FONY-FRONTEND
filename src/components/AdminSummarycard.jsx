@@ -9,25 +9,25 @@ const AdminSummaryCard = ({ stats }) => {
       label: "Total Users", 
       value: stats.usersCount || 0, 
       icon: <FaUsers />,
-      color: "bg-blue-100 border-blue-500 text-blue-700" 
+      color: "bg-blue-100 border-blue-500 text-blue-700 dark:bg-blue-950 dark:border-blue-600 dark:text-blue-300" 
     },
     { 
       label: "Total Tasks", 
       value: stats.tasksCount || 0, 
       icon: <FaTasks />,
-      color: "bg-purple-100 border-purple-500 text-purple-700" 
+      color: "bg-purple-100 border-purple-500 text-purple-700 dark:bg-purple-950 dark:border-purple-600 dark:text-purple-300" 
     },
     { 
       label: "Completed Tasks", 
       value: stats.completedCount || 0, 
       icon: <FaCheckCircle />,
-      color: "bg-green-100 border-green-500 text-green-700" 
+      color: "bg-green-100 border-green-500 text-green-700 dark:bg-green-950 dark:border-green-600 dark:text-green-300" 
     },
     { 
       label: "Ongoing Tasks", 
       value: stats.ongoingCount || 0, 
       icon: <FaSpinner />,
-      color: "bg-yellow-100 border-yellow-500 text-yellow-700" 
+      color: "bg-yellow-100 border-yellow-500 text-yellow-700 dark:bg-yellow-950 dark:border-yellow-600 dark:text-yellow-300" 
     },
   ];
 
@@ -37,13 +37,9 @@ const AdminSummaryCard = ({ stats }) => {
         <div
           key={i}
           className={`flex items-center gap-4 p-5 md:p-6 rounded-2xl shadow border-l-4 
-                     bg-white dark:bg-gray-900 
-                     border-gray-200 dark:border-gray-700
-                     ${item.color}
-                     dark:bg-gray-900 dark:border-gray-700`}
+                     ${item.color}`}
         >
-          <div className="text-3xl md:text-4xl flex-shrink-0 
-                        text-blue-600 dark:text-blue-400">
+          <div className="text-3xl md:text-4xl flex-shrink-0">
             {item.icon}
           </div>
           
