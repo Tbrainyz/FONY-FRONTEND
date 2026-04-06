@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect} from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import arrow from "../assets/Arrow.svg";
@@ -62,6 +62,12 @@ const CreatePassword = () => {
       setLoading(false);
     }
   };
+
+   useEffect(() => {
+    if (!user) {
+      navigate("/login", { replace: true });
+    }
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">

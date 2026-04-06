@@ -33,6 +33,12 @@ const ProfilePage = () => {
     }
   }, [user]);
 
+   useEffect(() => {
+    if (!user) {
+      navigate("/login", { replace: true });
+    }
+  }, [user]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };

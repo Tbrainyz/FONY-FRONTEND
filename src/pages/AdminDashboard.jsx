@@ -8,6 +8,7 @@ import API from "../api/axios";
 import AdminSummaryCard from "../components/AdminSummarycard";
 import AdminUsersRow from "../components/AdminUsersRow";
 import DeleteModal from "../components/DeleteModal";
+import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
@@ -20,6 +21,7 @@ const AdminDashboard = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   // ================= FETCH =================
   useEffect(() => {
@@ -124,6 +126,12 @@ const AdminDashboard = () => {
       toast.error("Delete failed");
     }
   };
+
+   useEffect(() => {
+    if (!admin) {
+      navigate("/login", { replace: true });
+    }
+  }, [admin]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-8 px-4 md:px-8 lg:px-12 transition-colors">

@@ -51,6 +51,12 @@ const CompletedPage = () => {
     setCurrentPage(1);
   }, [priorityFilter]);
 
+   useEffect(() => {
+    if (!user) {
+      navigate("/login", { replace: true });
+    }
+  }, [user]);
+
   const handleFilterSelect = (value) => {
     const newFilter = value === "All" ? "" : value;
     setPriorityFilter(newFilter);
