@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import arrow from "../assets/Arrow.svg";
@@ -17,6 +17,12 @@ const ChangePassword = () => {
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+      if (!user) {
+        navigate("/login", { replace: true });
+      }
+    }, [user]);
 
   const handleSubmit = async () => {
     if (!oldPassword || !newPassword || !confirmPassword) {

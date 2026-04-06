@@ -34,7 +34,7 @@ const NavBar = () => {
         <img 
           src={logo} 
           alt="Logo" 
-          className="h-9 md:h-10 cursor-pointer" 
+          className="h-9 md:h-10 cursor-pointer dark:brightness-0 dark:invert" 
           onClick={handleLogoClick}
         />
 
