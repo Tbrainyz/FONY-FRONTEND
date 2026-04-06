@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import { FaTasks, FaCheckCircle, FaCalendarAlt } from "react-icons/fa";
-import pen from "../assets/Pen.svg";
-import UpdateModal from "./UpdateModal";
-import SuccessModal from "./SuccessModal";
-import CreateModal from "../components/CreateModal";
+import { FaTasks, FaCheckCircle, FaCalendarAlt, FaEdit } from "react-icons/fa";
+import { IoEye } from "react-icons/io5";   // Optional: if you want to add View later
 import { TaskContext } from "../context/TasksContext";
 
 const Carousel = () => {
-  const { tasks = [], getStatusLabel } = React.useContext(TaskContext);
+  const { tasks = [] } = React.useContext(TaskContext);
 
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -15,6 +12,27 @@ const Carousel = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const inProgressTasks = tasks.filter((task) => task?.status >= 0 && task?.status < 100);
+
+  // Progress style - Same as TaskRow
+  const getProgressStyle = (progress = 0) => {
+    let backgroundColor;
+
+    if (progress <= 25) {
+      backgroundColor = "#fe2903";      // Red
+    } else if (progress <= 50) {
+      backgroundColor = "#FFA500";      // Orange
+    } else if (progress <= 75) {
+      backgroundColor = "#90EE90";      // Light Green
+    } else {
+      backgroundColor = "#339933";      // Dark Green
+    }
+
+    return {
+      width: `${progress}%`,
+      backgroundColor,
+      transition: "width 0.4s ease-in-out",
+    };
+  };
 
   return (
     <div className="w-full">
@@ -46,17 +64,18 @@ const Carousel = () => {
                 <div className="flex justify-between items-start">
                   <span className="text-xs font-medium px-3 py-1 border border-red-500 text-red-600 
                                    dark:border-red-400 dark:text-red-400 rounded-full">
-                    {task.priority}
+                    {task.priority || "—"}
                   </span>
 
-                  <img
-                    src={pen}
-                    alt="edit"
-                    className="w-6 h-6 cursor-pointer hover:scale-110 transition dark:brightness-110"
+                  {/* Replaced image with FaEdit icon - consistent with TaskRow */}
+                  <FaEdit
                     onClick={() => {
                       setSelectedTask(task);
                       setShowUpdateModal(true);
                     }}
+                    className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 
+                               hover:text-amber-600 dark:hover:text-amber-400 
+                               transition-colors active:scale-95"
                   />
                 </div>
 
@@ -64,16 +83,16 @@ const Carousel = () => {
                   {task.title}
                 </p>
 
-                {/* Progress Bar */}
+                {/* Updated Progress Bar - Same styling as TaskRow */}
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-[#77C2FF] dark:bg-blue-400 rounded-full transition-all"
-                      style={{ width: `${task.status || 0}%` }}
+                      className="h-full rounded-full"
+                      style={getProgressStyle(task.status)}
                     />
                   </div>
                   <p className="text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-300">
-                    {task.status || 0}% 
+                    {task.status || 0}%
                   </p>
                 </div>
               </div>
