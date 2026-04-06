@@ -8,8 +8,14 @@ import API from "../api/axios";
 import AdminSummaryCard from "../components/AdminSummarycard";
 import AdminUsersRow from "../components/AdminUsersRow";
 import DeleteModal from "../components/DeleteModal";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
 
 const AdminDashboard = () => {
+  const { admin } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(1);
@@ -33,6 +39,12 @@ const AdminDashboard = () => {
         console.error(err);
       }
     };
+      useEffect(() => {
+      if (!admin) {
+        navigate("/login", { replace: true });
+      }
+    }, [admin]);
+    
 
     const fetchUsers = async () => {
       try {

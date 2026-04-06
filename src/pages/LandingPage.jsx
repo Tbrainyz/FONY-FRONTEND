@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-
+import foot from "../assets/foot.svg";
 import flex1 from "../assets/flex1.svg";
 import flex2 from "../assets/flex2.svg";
 import flex3 from "../assets/flex3.svg";
@@ -217,8 +217,8 @@ const LandingPage = () => {
             <img src={tiktok} alt="" />
           </div>
         </div>
-        <div className="text-center mt-16 text-[180px] md:text-[250px] font-light text-black leading-none">
-          Fony
+        <div className="text-center flex justify-center mt-16 text-[180px] md:text-[250px] font-light text-black leading-none">
+          <img src={foot} alt="" className=" h-auto " />
         </div>
       </footer>
     </div>

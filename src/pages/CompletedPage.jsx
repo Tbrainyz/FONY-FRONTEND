@@ -10,6 +10,8 @@ import ViewModal from "../components/ViewModal";
 import DeleteModal from "../components/DeleteModal";
 import arr from "../assets/AltArrow.svg";
 import { TaskContext } from "../context/TasksContext";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const CompletedPage = () => {
   const {
@@ -29,6 +31,8 @@ const CompletedPage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [openFilter, setOpenFilter] = useState(false);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const dropdownRef = useRef(null);
 
@@ -50,6 +54,13 @@ const CompletedPage = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [priorityFilter]);
+
+    useEffect(() => {
+    if (!user) {
+      navigate("/login", { replace: true });
+    }
+  }, [user]);
+  
 
   const handleFilterSelect = (value) => {
     const newFilter = value === "All" ? "" : value;
