@@ -60,6 +60,12 @@ const DashBoard = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+  if (!user) {
+    navigate("/login", { replace: true });
+  }
+}, [user]);
+
   const handleFilterSelect = (value) => {
     const newFilter = value === "All" ? "" : value;
     setPriorityFilter(newFilter);
