@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+
 import flex1 from "../assets/flex1.svg";
 import flex2 from "../assets/flex2.svg";
 import flex3 from "../assets/flex3.svg";
@@ -13,10 +15,12 @@ import facebook from "../assets/facebook.svg";
 import instagram from "../assets/instagram.svg";
 import twitter from "../assets/twitter.svg";
 import tiktok from "../assets/tiktok.svg";
+
 import LandingNavBar from "../components/LandingNavBar";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   return (
     <div className="w-full overflow-hidden">
@@ -28,35 +32,48 @@ const LandingPage = () => {
           <p className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight">
             Organize What Matters, Move At Your Own Pace
           </p>
+
           <div className="flex flex-col sm:flex-row gap-4 mt-10">
-            <button
-              onClick={() => navigate("/register")}
-              className="w-full sm:w-auto px-10 py-4 bg-[#77C2FF] rounded-[48px] border-2 border-b-4 border-black shadow-2xl font-semibold text-lg active:translate-y-0.5 transition-all"
-            >
-              Get Started
-            </button>
-            <button
-              onClick={() => navigate("/login")}
-              className="w-full sm:w-auto px-10 py-4 bg-white rounded-[48px] border-2 border-b-4 border-black font-semibold text-lg active:translate-y-0.5 transition-all"
-            >
-              Login
-            </button>
+            {user ? (
+              // Logged in user
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="w-full sm:w-auto px-10 py-4 bg-[#77C2FF] rounded-[48px] border-2 border-b-4 border-black shadow-2xl font-semibold text-lg active:translate-y-0.5 transition-all hover:bg-[#5eb8ff]"
+              >
+                Go to Dashboard →
+              </button>
+            ) : (
+              // Not logged in - original buttons
+              <>
+                <button
+                  onClick={() => navigate("/register")}
+                  className="w-full sm:w-auto px-10 py-4 bg-[#77C2FF] rounded-[48px] border-2 border-b-4 border-black shadow-2xl font-semibold text-lg active:translate-y-0.5 transition-all"
+                >
+                  Get Started
+                </button>
+                <button
+                  onClick={() => navigate("/login")}
+                  className="w-full sm:w-auto px-10 py-4 bg-white rounded-[48px] border-2 border-b-4 border-black font-semibold text-lg active:translate-y-0.5 transition-all"
+                >
+                  Login
+                </button>
+              </>
+            )}
           </div>
         </div>
 
-        <img 
-          src={flex1} 
-          alt="" 
-          className="w-full max-w-md lg:max-w-lg h-auto object-contain" 
+        <img
+          src={flex1}
+          alt=""
+          className="w-full max-w-md lg:max-w-lg h-auto object-contain"
         />
       </div>
 
       {/* How it Works Section */}
-      <div className="px-6 md:px-12 lg:px-20 py-16">
+      <div id="how-it-works" className="px-6 md:px-12 lg:px-20 py-16">
         <p className="text-4xl md:text-5xl lg:text-6xl font-black text-center leading-tight mb-16">
           A Simple Way To <br className="hidden md:block" /> Manage Your Tasks
         </p>
-
         <div className="max-w-5xl mx-auto space-y-12">
           {/* Card 1 */}
           <div className="flex flex-col md:flex-row bg-[#F6FBFF] rounded-[60px] border border-b-4 overflow-hidden">
@@ -64,7 +81,7 @@ const LandingPage = () => {
               <div>
                 <p className="text-3xl md:text-4xl font-black mb-4">Create Your Tasks</p>
                 <p className="text-lg text-gray-700">
-                  Add What Matters, When It Matters Big <br className="hidden md:block" /> 
+                  Add What Matters, When It Matters Big <br className="hidden md:block" />
                   Goals Or Small Wins, All In One Place
                 </p>
               </div>
@@ -80,7 +97,7 @@ const LandingPage = () => {
               <div>
                 <p className="text-3xl md:text-4xl font-black mb-4">Update as You Go</p>
                 <p className="text-lg text-gray-700">
-                  Edit, prioritize, and track progress easily <br className="hidden md:block" /> 
+                  Edit, prioritize, and track progress easily <br className="hidden md:block" />
                   as your day evolves.
                 </p>
               </div>
@@ -96,7 +113,7 @@ const LandingPage = () => {
               <div>
                 <p className="text-3xl md:text-4xl font-black mb-4">Stay Organized</p>
                 <p className="text-lg text-gray-700">
-                  Add What Matters, When It Matters Big <br className="hidden md:block" /> 
+                  Add What Matters, When It Matters Big <br className="hidden md:block" />
                   Goals Or Small Wins, All In One Place
                 </p>
               </div>
@@ -109,11 +126,10 @@ const LandingPage = () => {
       </div>
 
       {/* Testimonials / Stats Section */}
-      <div className="px-6 md:px-12 lg:px-20 py-16 bg-gray-50">
+      <div id="testimonials" className="px-6 md:px-12 lg:px-20 py-16 bg-gray-50">
         <p className="text-4xl md:text-5xl lg:text-6xl font-black text-center leading-tight mb-16">
           Loved By People Who <br className="hidden md:block" /> Get Things Done
         </p>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {/* Testimonial 1 */}
           <div className="bg-[#F6FBFF] border border-b-4 rounded-[60px] p-8 text-center">
@@ -185,7 +201,7 @@ const LandingPage = () => {
         </div>
       </div>
 
-    {/* Footer */}
+      {/* Footer */}
       <footer className="px-6 md:px-12 lg:px-20 py-16 border-t">
         <div className="flex flex-col md:flex-row gap-10 justify-between items-center">
           <img src={footLogo} alt="" />
