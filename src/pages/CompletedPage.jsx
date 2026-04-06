@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { IoEye } from "react-icons/io5";
 import { FaTrash } from "react-icons/fa";
 import ViewModal from "../components/ViewModal";
-import DeleteModal from "../components/DeleteModal";   // ← Import DeleteModal
+import DeleteModal from "../components/DeleteModal";
 import arr from "../assets/AltArrow.svg";
 import { TaskContext } from "../context/TasksContext";
 
@@ -25,8 +25,8 @@ const CompletedPage = () => {
   } = useContext(TaskContext);
 
   const [selectedTask, setSelectedTask] = useState(null);
-  const [taskToDelete, setTaskToDelete] = useState(null);     // ← New state for delete
-  const [showDeleteModal, setShowDeleteModal] = useState(false); // ← New state
+  const [taskToDelete, setTaskToDelete] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [openFilter, setOpenFilter] = useState(false);
 
@@ -57,7 +57,6 @@ const CompletedPage = () => {
     setOpenFilter(false);
   };
 
-  // Handle Delete
   const handleDeleteClick = (task) => {
     setTaskToDelete(task);
     setShowDeleteModal(true);
@@ -67,16 +66,12 @@ const CompletedPage = () => {
     if (!taskToDelete?._id) return;
 
     try {
-      // You can call deleteTask from context if available, or use your existing logic
-      // For now, we'll assume deleteTask exists in TaskContext
-      // If not, you can adjust this part
-      await taskToDelete._id; // Placeholder - replace with actual delete call
+      // TODO: Replace with actual delete function from context
+      // await deleteTask(taskToDelete._id);
 
       toast.success("Task deleted successfully");
       setShowDeleteModal(false);
       setTaskToDelete(null);
-      
-      // Refresh the list
       fetchTasks(currentPage, priorityFilter || "", 100);
     } catch (err) {
       toast.error("Failed to delete task");
@@ -150,13 +145,13 @@ const CompletedPage = () => {
         {/* Main Container */}
         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-3xl shadow overflow-hidden">
 
-          {/* Desktop Table Header */}
-          <div className="hidden lg:flex bg-[#FBFBFB] dark:bg-gray-800 font-bold border-b border-gray-200 dark:border-gray-700 text-base">
-            <p className="flex-1 py-5 pl-8 text-gray-700 dark:text-gray-300">Task Name</p>
-            <p className="w-32 py-5 pl-8 text-gray-700 dark:text-gray-300">Priority</p>
-            <p className="w-44 py-5 text-gray-700 dark:text-gray-300">Date</p>
-            <p className="w-44 py-5 text-gray-700 dark:text-gray-300">Status</p>
-            <p className="w-32 py-5 pr-8 text-gray-700 dark:text-gray-300">Actions</p>
+          {/* Desktop Table Header - FIXED ALIGNMENT */}
+          <div className="hidden lg:grid grid-cols-12 bg-[#FBFBFB] dark:bg-gray-800 font-bold border-b border-gray-200 dark:border-gray-700 text-base">
+            <div className="col-span-5 py-5 pl-8 text-gray-700 dark:text-gray-300">Task Name</div>
+            <div className="col-span-2 py-5 pl-4 text-gray-700 dark:text-gray-300">Priority</div>
+            <div className="col-span-2 py-5 text-gray-700 dark:text-gray-300">Date</div>
+            <div className="col-span-2 py-5 text-gray-700 dark:text-gray-300">Status</div>
+            <div className="col-span-1 py-5 pr-8 text-gray-700 dark:text-gray-300 text-right">Actions</div>
           </div>
 
           {/* Content Area */}
@@ -190,7 +185,6 @@ const CompletedPage = () => {
                         <p className="font-medium">{task.status || 100}%</p>
                       </div>
 
-                      {/* Progress Bar */}
                       <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-5">
                         <div
                           className={`h-3 rounded-full transition-all ${getProgressColor(task.status)}`}
@@ -198,7 +192,6 @@ const CompletedPage = () => {
                         />
                       </div>
 
-                      {/* Actions */}
                       <div className="flex gap-5">
                         <IoEye
                           onClick={() => setSelectedTask(task)}
@@ -213,20 +206,22 @@ const CompletedPage = () => {
                   ))}
                 </div>
 
-                {/* ================= DESKTOP TABLE ================= */}
+                {/* ================= DESKTOP TABLE - FIXED ALIGNMENT ================= */}
                 <div className="hidden lg:block">
                   {tasks.map((task, index) => (
                     <div
                       key={task._id}
-                      className={`flex items-center border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 py-5 px-6 transition-colors ${
+                      className={`grid grid-cols-12 items-center border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 py-5 px-6 transition-colors ${
                         index % 2 === 1 ? "bg-[#F8FBFF] dark:bg-gray-800/50" : ""
                       }`}
                     >
-                      <p className="flex-1 font-semibold text-[17px] text-gray-900 dark:text-white">
+                      {/* Task Name */}
+                      <div className="col-span-5 font-semibold text-[17px] text-gray-900 dark:text-white pl-2">
                         {task.title}
-                      </p>
+                      </div>
 
-                      <div className="w-32">
+                      {/* Priority */}
+                      <div className="col-span-2 pl-4">
                         <span
                           className={`inline-block px-5 py-1.5 rounded-2xl text-sm font-medium border ${getPriorityClass(
                             task.priority
@@ -236,11 +231,13 @@ const CompletedPage = () => {
                         </span>
                       </div>
 
-                      <p className="w-44 text-gray-700 dark:text-gray-300">
+                      {/* Date */}
+                      <div className="col-span-2 text-gray-700 dark:text-gray-300">
                         {new Date(task.createdAt).toLocaleDateString("en-GB")}
-                      </p>
+                      </div>
 
-                      <div className="w-44">
+                      {/* Status / Progress */}
+                      <div className="col-span-2">
                         <div className="flex items-center gap-3">
                           <div className="flex-1 h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                             <div
@@ -255,7 +252,7 @@ const CompletedPage = () => {
                       </div>
 
                       {/* Actions */}
-                      <div className="flex gap-5 w-32">
+                      <div className="col-span-1 flex gap-5 justify-end pr-2">
                         <IoEye
                           onClick={() => setSelectedTask(task)}
                           className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
@@ -289,7 +286,7 @@ const CompletedPage = () => {
                 className={`w-8 h-8 cursor-pointer text-gray-700 dark:text-gray-300 
                   ${!hasPrevPage ? "opacity-40" : "hover:text-black dark:hover:text-white"}`}
               />
-              {Array.from({ length: totalPages || 1 }, (_, i) => i + 1).map((num) => (
+              {Array.from({ length: Math.min(totalPages || 1, 5) }, (_, i) => i + 1).map((num) => (
                 <p
                   key={num}
                   onClick={() => setCurrentPage(num)}
@@ -311,15 +308,10 @@ const CompletedPage = () => {
           </div>
         </div>
 
-        {/* View Modal */}
+        {/* View Modal - Fixed props passing */}
         {selectedTask && (
           <ViewModal
-            task={{
-              name: selectedTask.title,
-              priority: selectedTask.priority,
-              date: new Date(selectedTask.createdAt).toLocaleDateString(),
-              status: "Completed",
-            }}
+            task={selectedTask}   // Pass the full task object
             onClose={() => setSelectedTask(null)}
           />
         )}
