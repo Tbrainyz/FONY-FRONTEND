@@ -13,7 +13,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
 
 const AdminDashboard = () => {
-  const { user } = useContext(AuthContext);
+  const { isAdmin } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [stats, setStats] = useState(null);
@@ -40,10 +40,10 @@ const AdminDashboard = () => {
       }
     };
       useEffect(() => {
-      if (!user || user.role !== "admin") {
+      if (!isAdmin) {
         navigate("/login", { replace: true });
       }
-    }, [user]);
+    }, [isAdmin, navigate]);
     
 
     const fetchUsers = async () => {
