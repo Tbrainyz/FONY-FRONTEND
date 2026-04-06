@@ -1,9 +1,16 @@
 import React, { useContext } from "react";
 import pen from "../assets/Pen.svg";
 import del from "../assets/Del.svg";
+import { IoEye } from "react-icons/io5";        // ← Import Eye Icon
 import { TaskContext } from "../context/TasksContext";
 
-const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal }) => {
+const TaskRow = ({ 
+  tasks = [], 
+  setSelectedTask, 
+  openUpdateModal, 
+  openDeleteModal,
+  openViewModal   // ← New prop
+}) => {
   const { getStatusLabel } = useContext(TaskContext);
 
   const getProgressColor = (status = 0) => {
@@ -25,7 +32,7 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
 
   return (
     <div>
-      {/* MOBILE: CARD VIEW */}
+      {/* ================= MOBILE VIEW ================= */}
       <div className="lg:hidden space-y-4 p-4">
         {tasks.length > 0 ? (
           tasks.map((task) => (
@@ -56,8 +63,12 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
                 />
               </div>
 
-              {/* Mobile Actions - Improved Dark Mode */}
+              {/* Mobile Actions with View Icon */}
               <div className="flex gap-6">
+                <IoEye
+                  onClick={() => openViewModal(task)}
+                  className="w-6 h-6 cursor-pointer text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors"
+                />
                 <img
                   src={pen}
                   alt="edit"
@@ -80,7 +91,7 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
         )}
       </div>
 
-      {/* DESKTOP: TABLE ROW */}
+      {/* ================= DESKTOP TABLE VIEW ================= */}
       <div className="hidden lg:block">
         {tasks.length > 0 ? (
           tasks.map((task, index) => (
@@ -120,8 +131,12 @@ const TaskRow = ({ tasks = [], setSelectedTask, openUpdateModal, openDeleteModal
                 </div>
               </div>
 
-              {/* Desktop Actions - Improved Dark Mode */}
+              {/* Desktop Actions with View Icon */}
               <div className="w-[15%] flex justify-end gap-5">
+                <IoEye
+                  onClick={() => openViewModal(task)}
+                  className="w-6 h-6 cursor-pointer text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors"
+                />
                 <img
                   src={pen}
                   alt="edit"
