@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import foot from "../assets/foot.svg";
+import foot from "../assets/Foot.svg";
 import flex1 from "../assets/flex1.svg";
 import flex2 from "../assets/flex2.svg";
 import flex3 from "../assets/flex3.svg";
@@ -79,15 +79,22 @@ const LandingPage = () => {
           <div className="flex flex-col md:flex-row bg-[#F6FBFF] rounded-[60px] border border-b-4 overflow-hidden">
             <div className="flex-1 p-8 md:p-12 lg:p-16 flex items-center">
               <div>
-                <p className="text-3xl md:text-4xl font-black mb-4">Create Your Tasks</p>
+                <p className="text-3xl md:text-4xl font-black mb-4">
+                  Create Your Tasks
+                </p>
                 <p className="text-lg text-gray-700">
-                  Add What Matters, When It Matters Big <br className="hidden md:block" />
+                  Add What Matters, When It Matters Big{" "}
+                  <br className="hidden md:block" />
                   Goals Or Small Wins, All In One Place
                 </p>
               </div>
             </div>
             <div className="flex-1 flex items-center justify-center bg-white p-8 md:p-12">
-              <img src={flex2} alt="" className="max-h-80 w-full h-auto object-contain" />
+              <img
+                src={flex2}
+                alt=""
+                className="max-h-80 w-full h-auto object-contain"
+              />
             </div>
           </div>
 
@@ -95,15 +102,22 @@ const LandingPage = () => {
           <div className="flex flex-col md:flex-row-reverse bg-white rounded-[60px] border border-b-4 overflow-hidden">
             <div className="flex-1 p-8 md:p-12 lg:p-16 flex items-center">
               <div>
-                <p className="text-3xl md:text-4xl font-black mb-4">Update as You Go</p>
+                <p className="text-3xl md:text-4xl font-black mb-4">
+                  Update as You Go
+                </p>
                 <p className="text-lg text-gray-700">
-                  Edit, prioritize, and track progress easily <br className="hidden md:block" />
+                  Edit, prioritize, and track progress easily{" "}
+                  <br className="hidden md:block" />
                   as your day evolves.
                 </p>
               </div>
             </div>
             <div className="flex-1 flex items-center justify-center bg-[#F6FBFF] p-8 md:p-12">
-              <img src={flex3} alt="" className="max-h-80 w-full h-auto object-contain" />
+              <img
+                src={flex3}
+                alt=""
+                className="max-h-80 w-full h-auto object-contain"
+              />
             </div>
           </div>
 
@@ -111,22 +125,32 @@ const LandingPage = () => {
           <div className="flex flex-col md:flex-row bg-[#F6FBFF] rounded-[60px] border border-b-4 overflow-hidden">
             <div className="flex-1 p-8 md:p-12 lg:p-16 flex items-center">
               <div>
-                <p className="text-3xl md:text-4xl font-black mb-4">Stay Organized</p>
+                <p className="text-3xl md:text-4xl font-black mb-4">
+                  Stay Organized
+                </p>
                 <p className="text-lg text-gray-700">
-                  Add What Matters, When It Matters Big <br className="hidden md:block" />
+                  Add What Matters, When It Matters Big{" "}
+                  <br className="hidden md:block" />
                   Goals Or Small Wins, All In One Place
                 </p>
               </div>
             </div>
             <div className="flex-1 flex items-center justify-center bg-white p-8 md:p-12">
-              <img src={flex4} alt="" className="max-h-80 w-full h-auto object-contain" />
+              <img
+                src={flex4}
+                alt=""
+                className="max-h-80 w-full h-auto object-contain"
+              />
             </div>
           </div>
         </div>
       </div>
 
       {/* Testimonials / Stats Section */}
-      <div id="testimonials" className="px-6 md:px-12 lg:px-20 py-16 bg-gray-50">
+      <div
+        id="testimonials"
+        className="px-6 md:px-12 lg:px-20 py-16 bg-gray-50"
+      >
         <p className="text-4xl md:text-5xl lg:text-6xl font-black text-center leading-tight mb-16">
           Loved By People Who <br className="hidden md:block" /> Get Things Done
         </p>
@@ -136,7 +160,9 @@ const LandingPage = () => {
             <img src={eclipse1} alt="" className="mx-auto mb-4" />
             <p className="font-black text-2xl mb-3">OlaChi Maryam</p>
             <p className="text-gray-700">
-              This App Completely Changed How I Plan My Day. Creating Tasks Is Simple, Updating Them Feels Effortless, And I Actually Finish What I Start Now.
+              This App Completely Changed How I Plan My Day. Creating Tasks Is
+              Simple, Updating Them Feels Effortless, And I Actually Finish What
+              I Start Now.
             </p>
           </div>
 
@@ -151,7 +177,8 @@ const LandingPage = () => {
             <img src={joseph} alt="" className="mx-auto mb-4" />
             <p className="font-black text-2xl mb-3">Joseph Ibrahim</p>
             <p className="text-gray-700">
-              I Love How Organized Everything Feels Without Being Overwhelmed. It Fits Perfectly Into My Daily Routine And Keeps Me Focused.
+              I Love How Organized Everything Feels Without Being Overwhelmed.
+              It Fits Perfectly Into My Daily Routine And Keeps Me Focused.
             </p>
           </div>
 
@@ -166,13 +193,16 @@ const LandingPage = () => {
             <img src={wasiu} alt="" className="mx-auto mb-4" />
             <p className="font-black text-2xl mb-3">Wasiu David</p>
             <p className="text-gray-700">
-              Managing My Task Used To Be Stressful, But This Makes It Feel Calm And Intentional. I Get More Done With Less Pressure.
+              Managing My Task Used To Be Stressful, But This Makes It Feel Calm
+              And Intentional. I Get More Done With Less Pressure.
             </p>
           </div>
 
           {/* Stat 3 */}
           <div className="bg-white border border-b-4 rounded-[60px] p-8 text-center flex flex-col justify-center min-h-[280px]">
-            <p className="font-black text-6xl">2.5 <span className="text-4xl">Hours</span></p>
+            <p className="font-black text-6xl">
+              2.5 <span className="text-4xl">Hours</span>
+            </p>
             <p className="text-xl mt-4">Saved Per Week On Planning</p>
           </div>
         </div>
@@ -182,9 +212,13 @@ const LandingPage = () => {
       <div className="px-6 md:px-12 lg:px-20 py-16">
         <div className="max-w-5xl mx-auto bg-white border border-b-4 rounded-[60px] p-8 md:p-12 lg:p-16 flex flex-col md:flex-row gap-10 items-center">
           <div className="flex-1">
-            <p className="text-3xl md:text-4xl font-black mb-4">Stay In The Loop</p>
+            <p className="text-3xl md:text-4xl font-black mb-4">
+              Stay In The Loop
+            </p>
             <p className="text-lg text-gray-700">
-              Get Simple, Practical Insights On Productivity, Design, And Building Better Digital Experiences Delivered Straight To Your Inbox.
+              Get Simple, Practical Insights On Productivity, Design, And
+              Building Better Digital Experiences Delivered Straight To Your
+              Inbox.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
               <input
