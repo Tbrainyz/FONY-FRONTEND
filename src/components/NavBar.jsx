@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import logo from "../assets/Logo.svg";           // Light mode logo
-import darkmodelogo from "../assets/logodarkmode.svg";  // Dark mode logo
+
+import logo from "../assets/Logo.svg";           // Light mode logo (should have dark text)
+import darkmodelogo from "../assets/logodarkmode.svg";  // Dark mode logo (should have white/light text)
 
 import { IoIosArrowDown } from "react-icons/io";
 import ProfileDropDown from "./ProfileDropDown";
@@ -26,24 +27,27 @@ const NavBar = () => {
   }, []);
 
   const handleLogoClick = () => {
-    navigate("/"); 
+    navigate("/");
   };
 
   return (
     <nav className="border-b bg-white dark:bg-gray-900 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         
-        {/* Logo with Dark Mode Support */}
+        {/* Logo Switching */}
         <div className="cursor-pointer" onClick={handleLogoClick}>
+          {/* Light Mode Logo - Visible only in Light Mode */}
           <img 
             src={logo} 
             alt="Fony Logo" 
-            className="h-9 md:h-10 hidden dark:hidden"   // Shown only in Light Mode
+            className="h-9 md:h-10 block dark:hidden" 
           />
+          
+          {/* Dark Mode Logo - Visible only in Dark Mode */}
           <img 
             src={darkmodelogo} 
             alt="Fony Logo" 
-            className="h-9 md:h-10 hidden dark:block"    // Shown only in Dark Mode
+            className="h-9 md:h-10 hidden dark:block" 
           />
         </div>
 
