@@ -64,35 +64,35 @@ const CreatePassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col lg:flex-row transition-colors">
+    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
       {/* Left Side - Form */}
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-md">
           <div
-            className="flex gap-2 items-center cursor-pointer mb-10 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+            className="flex gap-2 items-center cursor-pointer mb-10 text-gray-700 hover:text-gray-900 transition-colors"
             onClick={() => navigate(-1)}
           >
             <img src={arrow} alt="back" className="w-5" />
             <p className="font-medium">Back</p>
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-bold mb-3 text-gray-900 dark:text-white">
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 text-gray-900">
             Create your password
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-8">
+          <p className="text-gray-600 mb-8">
             Create a new password by filling the form below
           </p>
 
           <div className="space-y-6">
             <div>
-              <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
+              <label className="block mb-2 font-medium text-gray-700">
                 Create New Password <span className="text-red-600">*</span>
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="w-full h-14 px-5 border border-gray-300 dark:border-gray-600 rounded-3xl pr-12 
-                             bg-white dark:bg-gray-800 text-gray-900 dark:text-white 
+                  className="w-full h-14 px-5 border border-gray-300 rounded-3xl pr-12 
+                             bg-white text-gray-900 
                              focus:outline-none focus:border-[#77C2FF]"
                   placeholder="Enter new password"
                   value={newPassword}
@@ -108,14 +108,14 @@ const CreatePassword = () => {
             </div>
 
             <div>
-              <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
+              <label className="block mb-2 font-medium text-gray-700">
                 Confirm Password <span className="text-red-600">*</span>
               </label>
               <div className="relative">
                 <input
                   type={showConfirm ? "text" : "password"}
-                  className="w-full h-14 px-5 border border-gray-300 dark:border-gray-600 rounded-3xl pr-12 
-                             bg-white dark:bg-gray-800 text-gray-900 dark:text-white 
+                  className="w-full h-14 px-5 border border-gray-300 rounded-3xl pr-12 
+                             bg-white text-gray-900 
                              focus:outline-none focus:border-[#77C2FF]"
                   placeholder="Re-enter password"
                   value={confirmPassword}
@@ -136,8 +136,8 @@ const CreatePassword = () => {
               onClick={handleSubmit}
               disabled={loading}
               className="w-full h-14 bg-[#77C2FF] hover:bg-blue-500 text-white font-bold rounded-3xl 
-                         border-2 border-black dark:border-white shadow-[0_4px_0_0_black] 
-                         dark:shadow-[0_4px_0_0_white] active:translate-y-0.5 disabled:opacity-70 transition-all"
+                         border-2 border-black shadow-[0_4px_0_0_black] 
+                         active:translate-y-0.5 disabled:opacity-70 transition-all"
             >
               {loading ? "Processing..." : "Confirm"}
             </button>
@@ -146,8 +146,12 @@ const CreatePassword = () => {
       </div>
 
       {/* Right Side - Image */}
-      <div className="hidden lg:flex lg:flex-1 bg-gray-100 dark:bg-gray-900 items-center justify-center">
-        <img src={img} alt="Illustration" className="max-h-[85%] object-contain" />
+      <div className="hidden lg:flex lg:flex-1 bg-gray-100 items-center justify-center">
+        <img 
+          src={img} 
+          alt="Illustration" 
+          className="max-h-[85%] object-contain" 
+        />
       </div>
     </div>
   );
