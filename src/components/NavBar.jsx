@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/Logo.svg";
 import { IoIosArrowDown } from "react-icons/io";
 import ProfileDropDown from "./ProfileDropDown";
-import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import ThemeToggle from "./ThemeToggle";
 
@@ -23,11 +23,20 @@ const NavBar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleLogoClick = () => {
+    navigate("/"); // Always navigate to Landing Page
+  };
+
   return (
     <nav className="border-b bg-white dark:bg-gray-900 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <img src={logo} alt="Logo" className="h-9 md:h-10" />
+        {/* Logo - Navigates to Landing Page */}
+        <img 
+          src={logo} 
+          alt="Logo" 
+          className="h-9 md:h-10 cursor-pointer" 
+          onClick={handleLogoClick}
+        />
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-3">
@@ -74,7 +83,6 @@ const NavBar = () => {
                 className={`transition text-gray-600 dark:text-gray-400 ${isOpen ? "rotate-180" : ""}`}
               />
             </div>
-
             {isOpen && (
               <div className="absolute right-0 mt-3 z-50">
                 <ProfileDropDown setOpen={setIsOpen} />
