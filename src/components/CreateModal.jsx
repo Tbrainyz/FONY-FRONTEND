@@ -77,7 +77,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
         </div>
 
         {/* BODY */}
-        <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto">
+        <div className=" scrollable-content  p-8  space-y-6 max-h-[70vh] overflow-y-auto">
           {/* Title */}
           <div>
             <label className="text-sm font-medium text-gray-700 dark:text-gray-300">

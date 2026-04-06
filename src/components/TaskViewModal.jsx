@@ -37,7 +37,7 @@ const TaskViewModal = ({ task, onClose }) => {
         </div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-8">
+        <div className="scrollable-content  flex-1 overflow-y-auto p-6 space-y-8">
           
           {/* Task Image */}
           {task.image && (
