@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import logo from "../assets/Logo.svg";
+import logo from "../assets/Logo.svg";           // Light mode logo
+import darkmodelogo from "../assets/logodarkmode.svg";  // Dark mode logo
+
 import { IoIosArrowDown } from "react-icons/io";
 import ProfileDropDown from "./ProfileDropDown";
 import { AuthContext } from "../context/AuthContext";
@@ -24,19 +26,26 @@ const NavBar = () => {
   }, []);
 
   const handleLogoClick = () => {
-    navigate("/"); // Always navigate to Landing Page
+    navigate("/"); 
   };
 
   return (
     <nav className="border-b bg-white dark:bg-gray-900 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        {/* Logo - Navigates to Landing Page */}
-        <img 
-          src={logo} 
-          alt="Logo" 
-          className="h-9 md:h-10 cursor-pointer dark:brightness-0 dark:invert" 
-          onClick={handleLogoClick}
-        />
+        
+        {/* Logo with Dark Mode Support */}
+        <div className="cursor-pointer" onClick={handleLogoClick}>
+          <img 
+            src={logo} 
+            alt="Fony Logo" 
+            className="h-9 md:h-10 hidden dark:hidden"   // Shown only in Light Mode
+          />
+          <img 
+            src={darkmodelogo} 
+            alt="Fony Logo" 
+            className="h-9 md:h-10 hidden dark:block"    // Shown only in Dark Mode
+          />
+        </div>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-3">
