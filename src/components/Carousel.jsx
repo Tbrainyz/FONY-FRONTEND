@@ -37,7 +37,7 @@ const Carousel = () => {
                 <img
                   src={task.image || "/default-image.png"}
                   alt={task.title}
-                  className="w-full h-40 sm:h-44 object-cover object-top"
+                  className="w-full h-40 sm:h-44 object-cover object-center"
                 />
               </div>
 
