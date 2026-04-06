@@ -4,8 +4,8 @@ import {
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
 import { toast } from "react-toastify";
-import del from "../assets/Del.svg";
 import { IoEye } from "react-icons/io5";
+import { FaTrash } from "react-icons/fa";           // ← Replaced Del.svg
 import ViewModal from "../components/ViewModal";
 import arr from "../assets/AltArrow.svg";
 import { TaskContext } from "../context/TasksContext";
@@ -169,18 +169,15 @@ const CompletedPage = () => {
                         />
                       </div>
 
-                      {/* Mobile Actions - Improved for Dark Mode */}
-                      <div className="flex gap-6">
+                      {/* Actions - Eye closer to Delete */}
+                      <div className="flex gap-5">
                         <IoEye
                           onClick={() => setSelectedTask(task)}
-                          className="w-6 h-6 cursor-pointer text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors"
+                          className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                         />
-                        <img
-                          src={del}
-                          alt="delete"
-                          className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
-                                     dark:brightness-90 dark:hover:brightness-110"
+                        <FaTrash
                           onClick={() => {}}
+                          className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                         />
                       </div>
                     </div>
@@ -228,18 +225,15 @@ const CompletedPage = () => {
                         </div>
                       </div>
 
-                      {/* Desktop Actions - Improved for Dark Mode */}
-                      <div className="flex gap-6 w-32">
+                      {/* Actions - Eye closer to Delete */}
+                      <div className="flex gap-5 w-32">
                         <IoEye
                           onClick={() => setSelectedTask(task)}
-                          className="w-6 h-6 cursor-pointer text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors"
+                          className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                         />
-                        <img
-                          src={del}
-                          alt="delete"
-                          className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
-                                     dark:brightness-90 dark:hover:brightness-110"
+                        <FaTrash
                           onClick={() => {}}
+                          className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                         />
                       </div>
                     </div>

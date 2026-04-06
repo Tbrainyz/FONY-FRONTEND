@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { FaTasks, FaCheckCircle, FaCalendarAlt } from "react-icons/fa";
-import pen from "../assets/Pen.svg";
-import del from "../assets/Del.svg";
+import { FaTasks, FaCheckCircle, FaCalendarAlt, FaEdit, FaTrash } from "react-icons/fa";
 import pic from "../assets/profile.svg";
 import AdminUserModal from "./AdminUserModal";
 
@@ -77,24 +75,18 @@ const AdminUsersRow = ({
           </div>
         </div>
 
-        {/* Actions - Improved Dark Mode Visibility */}
-        <div className="flex items-center justify-center w-[20%] gap-6">
-          <img
-            src={pen}
+        {/* Actions - Using React Icons */}
+        <div className="flex items-center justify-center w-[20%] gap-8">
+          <FaEdit
             onClick={() => setShowModal(true)}
-            className="w-6 h-6 cursor-pointer hover:scale-110 hover:rotate-6 transition-all 
-                       dark:brightness-90 dark:hover:brightness-110"
-            alt="edit"
+            className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
           />
-          <img
-            src={del}
+          <FaTrash
             onClick={() => {
               setSelectedUser(user);
               openDeleteModal();
             }}
-            className="w-6 h-6 cursor-pointer hover:scale-110 hover:-rotate-6 transition-all 
-                       dark:brightness-90 dark:hover:brightness-110"
-            alt="delete"
+            className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
           />
         </div>
       </div>
@@ -141,24 +133,18 @@ const AdminUsersRow = ({
           </div>
         </div>
 
-        {/* Mobile Actions - Improved Dark Mode */}
-        <div className="flex gap-6 mt-6 pt-4 border-t dark:border-gray-700">
-          <img
+        {/* Mobile Actions - Using React Icons */}
+        <div className="flex gap-8 mt-6 pt-4 border-t dark:border-gray-700">
+          <FaEdit
             onClick={() => setShowModal(true)}
-            src={pen}
-            className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
-                       dark:brightness-90 dark:hover:brightness-110"
-            alt="edit"
+            className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
           />
-          <img
-            src={del}
+          <FaTrash
             onClick={() => {
               setSelectedUser(user);
               openDeleteModal();
             }}
-            className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
-                       dark:brightness-90 dark:hover:brightness-110"
-            alt="delete"
+            className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
           />
         </div>
       </div>

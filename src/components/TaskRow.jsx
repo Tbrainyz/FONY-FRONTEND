@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
-import pen from "../assets/Pen.svg";
-import del from "../assets/Del.svg";
-import { IoEye } from "react-icons/io5";        // ← Import Eye Icon
+import { IoEye } from "react-icons/io5";
+import { FaEdit, FaTrash } from "react-icons/fa";   // ← New imports
 import { TaskContext } from "../context/TasksContext";
 
 const TaskRow = ({ 
@@ -9,7 +8,7 @@ const TaskRow = ({
   setSelectedTask, 
   openUpdateModal, 
   openDeleteModal,
-  openViewModal   // ← New prop
+  openViewModal 
 }) => {
   const { getStatusLabel } = useContext(TaskContext);
 
@@ -32,7 +31,7 @@ const TaskRow = ({
 
   return (
     <div>
-      {/* ================= MOBILE VIEW ================= */}
+      {/* MOBILE VIEW */}
       <div className="lg:hidden space-y-4 p-4">
         {tasks.length > 0 ? (
           tasks.map((task) => (
@@ -63,25 +62,19 @@ const TaskRow = ({
                 />
               </div>
 
-              {/* Mobile Actions with View Icon */}
+              {/* Actions with React Icons */}
               <div className="flex gap-6">
                 <IoEye
                   onClick={() => openViewModal(task)}
-                  className="w-6 h-6 cursor-pointer text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors"
+                  className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 />
-                <img
-                  src={pen}
-                  alt="edit"
-                  className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
-                             dark:brightness-90 dark:hover:brightness-110"
+                <FaEdit
                   onClick={() => { setSelectedTask(task); openUpdateModal(); }}
+                  className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
                 />
-                <img
-                  src={del}
-                  alt="delete"
-                  className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
-                             dark:brightness-90 dark:hover:brightness-110"
+                <FaTrash
                   onClick={() => { setSelectedTask(task); openDeleteModal(); }}
+                  className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                 />
               </div>
             </div>
@@ -91,7 +84,7 @@ const TaskRow = ({
         )}
       </div>
 
-      {/* ================= DESKTOP TABLE VIEW ================= */}
+      {/* DESKTOP TABLE VIEW */}
       <div className="hidden lg:block">
         {tasks.length > 0 ? (
           tasks.map((task, index) => (
@@ -131,25 +124,19 @@ const TaskRow = ({
                 </div>
               </div>
 
-              {/* Desktop Actions with View Icon */}
-              <div className="w-[15%] flex justify-end gap-5">
+              {/* Desktop Actions with React Icons */}
+              <div className="w-[15%] flex justify-end gap-6">
                 <IoEye
                   onClick={() => openViewModal(task)}
-                  className="w-6 h-6 cursor-pointer text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors"
+                  className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 />
-                <img
-                  src={pen}
-                  alt="edit"
-                  className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
-                             dark:brightness-90 dark:hover:brightness-110"
+                <FaEdit
                   onClick={() => { setSelectedTask(task); openUpdateModal(); }}
+                  className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
                 />
-                <img
-                  src={del}
-                  alt="delete"
-                  className="w-6 h-6 cursor-pointer hover:scale-110 transition-all 
-                             dark:brightness-90 dark:hover:brightness-110"
+                <FaTrash
                   onClick={() => { setSelectedTask(task); openDeleteModal(); }}
+                  className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                 />
               </div>
             </div>
