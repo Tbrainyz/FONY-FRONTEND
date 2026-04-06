@@ -10,7 +10,6 @@ import ViewModal from "../components/ViewModal";
 import DeleteModal from "../components/DeleteModal";
 import arr from "../assets/AltArrow.svg";
 import { TaskContext } from "../context/TasksContext";
-import { useNavigate } from "react-router-dom";
 
 const CompletedPage = () => {
   const {
@@ -32,7 +31,6 @@ const CompletedPage = () => {
   const [openFilter, setOpenFilter] = useState(false);
 
   const dropdownRef = useRef(null);
-  const navigate = useNavigate();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -52,12 +50,6 @@ const CompletedPage = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [priorityFilter]);
-
-   useEffect(() => {
-    if (!user) {
-      navigate("/login", { replace: true });
-    }
-  }, [user]);
 
   const handleFilterSelect = (value) => {
     const newFilter = value === "All" ? "" : value;
