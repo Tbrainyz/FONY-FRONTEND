@@ -52,8 +52,10 @@ const SignUp = () => {
     }
   };
 
+  // Google Signup / Login (same endpoint)
   const handleGoogleRegister = () => {
-    window.location.href = `${import.meta.env.VITE_API_URL}/api/users/google`;
+    const apiUrl = import.meta.env.VITE_API_URL;
+    window.location.href = `${apiUrl}/api/users/google`;
   };
 
   return (
@@ -165,10 +167,11 @@ const SignUp = () => {
               <span className="absolute left-1/2 -top-3 bg-gray-50 px-4 text-sm text-gray-500">Or</span>
             </div>
 
+            {/* Google Button */}
             <button
               type="button"
               onClick={handleGoogleRegister}
-              className="w-full h-14 border border-gray-300 rounded-3xl flex items-center justify-center gap-3 hover:bg-gray-100 transition"
+              className="w-full h-14 border border-gray-300 rounded-3xl flex items-center justify-center gap-3 hover:bg-gray-100 transition-colors"
             >
               <img src={Google} alt="Google" className="w-6 h-6" />
               Continue with Google
