@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { IoEye } from "react-icons/io5";
-import { FaEdit, FaTrash } from "react-icons/fa";   // ← New imports
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { TaskContext } from "../context/TasksContext";
 
 const TaskRow = ({ 
@@ -12,12 +12,25 @@ const TaskRow = ({
 }) => {
   const { getStatusLabel } = useContext(TaskContext);
 
-  const getProgressColor = (status = 0) => {
-    if (status === 0) return "bg-red-500";
-    if (status <= 25) return "bg-yellow-500";
-    if (status <= 50) return "bg-blue-500";
-    if (status <= 75) return "bg-[#77C2FF] dark:bg-blue-400";
-    return "bg-green-500";
+  // New progress color logic matching your example
+  const getProgressStyle = (progress = 0) => {
+    let backgroundColor;
+
+    if (progress <= 25) {
+      backgroundColor = "#fe2903";        // Red
+    } else if (progress <= 50) {
+      backgroundColor = "#FFA500";        // Orange
+    } else if (progress <= 75) {
+      backgroundColor = "#90EE90";        // Light Green
+    } else {
+      backgroundColor = "#339933";        // Dark Green
+    }
+
+    return {
+      width: `${progress}%`,
+      backgroundColor,
+      transition: "width 0.4s ease-in-out", // smooth animation
+    };
   };
 
   const getPriorityClass = (priority) => {
@@ -31,7 +44,7 @@ const TaskRow = ({
 
   return (
     <div>
-      {/* MOBILE VIEW */}
+      {/* ==================== MOBILE VIEW ==================== */}
       <div className="lg:hidden space-y-4 p-4">
         {tasks.length > 0 ? (
           tasks.map((task) => (
@@ -55,14 +68,15 @@ const TaskRow = ({
                 <p className="font-medium">{task.status || 0}%</p>
               </div>
 
+              {/* Updated Progress Bar - Mobile */}
               <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-5">
                 <div
-                  className={`h-3 rounded-full transition-all ${getProgressColor(task.status)}`}
-                  style={{ width: `${task.status || 0}%` }}
+                  className="h-3 rounded-full"
+                  style={getProgressStyle(task.status)}
                 />
               </div>
 
-              {/* Actions with React Icons */}
+              {/* Actions */}
               <div className="flex gap-6">
                 <IoEye
                   onClick={() => openViewModal(task)}
@@ -84,7 +98,7 @@ const TaskRow = ({
         )}
       </div>
 
-      {/* DESKTOP TABLE VIEW */}
+      {/* ==================== DESKTOP TABLE VIEW ==================== */}
       <div className="hidden lg:block">
         {tasks.length > 0 ? (
           tasks.map((task, index) => (
@@ -110,12 +124,13 @@ const TaskRow = ({
                 {task.createdAt ? new Date(task.createdAt).toLocaleDateString("en-GB") : "—"}
               </div>
 
+              {/* Updated Progress Bar - Desktop */}
               <div className="w-[20%]">
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                     <div
-                      className={`h-2.5 rounded-full transition-all ${getProgressColor(task.status)}`}
-                      style={{ width: `${task.status || 0}%` }}
+                      className="h-2.5 rounded-full"
+                      style={getProgressStyle(task.status)}
                     />
                   </div>
                   <span className="font-medium text-sm whitespace-nowrap min-w-[45px] text-right text-gray-700 dark:text-gray-300">
@@ -124,7 +139,7 @@ const TaskRow = ({
                 </div>
               </div>
 
-              {/* Desktop Actions with React Icons */}
+              {/* Actions */}
               <div className="w-[15%] flex justify-end gap-6">
                 <IoEye
                   onClick={() => openViewModal(task)}
