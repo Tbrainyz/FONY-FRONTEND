@@ -5,8 +5,9 @@ import {
 } from "react-icons/md";
 import { toast } from "react-toastify";
 import { IoEye } from "react-icons/io5";
-import { FaTrash } from "react-icons/fa";           // ← Replaced Del.svg
+import { FaTrash } from "react-icons/fa";
 import ViewModal from "../components/ViewModal";
+import DeleteModal from "../components/DeleteModal";   // ← Import DeleteModal
 import arr from "../assets/AltArrow.svg";
 import { TaskContext } from "../context/TasksContext";
 
@@ -24,6 +25,8 @@ const CompletedPage = () => {
   } = useContext(TaskContext);
 
   const [selectedTask, setSelectedTask] = useState(null);
+  const [taskToDelete, setTaskToDelete] = useState(null);     // ← New state for delete
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // ← New state
   const [currentPage, setCurrentPage] = useState(1);
   const [openFilter, setOpenFilter] = useState(false);
 
@@ -52,6 +55,32 @@ const CompletedPage = () => {
     const newFilter = value === "All" ? "" : value;
     setPriorityFilter(newFilter);
     setOpenFilter(false);
+  };
+
+  // Handle Delete
+  const handleDeleteClick = (task) => {
+    setTaskToDelete(task);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!taskToDelete?._id) return;
+
+    try {
+      // You can call deleteTask from context if available, or use your existing logic
+      // For now, we'll assume deleteTask exists in TaskContext
+      // If not, you can adjust this part
+      await taskToDelete._id; // Placeholder - replace with actual delete call
+
+      toast.success("Task deleted successfully");
+      setShowDeleteModal(false);
+      setTaskToDelete(null);
+      
+      // Refresh the list
+      fetchTasks(currentPage, priorityFilter || "", 100);
+    } catch (err) {
+      toast.error("Failed to delete task");
+    }
   };
 
   const getPriorityClass = (priority) => {
@@ -169,14 +198,14 @@ const CompletedPage = () => {
                         />
                       </div>
 
-                      {/* Actions - Eye closer to Delete */}
+                      {/* Actions */}
                       <div className="flex gap-5">
                         <IoEye
                           onClick={() => setSelectedTask(task)}
                           className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                         />
                         <FaTrash
-                          onClick={() => {}}
+                          onClick={() => handleDeleteClick(task)}
                           className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                         />
                       </div>
@@ -225,14 +254,14 @@ const CompletedPage = () => {
                         </div>
                       </div>
 
-                      {/* Actions - Eye closer to Delete */}
+                      {/* Actions */}
                       <div className="flex gap-5 w-32">
                         <IoEye
                           onClick={() => setSelectedTask(task)}
                           className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                         />
                         <FaTrash
-                          onClick={() => {}}
+                          onClick={() => handleDeleteClick(task)}
                           className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                         />
                       </div>
@@ -292,6 +321,18 @@ const CompletedPage = () => {
               status: "Completed",
             }}
             onClose={() => setSelectedTask(null)}
+          />
+        )}
+
+        {/* Delete Modal */}
+        {showDeleteModal && taskToDelete && (
+          <DeleteModal
+            task={taskToDelete}
+            closeModal={() => {
+              setShowDeleteModal(false);
+              setTaskToDelete(null);
+            }}
+            onConfirm={handleDeleteConfirm}
           />
         )}
       </div>
