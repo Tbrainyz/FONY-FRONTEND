@@ -1,4 +1,3 @@
-// pages/CodeVerification.jsx
 import React, { useState, useRef, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -19,6 +18,10 @@ const CodeVerification = () => {
 
   const inputsRef = useRef([]);
 
+  if (!email) {
+    return <div className="text-center py-20">No email found. Go back and try again.</div>;
+  }
+
   const handleChange = (value, index) => {
     if (/^[0-9]?$/.test(value)) {
       const newOtp = [...otp];
@@ -38,7 +41,7 @@ const CodeVerification = () => {
   };
 
   const handleSubmit = async () => {
-    const code = otp.join("");
+    const code = otp.join("").trim();
     if (code.length !== 6) {
       setError("Please enter all 6 digits");
       toast.error("Please enter all 6 digits");
@@ -50,27 +53,25 @@ const CodeVerification = () => {
 
     try {
       await verifyOtp(email, code);
-      toast.success("OTP verified successfully");
-      navigate("/createpassword", { 
-        state: { email, otp: code } 
-      });
+      toast.success("OTP verified successfully!");
+      navigate("/createpassword", { state: { email, otp: code } });
     } catch (err) {
-      const msg = err.response?.data?.message || "Invalid OTP";
+      const msg = err.response?.data?.message || "Invalid or expired OTP";
       setError(msg);
       toast.error(msg);
+      console.error("Verify OTP Error:", err.response?.data); // ← Helpful for debugging
     } finally {
       setLoading(false);
     }
   };
 
   const handleResend = async () => {
-    if (!email) return;
-
     setResendLoading(true);
+    setError("");
     try {
       await resendOtp(email);
-      toast.success("New OTP sent to your email");
-      setOtp(Array(6).fill(""));   // Clear OTP fields
+      toast.success("New OTP sent!");
+      setOtp(Array(6).fill(""));
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to resend OTP");
     } finally {
@@ -92,7 +93,7 @@ const CodeVerification = () => {
 
           <h2 className="text-3xl md:text-4xl font-bold mb-3">Enter 6-Digit Code</h2>
           <p className="text-gray-600 mb-8">
-            Enter the 6-digit code sent to <span className="font-medium">{email}</span>
+            Enter the code sent to <span className="font-medium">{email}</span>
           </p>
 
           <div className="flex justify-center gap-3 mb-8">
@@ -117,7 +118,7 @@ const CodeVerification = () => {
             disabled={loading}
             className="w-full h-14 bg-[#77C2FF] text-white font-bold rounded-3xl border-2 border-black shadow-[0_4px_0_0_black] active:translate-y-0.5 disabled:opacity-70"
           >
-            {loading ? "Verifying..." : "Verify OTP"}
+            {loading ? "Verifying..." : "Verify & Continue"}
           </button>
 
           <p className="text-center mt-8 text-sm text-gray-600">
@@ -126,7 +127,7 @@ const CodeVerification = () => {
               onClick={handleResend}
               className="text-blue-600 cursor-pointer font-medium hover:underline"
             >
-              {resendLoading ? "Resending..." : "Resend"}
+              {resendLoading ? "Resending..." : "Resend Code"}
             </span>
           </p>
         </div>
