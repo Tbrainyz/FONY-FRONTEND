@@ -240,19 +240,19 @@ const LandingPage = () => {
         <div className="flex flex-col md:flex-row gap-10  items-center">
           <img src={footLogo} alt="" className="md:w-[200px] lg:w-[300px]" />
         <div>
-          <div className="flex flex-wrap justify-center gap-10">
-            <div className="flex gap-8 text-lg">
-            <p>Home</p>
-            <p>Benefits</p>
-            <p>Testimonial</p>
-          </div>
-          <div className="flex gap-6">
-            <img src={facebook} alt="" />
-            <img src={instagram} alt="" />
-            <img src={twitter} alt="" />
-            <img src={tiktok} alt="" />
-          </div>
-        </div>
+          <div className=" flex flex-col md:flex-row justify-between items-center px-6 py-3 md:rounded-[60px] rounded-3xl border border-b-8 gap-10">
+
+              <div className="flex gap-8 text-lg">
+                <p>Home</p>
+                <p>Benefits</p>
+                <p>Testimonial</p>
+
+               
+              </div>
+               <div>
+                  <SocialDock />
+                </div>
+            </div>
         <div className="text-center flex justify-center mt-16 text-[180px] md:text-[250px] font-light text-black leading-none">
           <img src={foot} alt="" className=" h-auto " />
         </div>
