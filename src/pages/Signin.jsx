@@ -32,7 +32,7 @@ const Signin = () => {
       toast.success("Login Successful!");
       navigate("/dashboard");
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Invalid credentials");
+      toast.error("Invalid credentials");
     } finally {
       setLoading(false);
     }
