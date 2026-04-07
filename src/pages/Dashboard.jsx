@@ -1,17 +1,18 @@
+// DashBoard.jsx
 import React, { useState, useContext, useEffect, useRef } from "react";
 import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
 import TaskSummaryCard from "../components/TaskSummaryCard";
-import Carousel from "../components/Carousel";
+import Carousel from "../components/Carousel";           // ← Still named Carousel
 import arr from "../assets/AltArrow.svg";
 import CreateModal from "../components/CreateModal";
 import UpdateModal from "../components/UpdateModal";
 import SuccessModal from "../components/SuccessModal";
 import DeleteModal from "../components/DeleteModal";
 import TaskRow from "../components/TaskRow";
-import TaskViewModal from "../components/TaskViewModal";   // ← New Import
+import TaskViewModal from "../components/TaskViewModal";
 import { TaskContext } from "../context/TasksContext";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -21,9 +22,9 @@ const DashBoard = () => {
   const [showModal2, setShowModal2] = useState(false);
   const [showModal3, setShowModal3] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showViewModal, setShowViewModal] = useState(false);     // ← New State
+  const [showViewModal, setShowViewModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [viewedTask, setViewedTask] = useState(null);            // ← New State for View Modal
+  const [viewedTask, setViewedTask] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
 
   const dropdownRef = useRef(null);
@@ -61,10 +62,10 @@ const DashBoard = () => {
   }, []);
 
   useEffect(() => {
-  if (!user) {
-    navigate("/login", { replace: true });
-  }
-}, [user]);
+    if (!user) {
+      navigate("/login", { replace: true });
+    }
+  }, [user]);
 
   const handleFilterSelect = (value) => {
     const newFilter = value === "All" ? "" : value;
@@ -72,7 +73,11 @@ const DashBoard = () => {
     setOpenFilter(false);
   };
 
-  // New function to open View Modal
+  // Open Modals Functions
+  const openUpdateModal = () => setShowModal2(true);
+
+  const openDeleteModal = () => setShowDeleteModal(true);
+
   const openViewModal = (task) => {
     setViewedTask(task);
     setShowViewModal(true);
@@ -111,7 +116,15 @@ const DashBoard = () => {
         </div>
 
         <TaskSummaryCard />
-        <Carousel />
+
+        {/* Carousel Section - Now with proper props */}
+        <Carousel
+          tasks={tasks}
+          setSelectedTask={setSelectedTask}
+          openUpdateModal={openUpdateModal}
+          openDeleteModal={openDeleteModal}
+          openViewModal={openViewModal}
+        />
 
         {/* All Tasks Section */}
         <div className="flex flex-col gap-6">
@@ -174,9 +187,9 @@ const DashBoard = () => {
               <TaskRow
                 tasks={tasks}
                 setSelectedTask={setSelectedTask}
-                openUpdateModal={() => setShowModal2(true)}
-                openDeleteModal={() => setShowDeleteModal(true)}
-                openViewModal={openViewModal}           // ← Passed here
+                openUpdateModal={openUpdateModal}
+                openDeleteModal={openDeleteModal}
+                openViewModal={openViewModal}
               />
             </div>
 
@@ -214,7 +227,7 @@ const DashBoard = () => {
         </div>
       </div>
 
-      {/* Existing Modals */}
+      {/* Modals */}
       {showModal1 && (
         <div className="fixed inset-0 bg-black/70 dark:bg-black/80 flex items-center justify-center z-[999] p-4">
           <CreateModal
@@ -250,7 +263,6 @@ const DashBoard = () => {
         </div>
       )}
 
-      {/* New Task View Modal - Scrollable */}
       {showViewModal && viewedTask && (
         <TaskViewModal
           task={viewedTask}

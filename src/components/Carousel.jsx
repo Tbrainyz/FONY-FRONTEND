@@ -1,17 +1,17 @@
-// TaskCarousel.jsx
-import React from "react";
+// components/Carousel.jsx
+import React, { useContext } from "react";
 import { IoEye } from "react-icons/io5";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { TaskContext } from "../context/TasksContext";
 
-const TaskCarousel = ({
+const Carousel = ({
   tasks = [],
   setSelectedTask,
   openUpdateModal,
   openDeleteModal,
   openViewModal,
 }) => {
-  const { getStatusLabel } = React.useContext(TaskContext);
+  const { getStatusLabel } = useContext(TaskContext);
 
   const getProgressStyle = (progress = 0) => {
     let backgroundColor;
@@ -39,15 +39,15 @@ const TaskCarousel = ({
     return "";
   };
 
-  // Prevent carousel drag from interfering with button clicks
-  const handleActionClick = (e, actionFn) => {
+  // Handle clicks safely (prevents carousel drag from blocking buttons)
+  const handleAction = (e, callback) => {
     e.stopPropagation();
-    actionFn();
+    callback();
   };
 
   if (tasks.length === 0) {
     return (
-      <div className="py-12 text-center text-gray-500 dark:text-gray-400">
+      <div className="py-12 text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-700">
         No tasks available
       </div>
     );
@@ -55,16 +55,15 @@ const TaskCarousel = ({
 
   return (
     <div className="relative">
-      {/* Carousel Container */}
-      <div className="overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide">
+      <div className="overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide">
         <div className="flex gap-6 px-4">
           {tasks.map((task) => (
             <div
               key={task._id}
-              className="min-w-[320px] md:min-w-[360px] flex-shrink-0 snap-start pointer-events-auto" // Important fix
+              className="min-w-[320px] sm:min-w-[340px] flex-shrink-0 snap-start pointer-events-auto"
             >
-              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all h-full">
-                {/* Header */}
+              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-6 shadow-sm hover:shadow transition-all h-full">
+                {/* Task Header */}
                 <div className="flex justify-between items-start mb-4">
                   <p className="font-semibold text-lg leading-tight pr-4 text-gray-900 dark:text-white">
                     {task.title}
@@ -78,7 +77,7 @@ const TaskCarousel = ({
                   </span>
                 </div>
 
-                {/* Date & Status */}
+                {/* Date and Progress */}
                 <div className="flex justify-between text-sm mb-4 text-gray-600 dark:text-gray-400">
                   <p>
                     {task.createdAt
@@ -96,17 +95,15 @@ const TaskCarousel = ({
                   />
                 </div>
 
-                {/* Actions */}
-                <div className="flex gap-6">
+                {/* Action Buttons */}
+                <div className="flex gap-6 pt-2">
                   <IoEye
-                    onClick={(e) =>
-                      handleActionClick(e, () => openViewModal(task))
-                    }
+                    onClick={(e) => handleAction(e, () => openViewModal(task))}
                     className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   />
                   <FaEdit
                     onClick={(e) =>
-                      handleActionClick(e, () => {
+                      handleAction(e, () => {
                         setSelectedTask(task);
                         openUpdateModal();
                       })
@@ -115,7 +112,7 @@ const TaskCarousel = ({
                   />
                   <FaTrash
                     onClick={(e) =>
-                      handleActionClick(e, () => {
+                      handleAction(e, () => {
                         setSelectedTask(task);
                         openDeleteModal();
                       })
@@ -129,14 +126,13 @@ const TaskCarousel = ({
         </div>
       </div>
 
-      {/* Optional: Scroll indicator hint */}
-      {tasks.length > 1 && (
-        <div className="text-center text-xs text-gray-400 mt-2">
-          ← Scroll horizontally →
-        </div>
+      {tasks.length > 2 && (
+        <p className="text-center text-xs text-gray-400 mt-3">
+          ← Scroll horizontally to see more tasks →
+        </p>
       )}
     </div>
   );
 };
 
-export default TaskCarousel;
+export default Carousel;
