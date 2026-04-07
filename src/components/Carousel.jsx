@@ -1,5 +1,5 @@
 // components/Carousel.jsx
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { IoEye } from "react-icons/io5";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { TaskContext } from "../context/TasksContext";
@@ -13,8 +13,11 @@ const Carousel = ({
 }) => {
   const { getStatusLabel } = useContext(TaskContext);
 
-  // Filter only tasks that are NOT 100% completed
+  // Filter only tasks in progress (status < 100%)
   const inProgressTasks = tasks.filter(task => (task.status || 0) < 100);
+
+  const scrollContainerRef = useRef(null);
+  const intervalRef = useRef(null);
 
   const getProgressStyle = (progress = 0) => {
     let backgroundColor;
@@ -47,6 +50,54 @@ const Carousel = ({
     callback();
   };
 
+  // Auto-scroll function
+  const startAutoScroll = () => {
+    if (intervalRef.current || inProgressTasks.length <= 1) return;
+
+    intervalRef.current = setInterval(() => {
+      if (!scrollContainerRef.current) return;
+
+      const container = scrollContainerRef.current;
+      const cardWidth = container.children[0]?.offsetWidth || 340;
+      const gap = 24; // gap-6 = 1.5rem = 24px
+
+      let newScrollLeft = container.scrollLeft + cardWidth + gap;
+
+      // Reset to start when reaching the end (for seamless feel)
+      if (newScrollLeft >= container.scrollWidth - container.clientWidth - 10) {
+        newScrollLeft = 0;
+      }
+
+      container.scrollTo({
+        left: newScrollLeft,
+        behavior: "smooth",
+      });
+    }, 4000); // Change slide every 4 seconds
+  };
+
+  // Pause auto-scroll when user hovers over the carousel
+  const stopAutoScroll = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+
+  // Restart auto-scroll when mouse leaves
+  const resumeAutoScroll = () => {
+    startAutoScroll();
+  };
+
+  useEffect(() => {
+    startAutoScroll();
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [inProgressTasks.length]);
+
   if (inProgressTasks.length === 0) {
     return (
       <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-3xl p-8 text-center">
@@ -67,8 +118,13 @@ const Carousel = ({
         </p>
       </div>
 
-      {/* Carousel Scroll Area */}
-      <div className="scrollable-content overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide">
+      {/* Auto-scrolling Carousel */}
+      <div 
+        ref={scrollContainerRef}
+        className=" overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide"
+        onMouseEnter={stopAutoScroll}
+        onMouseLeave={resumeAutoScroll}
+      >
         <div className="flex gap-6 px-2">
           {inProgressTasks.map((task) => (
             <div
@@ -77,7 +133,7 @@ const Carousel = ({
             >
               <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all h-full flex flex-col">
                 
-                {/* Image Section - This is what was missing */}
+                {/* Image Section */}
                 <div className="h-48 bg-gray-100 dark:bg-gray-700 relative">
                   {task.image ? (
                     <img
@@ -88,7 +144,7 @@ const Carousel = ({
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-gray-700 dark:to-gray-600">
                       <div className="text-center">
-                        <div className="w-16 h-16 mx-auto bg-white dark:bg-gray-800 rounded-2xl flex items-center justify-center shadow">
+                        <div className="w-16 h-16 mx-auto bg-white dark:bg-gray-800 rounded-2xl flex items-center justify-center shadow text-3xl">
                           📋
                         </div>
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">No image</p>
@@ -99,7 +155,6 @@ const Carousel = ({
 
                 {/* Card Content */}
                 <div className="p-6 flex-1 flex flex-col">
-                  {/* Title + Priority */}
                   <div className="flex justify-between items-start mb-4">
                     <p className="font-semibold text-lg leading-tight pr-4 text-gray-900 dark:text-white">
                       {task.title}
@@ -113,7 +168,6 @@ const Carousel = ({
                     </span>
                   </div>
 
-                  {/* Date + Status */}
                   <div className="flex justify-between text-sm mb-4 text-gray-600 dark:text-gray-400">
                     <p>
                       {task.createdAt
@@ -123,7 +177,6 @@ const Carousel = ({
                     <p className="font-medium">{task.status || 0}%</p>
                   </div>
 
-                  {/* Progress Bar */}
                   <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-6">
                     <div
                       className="h-3 rounded-full"
@@ -131,7 +184,6 @@ const Carousel = ({
                     />
                   </div>
 
-                  {/* Action Buttons */}
                   <div className="flex gap-6 mt-auto pt-4">
                     <IoEye
                       onClick={(e) => handleAction(e, () => openViewModal(task))}
@@ -163,7 +215,7 @@ const Carousel = ({
         </div>
       </div>
 
-     
+    
     </div>
   );
 };
