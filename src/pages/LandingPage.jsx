@@ -17,6 +17,7 @@ import twitter from "../assets/twitter.svg";
 import tiktok from "../assets/tiktok.svg";
 
 import LandingNavBar from "../components/LandingNavBar";
+import SocialDock from "../components/SocialDock";
 
 const LandingPage = () => {
   const navigate = useNavigate();
