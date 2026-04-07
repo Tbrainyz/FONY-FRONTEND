@@ -9,24 +9,18 @@ export const AuthProvider = ({ children }) => {
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
-const saveUser = (userData, token) => {
-  if (token) localStorage.setItem("token", token);
-  localStorage.setItem("user", JSON.stringify(userData));
-  setUser(userData);
-};
+  const saveUser = (userData, token) => {
+    if (token) localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
+  };
 
   // ==================== LOGIN ====================
   const login = async (data) => {
     const res = await API.post("/api/users/login", data);
     const loggedInUser = res.data.user || res.data;
 
-    setUser(loggedInUser);
-    localStorage.setItem("user", JSON.stringify(loggedInUser));
-
-    if (res.data.token) {
-      localStorage.setItem("token", res.data.token);
-    }
-
+    saveUser(loggedInUser, res.data.token);
     return res.data;
   };
 
@@ -35,12 +29,7 @@ const saveUser = (userData, token) => {
     const res = await API.post("/api/users/google", { token });
     const loggedInUser = res.data.user || res.data;
 
-    setUser(loggedInUser);
-    localStorage.setItem("user", JSON.stringify(loggedInUser));
-    if (res.data.token) {
-      localStorage.setItem("token", res.data.token);
-    }
-
+    saveUser(loggedInUser, res.data.token);
     return res.data;
   };
 
@@ -54,7 +43,7 @@ const saveUser = (userData, token) => {
   const logout = async () => {
     try {
       await API.post("/api/users/logout");
-    } catch {
+    } catch (err) {
       console.warn("Backend logout failed, clearing local only");
     }
     setUser(null);
@@ -65,9 +54,9 @@ const saveUser = (userData, token) => {
   // ==================== UPDATE PROFILE ====================
   const updateProfile = async (data) => {
     const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("email", data.email);
-    formData.append("phone", data.phone);
+    if (data.name) formData.append("name", data.name);
+    if (data.email) formData.append("email", data.email);
+    if (data.phone) formData.append("phone", data.phone);
     if (data.image) formData.append("image", data.image);
 
     const token = localStorage.getItem("token");
@@ -80,9 +69,7 @@ const saveUser = (userData, token) => {
     });
 
     const updatedUser = res.data.user || res.data;
-    setUser(updatedUser);
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-
+    saveUser(updatedUser, token);
     return res.data;
   };
 
@@ -92,16 +79,20 @@ const saveUser = (userData, token) => {
     const res = await API.post(
       "/api/users/change-password",
       { oldPassword, newPassword },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     return res.data;
   };
 
-  // ==================== OTHER METHODS ====================
+  // ==================== PASSWORD RESET FLOW ====================
   const forgotPassword = async (email) => {
     const res = await API.post("/api/users/forgot-password", { email });
+    return res.data;
+  };
+
+  // NEW: Verify OTP (This was missing!)
+  const verifyOtp = async (email, otp) => {
+    const res = await API.post("/api/users/verify-otp", { email, otp });
     return res.data;
   };
 
@@ -121,23 +112,24 @@ const saveUser = (userData, token) => {
 
   const isAdmin = () => user?.role === "admin";
 
+  const value = {
+    user,
+    saveUser,
+    login,
+    googleAuth,
+    register,
+    logout,
+    updateProfile,
+    updatePassword,
+    forgotPassword,
+    verifyOtp,        // ← Added
+    resendOtp,
+    resetPassword,
+    isAdmin,
+  };
+
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        saveUser,
-        login,
-        googleAuth,
-        register,
-        logout,
-        updateProfile,
-        updatePassword,
-        forgotPassword,
-        resendOtp,
-        resetPassword,
-        isAdmin,
-      }}
-    >
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

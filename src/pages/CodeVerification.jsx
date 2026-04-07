@@ -1,3 +1,4 @@
+// pages/CodeVerification.jsx
 import React, { useState, useRef, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -8,12 +9,13 @@ import { toast } from "react-toastify";
 const CodeVerification = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { resendOtp } = useContext(AuthContext);
-  const email = location.state?.email || "";
+  const { verifyOtp, resendOtp } = useContext(AuthContext);
 
+  const email = location.state?.email || "";
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
 
   const inputsRef = useRef([]);
 
@@ -35,47 +37,62 @@ const CodeVerification = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const code = otp.join("");
     if (code.length !== 6) {
       setError("Please enter all 6 digits");
+      toast.error("Please enter all 6 digits");
       return;
     }
-    navigate("/createpassword", { state: { email, otp: code } });
-  };
 
-  const handleResend = async () => {
-    setError("");
     setLoading(true);
+    setError("");
+
     try {
-      await resendOtp(email);
-      toast.success("OTP resent successfully!");
+      await verifyOtp(email, code);
+      toast.success("OTP verified successfully");
+      navigate("/createpassword", { 
+        state: { email, otp: code } 
+      });
     } catch (err) {
-      toast.error(err.message || "Failed to resend OTP");
-      setError(err.message || "Failed to resend OTP");
+      const msg = err.response?.data?.message || "Invalid OTP";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleResend = async () => {
+    if (!email) return;
+
+    setResendLoading(true);
+    try {
+      await resendOtp(email);
+      toast.success("New OTP sent to your email");
+      setOtp(Array(6).fill(""));   // Clear OTP fields
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to resend OTP");
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
-      {/* Left - Form */}
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-md">
           <div
-            onClick={() => navigate("/")}
-            className="flex gap-2 items-center cursor-pointer mb-10 text-gray-700 hover:text-gray-900 transition-colors"
+            onClick={() => navigate("/forgot-password")}
+            className="flex gap-2 items-center cursor-pointer mb-10 text-gray-700 hover:text-gray-900"
           >
             <img src={arrow} alt="" className="w-5" />
             <p className="font-medium">Back</p>
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-bold mb-3 text-gray-900">
-            Enter 6-Digit Code
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">Enter 6-Digit Code</h2>
           <p className="text-gray-600 mb-8">
-            Enter the 6-digit code sent to <span className="font-medium text-gray-900">{email}</span>
+            Enter the 6-digit code sent to <span className="font-medium">{email}</span>
           </p>
 
           <div className="flex justify-center gap-3 mb-8">
@@ -88,9 +105,7 @@ const CodeVerification = () => {
                 value={digit}
                 onChange={(e) => handleChange(e.target.value, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
-                className="w-12 h-14 text-center text-2xl border-2 border-gray-300 
-                           bg-white text-gray-900 rounded-2xl 
-                           focus:border-[#77C2FF] focus:outline-none"
+                className="w-12 h-14 text-center text-2xl border-2 border-gray-300 bg-white rounded-2xl focus:border-[#77C2FF] focus:outline-none"
               />
             ))}
           </div>
@@ -99,11 +114,10 @@ const CodeVerification = () => {
 
           <button
             onClick={handleSubmit}
-            className="w-full h-14 bg-[#77C2FF] hover:bg-blue-500 text-white font-bold rounded-3xl 
-                       border-2 border-black shadow-[0_4px_0_0_black] 
-                       active:translate-y-0.5 transition-all"
+            disabled={loading}
+            className="w-full h-14 bg-[#77C2FF] text-white font-bold rounded-3xl border-2 border-black shadow-[0_4px_0_0_black] active:translate-y-0.5 disabled:opacity-70"
           >
-            Continue
+            {loading ? "Verifying..." : "Verify OTP"}
           </button>
 
           <p className="text-center mt-8 text-sm text-gray-600">
@@ -112,29 +126,14 @@ const CodeVerification = () => {
               onClick={handleResend}
               className="text-blue-600 cursor-pointer font-medium hover:underline"
             >
-              {loading ? "Resending..." : "Resend"}
-            </span>
-          </p>
-
-          <p className="text-center mt-4 text-sm text-gray-600">
-            Remember your password?{" "}
-            <span
-              onClick={() => navigate("/login")}
-              className="text-blue-600 cursor-pointer font-medium hover:underline"
-            >
-              Sign In
+              {resendLoading ? "Resending..." : "Resend"}
             </span>
           </p>
         </div>
       </div>
 
-      {/* Right - Image */}
       <div className="hidden lg:block lg:flex-1 bg-gray-100">
-        <img 
-          src={img} 
-          alt="" 
-          className="w-full h-full object-cover" 
-        />
+        <img src={img} alt="" className="w-full h-full object-cover" />
       </div>
     </div>
   );
