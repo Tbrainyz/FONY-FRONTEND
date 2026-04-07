@@ -1,31 +1,24 @@
-import React, { useState } from "react";
-import { FaTasks, FaCheckCircle, FaCalendarAlt, FaEdit } from "react-icons/fa";
-import { IoEye } from "react-icons/io5";   // Optional: if you want to add View later
+// TaskCarousel.jsx
+import React from "react";
+import { IoEye } from "react-icons/io5";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { TaskContext } from "../context/TasksContext";
 
-const Carousel = () => {
-  const { tasks = [] } = React.useContext(TaskContext);
+const TaskCarousel = ({
+  tasks = [],
+  setSelectedTask,
+  openUpdateModal,
+  openDeleteModal,
+  openViewModal,
+}) => {
+  const { getStatusLabel } = React.useContext(TaskContext);
 
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-
-  const inProgressTasks = tasks.filter((task) => task?.status >= 0 && task?.status < 100);
-
-  // Progress style - Same as TaskRow
   const getProgressStyle = (progress = 0) => {
     let backgroundColor;
-
-    if (progress <= 25) {
-      backgroundColor = "#fe2903";      // Red
-    } else if (progress <= 50) {
-      backgroundColor = "#FFA500";      // Orange
-    } else if (progress <= 75) {
-      backgroundColor = "#90EE90";      // Light Green
-    } else {
-      backgroundColor = "#339933";      // Dark Green
-    }
+    if (progress <= 25) backgroundColor = "#fe2903";
+    else if (progress <= 50) backgroundColor = "#FFA500";
+    else if (progress <= 75) backgroundColor = "#90EE90";
+    else backgroundColor = "#339933";
 
     return {
       width: `${progress}%`,
@@ -34,109 +27,116 @@ const Carousel = () => {
     };
   };
 
+  const getPriorityClass = (priority) => {
+    if (!priority) return "";
+    const prio = priority.toLowerCase();
+    if (prio === "high")
+      return "bg-red-100 dark:bg-red-900/30 border-red-500 dark:border-red-400 text-red-600 dark:text-red-400";
+    if (prio === "medium")
+      return "bg-orange-100 dark:bg-orange-900/30 border-orange-500 dark:border-orange-400 text-orange-600 dark:text-orange-400";
+    if (prio === "low")
+      return "bg-blue-100 dark:bg-blue-900/30 border-blue-500 dark:border-blue-400 text-blue-600 dark:text-blue-400";
+    return "";
+  };
+
+  // Prevent carousel drag from interfering with button clicks
+  const handleActionClick = (e, actionFn) => {
+    e.stopPropagation();
+    actionFn();
+  };
+
+  if (tasks.length === 0) {
+    return (
+      <div className="py-12 text-center text-gray-500 dark:text-gray-400">
+        No tasks available
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full">
-      <h3 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900 dark:text-white">
-        Tasks In Progress
-      </h3>
-
-      {inProgressTasks.length > 0 ? (
-        <div className="carousel flex gap-6 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory">
-          {inProgressTasks.map((task, index) => (
+    <div className="relative">
+      {/* Carousel Container */}
+      <div className="overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide">
+        <div className="flex gap-6 px-4">
+          {tasks.map((task) => (
             <div
-              key={task._id || index}
-              className="min-w-[280px] sm:min-w-[340px] md:min-w-[380px] 
-                         bg-white dark:bg-gray-900 
-                         border border-b-4 border-black dark:border-white 
-                         rounded-3xl shadow-md overflow-hidden snap-start transition-all"
+              key={task._id}
+              className="min-w-[320px] md:min-w-[360px] flex-shrink-0 snap-start pointer-events-auto" // Important fix
             >
-              {/* Image */}
-              <div className="relative">
-                <img
-                  src={task.image || "/default-image.png"}
-                  alt={task.title}
-                  className="w-full h-40 sm:h-44 object-cover object-[center_top]"
-                />
-              </div>
-
-              {/* Content */}
-              <div className="p-5 space-y-4">
-                <div className="flex justify-between items-start">
-                  <span className="text-xs font-medium px-3 py-1 border border-red-500 text-red-600 
-                                   dark:border-red-400 dark:text-red-400 rounded-full">
+              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all h-full">
+                {/* Header */}
+                <div className="flex justify-between items-start mb-4">
+                  <p className="font-semibold text-lg leading-tight pr-4 text-gray-900 dark:text-white">
+                    {task.title}
+                  </p>
+                  <span
+                    className={`inline-block px-4 py-1 text-sm font-medium rounded-2xl border ${getPriorityClass(
+                      task.priority
+                    )}`}
+                  >
                     {task.priority || "—"}
                   </span>
+                </div>
 
-                  {/* Replaced image with FaEdit icon - consistent with TaskRow */}
-                  <FaEdit
-                    onClick={() => {
-                      setSelectedTask(task);
-                      setShowUpdateModal(true);
-                    }}
-                    className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 
-                               hover:text-amber-600 dark:hover:text-amber-400 
-                               transition-colors active:scale-95"
+                {/* Date & Status */}
+                <div className="flex justify-between text-sm mb-4 text-gray-600 dark:text-gray-400">
+                  <p>
+                    {task.createdAt
+                      ? new Date(task.createdAt).toLocaleDateString("en-GB")
+                      : "—"}
+                  </p>
+                  <p className="font-medium">{task.status || 0}%</p>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-6">
+                  <div
+                    className="h-3 rounded-full"
+                    style={getProgressStyle(task.status)}
                   />
                 </div>
 
-                <p className="text-lg font-semibold leading-tight line-clamp-2 text-gray-900 dark:text-white">
-                  {task.title}
-                </p>
-
-                {/* Updated Progress Bar - Same styling as TaskRow */}
-                <div className="flex items-center gap-3">
-                  <div className="flex-1 h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div
-                      className="h-full rounded-full"
-                      style={getProgressStyle(task.status)}
-                    />
-                  </div>
-                  <p className="text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-300">
-                    {task.status || 0}%
-                  </p>
+                {/* Actions */}
+                <div className="flex gap-6">
+                  <IoEye
+                    onClick={(e) =>
+                      handleActionClick(e, () => openViewModal(task))
+                    }
+                    className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  />
+                  <FaEdit
+                    onClick={(e) =>
+                      handleActionClick(e, () => {
+                        setSelectedTask(task);
+                        openUpdateModal();
+                      })
+                    }
+                    className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
+                  />
+                  <FaTrash
+                    onClick={(e) =>
+                      handleActionClick(e, () => {
+                        setSelectedTask(task);
+                        openDeleteModal();
+                      })
+                    }
+                    className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                  />
                 </div>
               </div>
             </div>
           ))}
         </div>
-      ) : (
-        <div className="bg-white dark:bg-gray-900 border border-dashed border-gray-300 dark:border-gray-600 
-                        rounded-3xl p-10 text-center">
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
-            No tasks in progress yet
-          </p>
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="bg-[#77C2FF] hover:bg-[#66b3f0] text-black px-6 py-3 rounded-2xl 
-                       font-medium border border-black dark:border-white 
-                       shadow-md active:translate-y-0.5 transition-all"
-          >
-            Create New Task
-          </button>
+      </div>
+
+      {/* Optional: Scroll indicator hint */}
+      {tasks.length > 1 && (
+        <div className="text-center text-xs text-gray-400 mt-2">
+          ← Scroll horizontally →
         </div>
-      )}
-
-      {/* Modals */}
-      {showUpdateModal && selectedTask && (
-        <UpdateModal
-          task={selectedTask}
-          closeModal={() => setShowUpdateModal(false)}
-          openNextModal={() => setShowSuccessModal(true)}
-        />
-      )}
-
-      {showSuccessModal && (
-        <SuccessModal closeModal={() => setShowSuccessModal(false)} />
-      )}
-
-      {showCreateModal && (
-        <CreateModal
-          closeModal={() => setShowCreateModal(false)}
-          openNextModal={() => setShowSuccessModal(true)}
-        />
       )}
     </div>
   );
 };
 
-export default Carousel;
+export default TaskCarousel;
