@@ -237,9 +237,11 @@ const LandingPage = () => {
 
       {/* Footer */}
       <footer className="px-6 md:px-12 lg:px-20 py-16 border-t">
-        <div className="flex flex-col md:flex-row gap-10 justify-between items-center">
-          <img src={footLogo} alt="" />
-          <div className="flex gap-8 text-lg">
+        <div className="flex flex-col md:flex-row gap-10  items-center">
+          <img src={footLogo} alt="" className="md:w-[200px] lg:w-[300px]" />
+        <div>
+          <div className="flex flex-wrap justify-center gap-10">
+            <div className="flex gap-8 text-lg">
             <p>Home</p>
             <p>Benefits</p>
             <p>Testimonial</p>
@@ -254,6 +256,9 @@ const LandingPage = () => {
         <div className="text-center flex justify-center mt-16 text-[180px] md:text-[250px] font-light text-black leading-none">
           <img src={foot} alt="" className=" h-auto " />
         </div>
+        </div>
+        </div>
+        
       </footer>
     </div>
   );
