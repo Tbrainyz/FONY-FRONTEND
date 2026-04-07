@@ -20,7 +20,7 @@ const SuccessModal = ({ closeModal, message }) => {
         </h1>
 
         <p className="text-gray-600 mb-8">
-          Your task has been updated successfully.
+          Your task has been processed successfully.
         </p>
 
         <button
