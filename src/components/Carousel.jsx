@@ -121,7 +121,7 @@ const Carousel = ({
       {/* Auto-scrolling Carousel */}
       <div 
         ref={scrollContainerRef}
-        className=" overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide"
+        className=" scrollable-content overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide"
         onMouseEnter={stopAutoScroll}
         onMouseLeave={resumeAutoScroll}
       >
@@ -184,20 +184,12 @@ const Carousel = ({
                     />
                   </div>
 
-                  <div className="flex gap-6 mt-auto pt-4">
+                  <div className="flex justify-between mt-auto pt-4">
                     <IoEye
                       onClick={(e) => handleAction(e, () => openViewModal(task))}
                       className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                     />
-                    <FaEdit
-                      onClick={(e) =>
-                        handleAction(e, () => {
-                          setSelectedTask(task);
-                          openUpdateModal();
-                        })
-                      }
-                      className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
-                    />
+                 
                     <FaTrash
                       onClick={(e) =>
                         handleAction(e, () => {
