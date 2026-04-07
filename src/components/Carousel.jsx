@@ -68,7 +68,7 @@ const Carousel = ({
       </div>
 
       {/* Carousel Scroll Area */}
-      <div className="overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide">
+      <div className="scrollable-content overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide">
         <div className="flex gap-6 px-2">
           {inProgressTasks.map((task) => (
             <div
@@ -163,11 +163,7 @@ const Carousel = ({
         </div>
       </div>
 
-      {inProgressTasks.length > 2 && (
-        <p className="text-center text-xs text-gray-400 mt-2">
-          ← Scroll horizontally to see more →
-        </p>
-      )}
+     
     </div>
   );
 };
