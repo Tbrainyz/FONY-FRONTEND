@@ -92,12 +92,31 @@ const googleAuth = async (token) => {
   }
 };
 
-  // ==================== REGISTER ====================
-  const register = async (data) => {
-    const res = await API.post("/api/users/register", data);
-    return res.data;
-  };
 
+// ==================== REGISTER ====================
+const register = async (data) => {
+  try {
+    const res = await API.post("/api/users/register", data);
+
+    const newUser = res.data.user || res.data;   // Get user from response
+    const token = res.data.token;                // Get token from response
+
+    // Auto-login the user after registration
+    if (token && newUser) {
+      saveUser(newUser, token);
+    } else {
+      // Fallback if backend doesn't return token yet
+      toast.error("Registration successful but login failed. Please login manually.");
+      throw new Error("No token received");
+    }
+
+    return res.data;
+  } catch (error) {
+    const errorMsg = error.response?.data?.message || "Registration failed. Please try again.";
+    toast.error(errorMsg);
+    throw error;
+  }
+};
   // ==================== LOGOUT ====================
   const logout = async () => {
     try {

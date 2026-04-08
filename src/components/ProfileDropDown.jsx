@@ -8,9 +8,9 @@ const ProfileDropDown = ({ setOpen }) => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+   const handleLogout = () => {
     logout();
-    setOpen(false);
+    navigate("/login", { replace: true });
   };
 
   return (

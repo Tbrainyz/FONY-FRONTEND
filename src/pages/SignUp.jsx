@@ -27,30 +27,39 @@ const SignUp = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match");
-      return;
-    }
+  if (formData.password !== formData.confirmPassword) {
+    toast.error("Passwords do not match");
+    return;
+  }
 
-    setLoading(true);
-    try {
-      await register({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        password: formData.password,
-      });
-      toast.success("Registration successful! Please login.");
-      navigate("/login");
-    } catch (error) {
-      toast.error(error?.response?.data?.message || "Signup failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (!formData.name || !formData.email || !formData.phone || !formData.password) {
+    toast.error("Please fill all fields");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    await register({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      password: formData.password,
+    });
+
+    // Success messages and redirect
+    toast.success("Account created successfully! Welcome aboard.");
+    navigate("/dashboard");        
+
+  } catch (error) {
+    console.error("Registration error:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Google Signup / Login (same endpoint)
   const handleGoogleRegister = () => {
