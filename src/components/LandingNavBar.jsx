@@ -43,7 +43,7 @@ const LandingNavBar = () => {
           </button>
         ) : (
           // Not Logged In
-          <div className="flex items-center gap-3">
+          <div className="hidden md:flex lg:flex items-center gap-3">
             <button
               onClick={() => navigate("/login")}
               className="px-7 py-2.5 border-2 border-b-4 border-black rounded-[48px] font-semibold hover:bg-gray-50 transition"
