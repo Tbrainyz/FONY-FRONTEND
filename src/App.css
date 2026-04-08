@@ -66,5 +66,32 @@ body {
   scrollbar-width: none;     /* Firefox */
 }
 
+/* Custom Toast Styling */
+.custom-toast {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Success Toast - Your Blue Color */
+.Toastify__toast--success {
+  background: #77C2FF !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+
+.Toastify__toast--success .Toastify__progress-bar {
+  background: #000000 !important;
+}
+
+/* Error Toast - Red */
+.Toastify__toast--error {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+}
+
+.Toastify__toast--error .Toastify__progress-bar {
+  background: #000000 !important;
+}
 
 

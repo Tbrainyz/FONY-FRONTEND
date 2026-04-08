@@ -8,11 +8,14 @@ const AdminUserModal = ({
   onBlock,
   onUnblock,
   onMakeAdmin,
+  onDelete,
+  currentUser,          // ← Pass the logged-in admin
 }) => {
   if (!user) return null;
 
   const isBlocked = user.isBlocked;
   const isAdmin = user.role === "admin";
+  const isCurrentUser = user._id === currentUser?._id;
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
@@ -29,7 +32,6 @@ const AdminUserModal = ({
 
         {/* Body */}
         <div className="p-6 space-y-5">
-          
           {/* Profile */}
           <div className="flex items-center gap-4">
             <img
@@ -48,16 +50,12 @@ const AdminUserModal = ({
           <div className="space-y-2 text-sm">
             <p>
               <span className="font-medium">Role:</span>{" "}
-              {user.role || "User"}
+              <span className="font-semibold">{isAdmin ? "Admin" : "User"}</span>
             </p>
 
             <p>
               <span className="font-medium">Status:</span>{" "}
-              <span
-                className={`font-medium ${
-                  isBlocked ? "text-red-600" : "text-green-600"
-                }`}
-              >
+              <span className={`font-medium ${isBlocked ? "text-red-600" : "text-green-600"}`}>
                 {isBlocked ? "Blocked" : "Active"}
               </span>
             </p>
@@ -82,18 +80,18 @@ const AdminUserModal = ({
         </div>
 
         {/* Actions */}
-        <div className="p-6 border-t flex flex-col sm:flex-row gap-3">
+        <div className="p-6 border-t flex flex-col gap-3">
 
-          {/* 🔴 Block / Unblock */}
+          {/* Block / Unblock Button */}
           {!isBlocked ? (
             <button
               onClick={() => {
                 if (isAdmin) {
-                  toast.error("You cannot block an admin");
+                  toast.error("You cannot block an Admin");
                   return;
                 }
-                onBlock(user); // ✅ FIXED
-                toast.success(`${user.name} blocked`);
+                onBlock(user);
+                toast.success(`${user.name} has been blocked`);
                 closeModal();
               }}
               className="flex-1 bg-red-600 text-white py-3 rounded-2xl font-medium hover:bg-red-700 transition"
@@ -103,8 +101,8 @@ const AdminUserModal = ({
           ) : (
             <button
               onClick={() => {
-                onUnblock(user); // ✅ FIXED
-                toast.success(`${user.name} unblocked`);
+                onUnblock(user);
+                toast.success(`${user.name} has been unblocked`);
                 closeModal();
               }}
               className="flex-1 bg-green-600 text-white py-3 rounded-2xl font-medium hover:bg-green-700 transition"
@@ -113,23 +111,47 @@ const AdminUserModal = ({
             </button>
           )}
 
-          {/* 🔵 Make Admin */}
-          <button
-            onClick={() => {
-              if (isAdmin) return;
-              onMakeAdmin(user); // ✅ FIXED
-              toast.success(`${user.name} is now an admin`);
-              closeModal();
-            }}
-            disabled={isAdmin}
-            className={`flex-1 py-3 rounded-2xl font-medium transition ${
-              isAdmin
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
-          >
-            {isAdmin ? "Already Admin" : "Make Admin"}
-          </button>
+          {/* Make Admin Button */}
+          {!isAdmin && (
+            <button
+              onClick={() => {
+                onMakeAdmin(user);
+                toast.success(`${user.name} is now an Admin`);
+                closeModal();
+              }}
+              className="flex-1 bg-blue-600 text-white py-3 rounded-2xl font-medium hover:bg-blue-700 transition"
+            >
+              Make Admin
+            </button>
+          )}
+
+          {/* Delete Button - Only for Regular Users */}
+          {!isAdmin && !isCurrentUser && (
+            <button
+              onClick={() => {
+                onDelete(user);
+                toast.success(`${user.name} deleted successfully`);
+                closeModal();
+              }}
+              className="flex-1 bg-red-700 text-white py-3 rounded-2xl font-medium hover:bg-red-800 transition"
+            >
+              Delete User
+            </button>
+          )}
+
+          {/* Info Message for Admin Accounts */}
+          {isAdmin && (
+            <div className="text-center text-sm text-gray-500 py-2">
+              Admin accounts cannot be deleted
+            </div>
+          )}
+
+          {isCurrentUser && (
+            <div className="text-center text-sm text-gray-500 py-2">
+              You cannot delete your own account
+            </div>
+          )}
+
         </div>
       </div>
     </div>

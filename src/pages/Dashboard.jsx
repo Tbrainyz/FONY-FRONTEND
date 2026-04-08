@@ -117,14 +117,16 @@ const DashBoard = () => {
 
         <TaskSummaryCard />
 
-        {/* Carousel Section - Now with proper props */}
-        <Carousel
-          tasks={tasks}
-          setSelectedTask={setSelectedTask}
-          openUpdateModal={openUpdateModal}
-          openDeleteModal={openDeleteModal}
-          openViewModal={openViewModal}
-        />
+      
+      {/* Carousel Section */}
+<Carousel
+  tasks={tasks}
+  setSelectedTask={setSelectedTask}
+  openUpdateModal={openUpdateModal}
+  openDeleteModal={openDeleteModal}
+  openViewModal={openViewModal}
+  openCreateModal={() => setShowModal1(true)}     // ← Add this line
+/>
 
         {/* All Tasks Section */}
         <div className="flex flex-col gap-6">
@@ -190,6 +192,7 @@ const DashBoard = () => {
                 openUpdateModal={openUpdateModal}
                 openDeleteModal={openDeleteModal}
                 openViewModal={openViewModal}
+                openCreateModal={() => setShowModal1(true)}  
               />
             </div>
 

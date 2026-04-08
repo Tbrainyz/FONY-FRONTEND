@@ -8,7 +8,8 @@ const TaskRow = ({
   setSelectedTask, 
   openUpdateModal, 
   openDeleteModal,
-  openViewModal 
+  openViewModal ,
+    openCreateModal
 }) => {
   const { getStatusLabel } = useContext(TaskContext);
 
@@ -94,7 +95,18 @@ const TaskRow = ({
             </div>
           ))
         ) : (
-          <div className="py-12 text-center text-gray-500 dark:text-gray-400">No tasks available</div>
+          <div className="min-h-[360px] px-4 py-6">
+              <div className="flex min-h-[300px] flex-col items-center justify-center text-center">
+                <p className="text-xs font-semibold">No Task Created yet</p>
+
+                <button
+                  type="button"
+                  className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#77C2FF] px-4 py-2 text-xs font-medium text-black shadow-md shadow-black border border-black" onClick={openCreateModal}
+                >
+                  Create new task
+                </button>
+              </div>
+            </div>
         )}
       </div>
 
@@ -157,7 +169,18 @@ const TaskRow = ({
             </div>
           ))
         ) : (
-          <div className="py-20 text-center text-gray-500 dark:text-gray-400">No tasks available</div>
+              <div className="min-h-[360px] px-4 py-6">
+              <div className="flex min-h-[300px] flex-col items-center justify-center text-center">
+                <p className="text-xs font-semibold">No Task Created yet</p>
+
+                <button
+                  type="button"
+                  className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#77C2FF] px-4 py-2 text-xs font-medium text-black shadow-md shadow-black border border-black" onClick={openCreateModal}
+                >
+                  Create new task
+                </button>
+              </div>
+            </div>
         )}
       </div>
     </div>

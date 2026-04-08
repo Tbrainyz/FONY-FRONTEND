@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-import logo from "../assets/Logo.svg";           // Light mode logo (should have dark text)
-import darkmodelogo from "../assets/logodarkmode.svg";  // Dark mode logo (should have white/light text)
-
+import logo from "../assets/Logo.svg"; // Light mode logo (should have dark text)
+import darkmodelogo from "../assets/logodarkmode.svg"; // Dark mode logo (should have white/light text)
+import DefaultProfile from "../assets/FB_IMG_16265830618836469 1.png";
 import { IoIosArrowDown } from "react-icons/io";
 import ProfileDropDown from "./ProfileDropDown";
 import { AuthContext } from "../context/AuthContext";
@@ -33,21 +33,20 @@ const NavBar = () => {
   return (
     <nav className="border-b bg-white dark:bg-gray-900 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        
         {/* Logo Switching */}
         <div className="cursor-pointer" onClick={handleLogoClick}>
           {/* Light Mode Logo - Visible only in Light Mode */}
-          <img 
-            src={logo} 
-            alt="Fony Logo" 
-            className="h-9 md:h-10 block dark:hidden" 
+          <img
+            src={logo}
+            alt="Fony Logo"
+            className="h-9 md:h-10 block dark:hidden"
           />
-          
+
           {/* Dark Mode Logo - Visible only in Dark Mode */}
-          <img 
-            src={darkmodelogo} 
-            alt="Fony Logo" 
-            className="h-9 md:h-10 hidden dark:block" 
+          <img
+            src={darkmodelogo}
+            alt="Fony Logo"
+            className="h-9 md:h-10 hidden dark:block"
           />
         </div>
 
@@ -86,11 +85,11 @@ const NavBar = () => {
               onClick={() => setIsOpen(!isOpen)}
             >
               <img
-                src={user?.profilePicture || "/default-avatar.png"}
+                src={user?.profilePicture || DefaultProfile}
                 alt="Profile"
                 referrerPolicy="no-referrer"
                 className="w-9 h-9 rounded-full object-cover border border-gray-300 dark:border-gray-600"
-                onError={(e) => (e.target.src = "/default-avatar.png")}
+                onError={(e) => (e.target.src = DefaultProfile)}
               />
               <IoIosArrowDown
                 className={`transition text-gray-600 dark:text-gray-400 ${isOpen ? "rotate-180" : ""}`}

@@ -62,17 +62,27 @@ function App() {
         </Routes>
       </BrowserRouter>
 
-      {/* ✅ Toastify container */}
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        pauseOnHover
-        draggable
-        theme="colored"
-      />
+   <ToastContainer
+  position="top-center"
+  autoClose={3500}
+  hideProgressBar={false}
+  newestOnTop={true}
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme="light"
+  closeButton={false}
+  toastClassName="custom-toast"     // ← Important
+  toastStyle={{
+    border: "2px solid #000000",
+    borderRadius: "20px",
+    boxShadow: "0 4px 0 0 #000000",
+    fontWeight: "600",
+  }}
+  progressStyle={{ background: "#000000" }}
+/>
     </div>
   );
 }

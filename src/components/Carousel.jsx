@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { IoEye } from "react-icons/io5";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaTasks } from "react-icons/fa";
 import { TaskContext } from "../context/TasksContext";
 
 const Carousel = ({
@@ -10,10 +11,11 @@ const Carousel = ({
   openUpdateModal,
   openDeleteModal,
   openViewModal,
+  openCreateModal,
 }) => {
   const { getStatusLabel } = useContext(TaskContext);
 
-  // Filter only tasks in progress (status < 100%)
+  // Filter only tasks that are NOT 100% completed
   const inProgressTasks = tasks.filter(task => (task.status || 0) < 100);
 
   const scrollContainerRef = useRef(null);
@@ -50,7 +52,7 @@ const Carousel = ({
     callback();
   };
 
-  // Auto-scroll function
+  // Auto-scroll functionality
   const startAutoScroll = () => {
     if (intervalRef.current || inProgressTasks.length <= 1) return;
 
@@ -59,11 +61,10 @@ const Carousel = ({
 
       const container = scrollContainerRef.current;
       const cardWidth = container.children[0]?.offsetWidth || 340;
-      const gap = 24; // gap-6 = 1.5rem = 24px
+      const gap = 24;
 
       let newScrollLeft = container.scrollLeft + cardWidth + gap;
 
-      // Reset to start when reaching the end (for seamless feel)
       if (newScrollLeft >= container.scrollWidth - container.clientWidth - 10) {
         newScrollLeft = 0;
       }
@@ -72,10 +73,9 @@ const Carousel = ({
         left: newScrollLeft,
         behavior: "smooth",
       });
-    }, 4000); // Change slide every 4 seconds
+    }, 4000);
   };
 
-  // Pause auto-scroll when user hovers over the carousel
   const stopAutoScroll = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -83,7 +83,6 @@ const Carousel = ({
     }
   };
 
-  // Restart auto-scroll when mouse leaves
   const resumeAutoScroll = () => {
     startAutoScroll();
   };
@@ -98,11 +97,40 @@ const Carousel = ({
     };
   }, [inProgressTasks.length]);
 
+  // Empty State
   if (inProgressTasks.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-3xl p-8 text-center">
-        <p className="text-gray-500 dark:text-gray-400">No tasks in progress</p>
+ <div>
+  {/* Header */}
+      <div className="flex items-center justify-between mb-6 px-2">
+        <h2 className="text-3xl md:text-4xl font-[Caveat] font-bold text-gray-900 dark:text-white">
+          Tasks in Progress
+        </h2>
       </div>
+      
+      
+      <div className="mt-3 w-full md:max-w-xs rounded-2xl border border-black shadow-md shadow-black">
+        
+        <div className="flex items-center justify-center border-b border-black rounded-2xl bg-[#F4F4F4] py-12">
+          <div className="grid h-9 w-9 place-items-center rounded-xl bg-[#F4F4F4] border border-[#666666] shadow-md shadow-[#666666]">
+            <div className="bg-[#666666] p-[2px] rounded-md">
+              <FaTasks className="text-[#F4F4F4] text-sm" />
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col py-6 px-6">
+          <p className="mt-4 text-sm font-medium">No Task in Progress yet</p>
+
+          <button
+            type="button"
+            onClick={openCreateModal}
+            className="mt-4 w-[7.5rem] inline-flex items-center gap-2 rounded-full bg-[#77C2FF] px-4 py-2 text-xs font-medium text-black shadow-md shadow-black border border-black"
+          >
+            Create new task
+          </button>
+        </div>
+      </div>
+ </div>
     );
   }
 
@@ -119,9 +147,9 @@ const Carousel = ({
       </div>
 
       {/* Auto-scrolling Carousel */}
-      <div 
+      <div
         ref={scrollContainerRef}
-        className=" scrollable-content overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide"
+        className="scrollable-content overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide"
         onMouseEnter={stopAutoScroll}
         onMouseLeave={resumeAutoScroll}
       >
@@ -132,7 +160,6 @@ const Carousel = ({
               className="min-w-[300px] sm:min-w-[340px] flex-shrink-0 snap-start pointer-events-auto"
             >
               <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all h-full flex flex-col">
-                
                 {/* Image Section */}
                 <div className="h-48 bg-gray-100 dark:bg-gray-700 relative">
                   {task.image ? (
@@ -178,18 +205,15 @@ const Carousel = ({
                   </div>
 
                   <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-6">
-                    <div
-                      className="h-3 rounded-full"
-                      style={getProgressStyle(task.status)}
-                    />
+                    <div className="h-3 rounded-full" style={getProgressStyle(task.status)} />
                   </div>
 
-                  <div className="flex justify-be mt-auto pt-4">
+                  <div className="flex justify-between mt-auto pt-4">
                     <IoEye
                       onClick={(e) => handleAction(e, () => openViewModal(task))}
                       className="w-6 h-6 cursor-pointer text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                     />
-                 
+
                     <FaTrash
                       onClick={(e) =>
                         handleAction(e, () => {
@@ -206,8 +230,6 @@ const Carousel = ({
           ))}
         </div>
       </div>
-
-    
     </div>
   );
 };
