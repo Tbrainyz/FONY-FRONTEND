@@ -19,24 +19,34 @@ const Signin = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.email || !form.password) {
-      toast.error("Please fill all fields");
-      return;
-    }
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  if (!form.email || !form.password) {
+    toast.error("Please fill all fields");
+    return;
+  }
 
-    setLoading(true);
-    try {
-      await login(form);
-      toast.success("Login Successful!");
-      navigate("/dashboard");
-    } catch (err) {
+  setLoading(true);
+
+  try {
+    await login(form);
+    toast.success("Login Successful!");
+    navigate("/dashboard");
+  } catch (err) {
+    // ✅ Do NOTHING here for blocked accounts
+    // The toast is already shown correctly from AuthContext
+    console.log("Login failed:", err.message);
+
+    // Only show "Invalid credentials" for non-blocked errors
+    if (err.message !== "Account blocked") {
       toast.error("Invalid credentials");
-    } finally {
-      setLoading(false);
     }
-  };
+    // For blocked users → we already showed the proper message in AuthContext
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Google Login - Matches your Passport redirect flow
   const handleGoogleLogin = () => {
