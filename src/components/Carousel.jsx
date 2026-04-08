@@ -159,7 +159,7 @@ const Carousel = ({
               key={task._id}
               className="min-w-[300px] sm:min-w-[340px] flex-shrink-0 snap-start pointer-events-auto"
             >
-              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all h-full flex flex-col">
+              <div className="bg-white text-wrap dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all h-full flex flex-col">
                 {/* Image Section */}
                 <div className="h-48 bg-gray-100 dark:bg-gray-700 relative">
                   {task.image ? (
