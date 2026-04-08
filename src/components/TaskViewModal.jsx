@@ -88,7 +88,7 @@ const TaskViewModal = ({ task, onClose }) => {
           <div className="text-wrap">
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Description</p>
             <div className="bg-gray-50 dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 min-h-[120px]">
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap text-wrap word-break break-word">
                 {task.description || "No description provided."}
               </p>
             </div>
