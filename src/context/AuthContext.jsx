@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import API from "../api/axios";
+import { toast } from "react-toastify";
 
 export const AuthContext = createContext();
 
@@ -14,16 +15,16 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
   };
-// ==================== LOGIN ====================
-// ==================== LOGIN ====================
+
+  // ==================== LOGIN ====================
+ // ==================== LOGIN ====================
 const login = async (data) => {
   try {
     const res = await API.post("/api/users/login", data);
 
     const loggedInUser = res.data.user || res.data;
 
-    // Safety check
-    if (loggedInUser?.blocked || loggedInUser?.isBlocked) {
+    if (loggedInUser?.isBlocked || loggedInUser?.blocked) {
       toast.error("Your account has been blocked. Please contact support.", {
         position: "top-center",
         autoClose: 8000,
@@ -35,19 +36,16 @@ const login = async (data) => {
     return res.data;
 
   } catch (error) {
-    // Blocked account from backend (status 403)
+    // Blocked account handling
     if (error.response?.status === 403) {
-      const blockedMsg = error.response?.data?.message || 
-                        "Your account has been blocked. Please contact support.";
-
-      toast.error(blockedMsg, {
+      toast.error("Your account has been blocked. Please contact support.", {
         position: "top-center",
         autoClose: 8000,
       });
       throw new Error("Account blocked");
     }
 
-    // All other errors (wrong password, user not found, network issues, etc.)
+    // Normal errors only
     const errorMsg = error.response?.data?.message || "Invalid credentials";
     
     toast.error(errorMsg, {
@@ -60,76 +58,69 @@ const login = async (data) => {
 };
 
   // ==================== GOOGLE LOGIN ====================
-// ==================== GOOGLE LOGIN ====================
-const googleAuth = async (token) => {
-  try {
-    const res = await API.post("/api/users/google", { token });
+  const googleAuth = async (token) => {
+    try {
+      const res = await API.post("/api/users/google", { token });
 
-    const loggedInUser = res.data.user || res.data;
+      const loggedInUser = res.data.user || res.data;
 
-    if (loggedInUser?.blocked || loggedInUser?.isBlocked) {
-      toast.error("Your account has been blocked. Please contact support.", {
-        position: "top-center",
-        autoClose: 6000,
-      });
-      throw new Error("Account blocked");
+      if (loggedInUser?.isBlocked || loggedInUser?.blocked) {
+        toast.error("Your account has been blocked. Please contact support.", {
+          position: "top-center",
+          autoClose: 8000,
+        });
+        throw new Error("Account blocked");
+      }
+
+      saveUser(loggedInUser, res.data.token);
+      return res.data;
+
+    } catch (error) {
+      if (error.response?.status === 403) {
+        toast.error("Your account has been blocked. Please contact support.", {
+          position: "top-center",
+          autoClose: 8000,
+        });
+        throw new Error("Account blocked");
+      }
+
+      toast.error(error.response?.data?.message || "Google login failed");
+      throw error;
     }
+  };
 
-    saveUser(loggedInUser, res.data.token);
-    return res.data;
+  // ==================== REGISTER ====================
+  const register = async (data) => {
+    try {
+      const res = await API.post("/api/users/register", data);
+      const newUser = res.data.user || res.data;
+      const token = res.data.token;
 
-  } catch (error) {
-    if (error.response?.status === 403) {
-      toast.error(
-        error.response?.data?.message || "Your account has been blocked. Please contact support.",
-        { position: "top-center", autoClose: 8000 }
-      );
-      throw new Error("Account blocked");
+      if (token && newUser) {
+        saveUser(newUser, token);
+      }
+
+      return res.data;
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || "Registration failed";
+      toast.error(errorMsg);
+      throw error;
     }
+  };
 
-    toast.error(error.response?.data?.message || "Google login failed");
-    throw error;
-  }
-};
-
-
-// ==================== REGISTER ====================
-const register = async (data) => {
-  try {
-    const res = await API.post("/api/users/register", data);
-
-    const newUser = res.data.user || res.data;   // Get user from response
-    const token = res.data.token;                // Get token from response
-
-    // Auto-login the user after registration
-    if (token && newUser) {
-      saveUser(newUser, token);
-    } else {
-      // Fallback if backend doesn't return token yet
-      toast.error("Registration successful but login failed. Please login manually.");
-      throw new Error("No token received");
-    }
-
-    return res.data;
-  } catch (error) {
-    const errorMsg = error.response?.data?.message || "Registration failed. Please try again.";
-    toast.error(errorMsg);
-    throw error;
-  }
-};
   // ==================== LOGOUT ====================
   const logout = async () => {
     try {
       await API.post("/api/users/logout");
     } catch (err) {
-      console.warn("Backend logout failed, clearing local only");
+      console.warn("Backend logout failed");
     }
     setUser(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
   };
 
-  // ==================== UPDATE PROFILE ====================
+  // ==================== OTHER FUNCTIONS ====================
   const updateProfile = async (data) => {
     const formData = new FormData();
     if (data.name) formData.append("name", data.name);
@@ -151,7 +142,6 @@ const register = async (data) => {
     return res.data;
   };
 
-  // ==================== CHANGE PASSWORD ====================
   const updatePassword = async (oldPassword, newPassword) => {
     const token = localStorage.getItem("token");
     const res = await API.post(
@@ -162,13 +152,11 @@ const register = async (data) => {
     return res.data;
   };
 
-  // ==================== PASSWORD RESET FLOW ====================
   const forgotPassword = async (email) => {
     const res = await API.post("/api/users/forgot-password", { email });
     return res.data;
   };
 
-  // NEW: Verify OTP (This was missing!)
   const verifyOtp = async (email, otp) => {
     const res = await API.post("/api/users/verify-otp", { email, otp });
     return res.data;
@@ -200,15 +188,11 @@ const register = async (data) => {
     updateProfile,
     updatePassword,
     forgotPassword,
-    verifyOtp,        // ← Added
+    verifyOtp,
     resendOtp,
     resetPassword,
     isAdmin,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

@@ -11,10 +11,6 @@ import joseph from "../assets/Joseph.svg";
 import wasiu from "../assets/wasiu.svg";
 import stayloop from "../assets/Stayloop.svg";
 import footLogo from "../assets/Footerimg.svg";
-import facebook from "../assets/facebook.svg";
-import instagram from "../assets/instagram.svg";
-import twitter from "../assets/twitter.svg";
-import tiktok from "../assets/tiktok.svg";
 
 import LandingNavBar from "../components/LandingNavBar";
 import SocialDock from "../components/SocialDock";
@@ -36,7 +32,6 @@ const LandingPage = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 mt-10">
             {user ? (
-              // Logged in user
               <button
                 onClick={() => navigate("/dashboard")}
                 className="w-full sm:w-auto px-10 py-4 bg-[#77C2FF] rounded-[48px] border-2 border-b-4 border-black shadow-2xl font-semibold text-lg active:translate-y-0.5 transition-all hover:bg-[#5eb8ff]"
@@ -44,7 +39,6 @@ const LandingPage = () => {
                 Go to Dashboard →
               </button>
             ) : (
-              // Not logged in - original buttons
               <>
                 <button
                   onClick={() => navigate("/register")}
@@ -76,7 +70,6 @@ const LandingPage = () => {
           A Simple Way To <br className="hidden md:block" /> Manage Your Tasks
         </p>
         <div className="max-w-5xl mx-auto space-y-12">
-          {/* Card 1 */}
           <div className="flex flex-col md:flex-row bg-[#F6FBFF] rounded-[60px] border border-b-4 overflow-hidden">
             <div className="flex-1 p-8 md:p-12 lg:p-16 flex items-center">
               <div>
@@ -91,15 +84,10 @@ const LandingPage = () => {
               </div>
             </div>
             <div className="flex-1 flex items-center justify-center bg-white p-8 md:p-12">
-              <img
-                src={flex2}
-                alt=""
-                className="max-h-80 w-full h-auto object-contain"
-              />
+              <img src={flex2} alt="" className="max-h-80 w-full h-auto object-contain" />
             </div>
           </div>
 
-          {/* Card 2 */}
           <div className="flex flex-col md:flex-row-reverse bg-white rounded-[60px] border border-b-4 overflow-hidden">
             <div className="flex-1 p-8 md:p-12 lg:p-16 flex items-center">
               <div>
@@ -114,15 +102,10 @@ const LandingPage = () => {
               </div>
             </div>
             <div className="flex-1 flex items-center justify-center bg-[#F6FBFF] p-8 md:p-12">
-              <img
-                src={flex3}
-                alt=""
-                className="max-h-80 w-full h-auto object-contain"
-              />
+              <img src={flex3} alt="" className="max-h-80 w-full h-auto object-contain" />
             </div>
           </div>
 
-          {/* Card 3 */}
           <div className="flex flex-col md:flex-row bg-[#F6FBFF] rounded-[60px] border border-b-4 overflow-hidden">
             <div className="flex-1 p-8 md:p-12 lg:p-16 flex items-center">
               <div>
@@ -137,26 +120,18 @@ const LandingPage = () => {
               </div>
             </div>
             <div className="flex-1 flex items-center justify-center bg-white p-8 md:p-12">
-              <img
-                src={flex4}
-                alt=""
-                className="max-h-80 w-full h-auto object-contain"
-              />
+              <img src={flex4} alt="" className="max-h-80 w-full h-auto object-contain" />
             </div>
           </div>
         </div>
       </div>
 
       {/* Testimonials / Stats Section */}
-      <div
-        id="testimonials"
-        className="px-6 md:px-12 lg:px-20 py-16 bg-gray-50"
-      >
+      <div id="testimonials" className="px-6 md:px-12 lg:px-20 py-16 bg-gray-50">
         <p className="text-4xl md:text-5xl lg:text-6xl font-black text-center leading-tight mb-16">
           Loved By People Who <br className="hidden md:block" /> Get Things Done
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {/* Testimonial 1 */}
           <div className="bg-[#F6FBFF] border border-b-4 rounded-[60px] p-8 text-center">
             <img src={eclipse1} alt="" className="mx-auto mb-4" />
             <p className="font-black text-2xl mb-3">OlaChi Maryam</p>
@@ -167,13 +142,11 @@ const LandingPage = () => {
             </p>
           </div>
 
-          {/* Stat 1 */}
           <div className="bg-white border border-b-4 rounded-[60px] p-8 text-center flex flex-col justify-center min-h-[280px]">
             <p className="font-black text-7xl">32%</p>
             <p className="text-xl mt-4">Increase In Task Completion Rate</p>
           </div>
 
-          {/* Testimonial 2 */}
           <div className="bg-[#F6FBFF] border border-b-4 rounded-[60px] p-8 text-center">
             <img src={joseph} alt="" className="mx-auto mb-4" />
             <p className="font-black text-2xl mb-3">Joseph Ibrahim</p>
@@ -183,13 +156,11 @@ const LandingPage = () => {
             </p>
           </div>
 
-          {/* Stat 2 */}
           <div className="bg-white border border-b-4 rounded-[60px] p-8 text-center flex flex-col justify-center min-h-[280px]">
             <p className="font-black text-7xl">3X</p>
             <p className="text-xl mt-4">Better Daily Focus And Consistency</p>
           </div>
 
-          {/* Testimonial 3 */}
           <div className="bg-[#F6FBFF] border border-b-4 rounded-[60px] p-8 text-center">
             <img src={wasiu} alt="" className="mx-auto mb-4" />
             <p className="font-black text-2xl mb-3">Wasiu David</p>
@@ -199,7 +170,6 @@ const LandingPage = () => {
             </p>
           </div>
 
-          {/* Stat 3 */}
           <div className="bg-white border border-b-4 rounded-[60px] p-8 text-center flex flex-col justify-center min-h-[280px]">
             <p className="font-black text-6xl">
               2.5 <span className="text-4xl">Hours</span>
@@ -236,30 +206,40 @@ const LandingPage = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="px-6 md:px-12 lg:px-20 py-16 border-t">
-        <div className="flex flex-col md:flex-row gap-10  items-center">
+      {/* ==================== FOOTER ==================== */}
+      <footer className="px-6 md:px-12 lg:px-20 py-16 border-t bg-white">
+        <div className="flex flex-col md:flex-row gap-10 items-center">
           <img src={footLogo} alt="" className="md:w-[200px] lg:w-[300px]" />
-        <div>
-          <div className=" flex flex-col md:flex-row justify-between items-center px-6 py-3 md:rounded-[60px] rounded-3xl border border-b-8 gap-10">
-
+          
+          <div className="flex-1">
+            <div className="flex flex-col md:flex-row justify-between items-center px-6 py-3 md:rounded-[60px] rounded-3xl border border-b-8 gap-10">
               <div className="flex gap-8 text-lg">
                 <p>Home</p>
                 <p>Benefits</p>
                 <p>Testimonial</p>
-
-               
               </div>
-               <div>
-                  <SocialDock />
-                </div>
+              <div>
+                <SocialDock />
+              </div>
             </div>
-        <div className="text-center flex justify-center mt-16 text-[180px] md:text-[250px] font-light text-black leading-none">
-          <img src={foot} alt="" className=" h-auto " />
+
+            {/* Big Foot Image */}
+            <div className="text-center flex justify-center mt-16 text-[180px] md:text-[250px] font-light text-black leading-none">
+              <img src={foot} alt="" className="h-auto" />
+            </div>
+
+            {/* Support Email - LAST THING */}
+            <div className="mt-10 text-center text-sm text-gray-600">
+              Need help or have questions? Reach out to our support team at{" "}
+              <a 
+                href="mailto:fonytaskmanager2026@gmail.com" 
+                className="text-[#77C2FF] hover:underline font-medium"
+              >
+                fonytaskmanager2026@gmail.com
+              </a>
+            </div>
+          </div>
         </div>
-        </div>
-        </div>
-        
       </footer>
     </div>
   );

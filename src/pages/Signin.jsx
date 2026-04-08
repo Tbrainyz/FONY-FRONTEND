@@ -18,9 +18,10 @@ const Signin = () => {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
 const handleSubmit = async (e) => {
   e.preventDefault();
-  
+
   if (!form.email || !form.password) {
     toast.error("Please fill all fields");
     return;
@@ -33,12 +34,13 @@ const handleSubmit = async (e) => {
     toast.success("Login Successful!");
     navigate("/dashboard");
   } catch (err) {
-    // IMPORTANT: Do NOT show "Invalid credentials" for blocked accounts
+    // 🔥 IMPORTANT: Do NOTHING if it's a blocked account
     if (err.message === "Account blocked") {
-      // Do nothing — the correct blocked message is already shown from AuthContext
-      console.log("Blocked account login attempt handled");
+      // The blocked message is already shown from AuthContext
+      // So we silently ignore it here
+      console.log("Blocked account - toast already handled");
     } else {
-      // Only show generic error for wrong password, etc.
+      // Only show "Invalid credentials" for normal login failures
       toast.error("Invalid credentials");
     }
   } finally {
@@ -46,7 +48,6 @@ const handleSubmit = async (e) => {
   }
 };
 
-  // Google Login - Matches your Passport redirect flow
   const handleGoogleLogin = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     window.location.href = `${apiUrl}/api/users/google`;
@@ -74,7 +75,6 @@ const handleSubmit = async (e) => {
               <input
                 type="email"
                 name="email"
-                autoComplete="email"
                 value={form.email}
                 onChange={handleChange}
                 placeholder="Enter Email"
@@ -134,7 +134,6 @@ const handleSubmit = async (e) => {
               </span>
             </div>
 
-            {/* Google Button */}
             <button
               type="button"
               onClick={handleGoogleLogin}
@@ -147,10 +146,7 @@ const handleSubmit = async (e) => {
 
           <p className="text-center mt-8 text-sm">
             Don’t have an account?{" "}
-            <Link
-              to="/register"
-              className="text-[#77C2FF] font-medium hover:underline"
-            >
+            <Link to="/register" className="text-[#77C2FF] font-medium hover:underline">
               Sign Up
             </Link>
           </p>
@@ -159,11 +155,7 @@ const handleSubmit = async (e) => {
 
       {/* Right Side - Image */}
       <div className="hidden lg:flex lg:flex-1 bg-gray-100 items-center justify-center">
-        <img
-          src={Run}
-          alt="Illustration"
-          className="max-h-[90%] object-contain"
-        />
+        <img src={Run} alt="Illustration" className="max-h-[90%] object-contain" />
       </div>
     </div>
   );
