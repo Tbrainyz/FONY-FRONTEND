@@ -1,19 +1,21 @@
 // components/Carousel.jsx
 import React, { useContext, useEffect, useRef } from "react";
 import { IoEye } from "react-icons/io5";
-import { FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { FaTasks } from "react-icons/fa";
 import { TaskContext } from "../context/TasksContext";
 
 const Carousel = ({
   tasks = [],
   setSelectedTask,
+  openUpdateModal,
   openDeleteModal,
   openViewModal,
   openCreateModal,
 }) => {
   const { getStatusLabel } = useContext(TaskContext);
 
+  // Filter only tasks that are NOT 100% completed
   const inProgressTasks = tasks.filter(task => (task.status || 0) < 100);
 
   const scrollContainerRef = useRef(null);
@@ -50,7 +52,7 @@ const Carousel = ({
     callback();
   };
 
-  // Auto-scroll functionality (unchanged)
+  // Auto-scroll functionality
   const startAutoScroll = () => {
     if (intervalRef.current || inProgressTasks.length <= 1) return;
 
@@ -58,7 +60,7 @@ const Carousel = ({
       if (!scrollContainerRef.current) return;
 
       const container = scrollContainerRef.current;
-      const cardWidth = container.children[0]?.offsetWidth || 320;
+      const cardWidth = container.children[0]?.offsetWidth || 340;
       const gap = 24;
 
       let newScrollLeft = container.scrollLeft + cardWidth + gap;
@@ -87,52 +89,51 @@ const Carousel = ({
 
   useEffect(() => {
     startAutoScroll();
+
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
     };
   }, [inProgressTasks.length]);
 
-  // ==================== EMPTY STATE ====================
-  if (inProgressTasks.length === 0){
+  // Empty State
+  if (inProgressTasks.length === 0) {
     return (
-      <div>
-        <div className="flex items-center justify-between mb-6 px-2">
-          <h2 className="text-3xl md:text-4xl font-[Caveat] font-bold text-gray-900 dark:text-white">
-            Tasks in Progress
-          </h2>
-        </div>
-
-        <div className="mt-3 w-full md:max-w-xs rounded-3xl border border-black dark:border-gray-600 shadow-md shadow-black/50 dark:shadow-gray-800/50 overflow-hidden">
-          {/* Top Icon Section */}
-          <div className="flex items-center justify-center border-b border-black dark:border-gray-600 bg-[#F4F4F4] dark:bg-gray-800 py-12">
-            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white dark:bg-gray-700 border border-gray-400 dark:border-gray-500 shadow-md">
-              <div className="bg-gray-700 dark:bg-gray-300 p-2 rounded-xl">
-                <FaTasks className="text-white dark:text-gray-800 text-2xl" />
-              </div>
+ <div>
+  {/* Header */}
+      <div className="flex items-center justify-between mb-6 px-2">
+        <h2 className="text-3xl md:text-4xl font-[Caveat] font-bold text-gray-900 dark:text-white">
+          Tasks in Progress
+        </h2>
+      </div>
+      
+      
+      <div className="mt-3 w-full md:max-w-xs rounded-2xl border border-black shadow-md shadow-black">
+        
+        <div className="flex items-center justify-center border-b border-black rounded-2xl bg-[#F4F4F4] py-12">
+          <div className="grid h-9 w-9 place-items-center rounded-xl bg-[#F4F4F4] border border-[#666666] shadow-md shadow-[#666666]">
+            <div className="bg-[#666666] p-[2px] rounded-md">
+              <FaTasks className="text-[#F4F4F4] text-sm" />
             </div>
           </div>
+        </div>
+        <div className="flex flex-col py-6 px-6">
+          <p className="mt-4 text-sm font-medium">No Task in Progress yet</p>
 
-          {/* Bottom Content */}
-          <div className="flex flex-col py-8 px-6 bg-white dark:bg-gray-800">
-            <p className="text-center text-gray-600 dark:text-gray-400 font-medium">
-              No Task in Progress yet
-            </p>
-            <button
-              type="button"
-              onClick={openCreateModal}
-              className="mt-6 mx-auto w-full max-w-[180px] inline-flex items-center justify-center gap-2 
-                         rounded-full bg-[#77C2FF] px-6 py-3 text-sm font-medium text-black 
-                         shadow-md shadow-black border border-black hover:bg-[#5eb0f0] transition-colors"
-            >
-              Create new task
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={openCreateModal}
+            className="mt-4 w-[7.5rem] inline-flex items-center gap-2 rounded-full bg-[#77C2FF] px-4 py-2 text-xs font-medium text-black shadow-md shadow-black border border-black"
+          >
+            Create new task
+          </button>
         </div>
       </div>
+ </div>
     );
   }
 
-  // ==================== MAIN CAROUSEL ====================
   return (
     <div className="mb-10">
       {/* Header */}
@@ -145,23 +146,22 @@ const Carousel = ({
         </p>
       </div>
 
-      {/* Auto-scrolling Carousel - Improved Responsiveness */}
+      {/* Auto-scrolling Carousel */}
       <div
         ref={scrollContainerRef}
         className="scrollable-content overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide"
         onMouseEnter={stopAutoScroll}
         onMouseLeave={resumeAutoScroll}
       >
-        <div className="flex gap-4 sm:gap-6 px-2">
+        <div className="flex gap-6 px-2">
           {inProgressTasks.map((task) => (
             <div
               key={task._id}
-              className="min-w-[280px] sm:min-w-[320px] md:min-w-[340px] lg:min-w-[360px] flex-shrink-0 snap-start pointer-events-auto"
+              className="min-w-[300px] sm:min-w-[340px] flex-shrink-0 snap-start pointer-events-auto"
             >
               <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all h-full flex flex-col">
-                
                 {/* Image Section */}
-                <div className="h-48 bg-gray-100 dark:bg-gray-700 relative">
+                <div className="h-48 bg-gray-100 rounded-bl-lg rounded-br-lg dark:bg-gray-700 relative">
                   {task.image ? (
                     <img
                       src={task.image}

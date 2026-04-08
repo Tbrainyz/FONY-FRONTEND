@@ -95,18 +95,27 @@ const TaskRow = ({
             </div>
           ))
         ) : (
-          <div className="min-h-[360px] px-4 py-6">
-              <div className="flex min-h-[300px] flex-col items-center justify-center text-center">
-                <p className="text-xs font-semibold">No Task Created yet</p>
+          <div className="min-h-[360px] px-4 py-6 bg-white text-black dark:bg-gray-900 dark:text-white">
+  <div className="flex min-h-[300px] flex-col items-center justify-center text-center">
+    <p className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+      No Task Created yet
+    </p>
 
-                <button
-                  type="button"
-                  className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#77C2FF] px-4 py-2 text-xs font-medium text-black shadow-md shadow-black border border-black" onClick={openCreateModal}
-                >
-                  Create new task
-                </button>
-              </div>
-            </div>
+    <button
+      type="button"
+      onClick={openCreateModal}
+      className="mt-3 inline-flex items-center gap-2 rounded-full 
+                 bg-[#77C2FF] text-black 
+                 dark:bg-blue-400 dark:text-black
+                 px-4 py-2 text-xs font-medium 
+                 border border-black dark:border-gray-600
+                 shadow-md shadow-black/20 dark:shadow-black/50"
+    >
+      Create new task
+    </button>
+  </div>
+</div>
+
         )}
       </div>
 
@@ -169,18 +178,27 @@ const TaskRow = ({
             </div>
           ))
         ) : (
-              <div className="min-h-[360px] px-4 py-6">
-              <div className="flex min-h-[300px] flex-col items-center justify-center text-center">
-                <p className="text-xs font-semibold">No Task Created yet</p>
+             <div className="min-h-[360px] px-4 py-6 bg-white text-black dark:bg-gray-900 dark:text-white">
+  <div className="flex min-h-[300px] flex-col items-center justify-center text-center">
+    <p className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+      No Task Created yet
+    </p>
 
-                <button
-                  type="button"
-                  className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#77C2FF] px-4 py-2 text-xs font-medium text-black shadow-md shadow-black border border-black" onClick={openCreateModal}
-                >
-                  Create new task
-                </button>
-              </div>
-            </div>
+    <button
+      type="button"
+      onClick={openCreateModal}
+      className="mt-3 inline-flex items-center gap-2 rounded-full 
+                 bg-[#77C2FF] text-black 
+                 dark:bg-blue-400 dark:text-black
+                 px-4 py-2 text-xs font-medium 
+                 border border-black dark:border-gray-600
+                 shadow-md shadow-black/20 dark:shadow-black/50"
+    >
+      Create new task
+    </button>
+  </div>
+</div>
+
         )}
       </div>
     </div>

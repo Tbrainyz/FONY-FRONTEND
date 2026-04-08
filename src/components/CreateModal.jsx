@@ -103,7 +103,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full mt-1 h-12 px-5 rounded-2xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-[#77C2FF] focus:outline-none"
+              className ="w-full mt-1 h-12 px-5 whitespace-pre-wrap text-wrap break-words break-all truncate rounded-2xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-[#77C2FF] focus:outline-none"
               placeholder="What is this task about?"
             />
           </div>
