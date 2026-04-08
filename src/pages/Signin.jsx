@@ -18,8 +18,7 @@ const Signin = () => {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
- const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
   
   if (!form.email || !form.password) {
@@ -34,15 +33,14 @@ const Signin = () => {
     toast.success("Login Successful!");
     navigate("/dashboard");
   } catch (err) {
-    // ✅ Do NOTHING here for blocked accounts
-    // The toast is already shown correctly from AuthContext
-    console.log("Login failed:", err.message);
-
-    // Only show "Invalid credentials" for non-blocked errors
-    if (err.message !== "Account blocked") {
+    // IMPORTANT: Do NOT show "Invalid credentials" for blocked accounts
+    if (err.message === "Account blocked") {
+      // Do nothing — the correct blocked message is already shown from AuthContext
+      console.log("Blocked account login attempt handled");
+    } else {
+      // Only show generic error for wrong password, etc.
       toast.error("Invalid credentials");
     }
-    // For blocked users → we already showed the proper message in AuthContext
   } finally {
     setLoading(false);
   }

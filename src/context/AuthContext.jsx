@@ -15,12 +15,14 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
   };
 // ==================== LOGIN ====================
+// ==================== LOGIN ====================
 const login = async (data) => {
   try {
     const res = await API.post("/api/users/login", data);
 
     const loggedInUser = res.data.user || res.data;
 
+    // Safety check
     if (loggedInUser?.blocked || loggedInUser?.isBlocked) {
       toast.error("Your account has been blocked. Please contact support.", {
         position: "top-center",
@@ -33,8 +35,7 @@ const login = async (data) => {
     return res.data;
 
   } catch (error) {
-    console.log("Login error details:", error.response?.data); // for debugging
-
+    // Blocked account from backend (status 403)
     if (error.response?.status === 403) {
       const blockedMsg = error.response?.data?.message || 
                         "Your account has been blocked. Please contact support.";
@@ -46,8 +47,9 @@ const login = async (data) => {
       throw new Error("Account blocked");
     }
 
-    // Normal errors (wrong password, user not found, etc.)
+    // All other errors (wrong password, user not found, network issues, etc.)
     const errorMsg = error.response?.data?.message || "Invalid credentials";
+    
     toast.error(errorMsg, {
       position: "top-center",
       autoClose: 5000,
