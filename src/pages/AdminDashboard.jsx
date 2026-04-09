@@ -71,7 +71,7 @@ const AdminDashboard = () => {
         )
       );
 
-      toast.success("User blocked successfully");
+      
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to block user");
     }
@@ -89,7 +89,7 @@ const AdminDashboard = () => {
         )
       );
 
-      toast.success("User unblocked successfully");
+    
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to unblock user");
     }
