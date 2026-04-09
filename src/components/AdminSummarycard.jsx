@@ -9,13 +9,13 @@ const AdminSummaryCard = ({ stats }) => {
       label: "Total Users", 
       value: stats.usersCount || 0, 
       icon: <FaUsers />,
-      color: "bg-purple-100 border-blue-500 text-blue-700 dark:bg-purple-950 dark:border-blue-600 dark:text-blue-300" 
+      color: "bg-purple-100 border-purple-500 text-purple-700 dark:bg-purple-950 dark:border-purple-600 dark:text-purple-300" 
     },
     { 
       label: "Total Tasks", 
       value: stats.tasksCount || 0, 
       icon: <FaTasks />,
-      color: "bg-blue-100 border-purple-500 text-purple-700 dark:bg-blue-950 dark:border-purple-600 dark:text-purple-300" 
+      color: "bg-blue-100 border-blue-500 text-blue-700 dark:bg-blue-950 dark:border-blue-600 dark:text-blue-300" 
     },
     { 
       label: "Completed Tasks", 
