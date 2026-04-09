@@ -18,9 +18,47 @@ export const AuthProvider = ({ children }) => {
 
   // ==================== LOGIN ====================
  // ==================== LOGIN ====================
+// ==================== LOGIN ====================
 const login = async (data) => {
   try {
     const res = await API.post("/api/users/login", data);
+
+    const loggedInUser = res.data.user || res.data;
+
+    // Check if user is blocked
+    if (loggedInUser?.isBlocked || loggedInUser?.blocked) {
+      toast.error("Your account has been blocked. Please contact support.", {
+        position: "top-center",
+        autoClose: 8000,
+      });
+      throw new Error("Account blocked");
+    }
+
+    saveUser(loggedInUser, res.data.token);
+    return res.data;
+
+  } catch (error) {
+    // Blocked account (from backend 403 or from our check above)
+    if (error.response?.status === 403 || error.message === "Account blocked") {
+      // Toast is already shown above, so we just re-throw
+      throw new Error("Account blocked");
+    }
+
+    // All other errors (invalid credentials, network error, etc.)
+    toast.error("Invalid credentials", {
+      position: "top-center",
+      autoClose: 5000,
+    });
+
+    throw error;
+  }
+};
+
+  
+// ==================== GOOGLE LOGIN ====================
+const googleAuth = async (token) => {
+  try {
+    const res = await API.post("/api/users/google", { token });
 
     const loggedInUser = res.data.user || res.data;
 
@@ -36,58 +74,17 @@ const login = async (data) => {
     return res.data;
 
   } catch (error) {
-    // Blocked account handling
-    if (error.response?.status === 403) {
-      toast.error("Your account has been blocked. Please contact support.", {
-        position: "top-center",
-        autoClose: 8000,
-      });
-      throw new Error("Account blocked");
+    if (error.response?.status === 403 || error.message === "Account blocked") {
+      throw new Error("Account blocked"); // Toast already shown
     }
 
-    // Normal errors only
-    const errorMsg =  "Invalid credentials";
-    
-    toast.error(errorMsg, {
+    toast.error("Google login failed", {
       position: "top-center",
       autoClose: 5000,
     });
-
     throw error;
   }
 };
-
-  // ==================== GOOGLE LOGIN ====================
-  const googleAuth = async (token) => {
-    try {
-      const res = await API.post("/api/users/google", { token });
-
-      const loggedInUser = res.data.user || res.data;
-
-      if (loggedInUser?.isBlocked || loggedInUser?.blocked) {
-        toast.error("Your account has been blocked. Please contact support.", {
-          position: "top-center",
-          autoClose: 8000,
-        });
-        throw new Error("Account blocked");
-      }
-
-      saveUser(loggedInUser, res.data.token);
-      return res.data;
-
-    } catch (error) {
-      if (error.response?.status === 403) {
-        toast.error("Your account has been blocked. Please contact support.", {
-          position: "top-center",
-          autoClose: 8000,
-        });
-        throw new Error("Account blocked");
-      }
-
-      toast.error( "Google login failed");
-      throw error;
-    }
-  };
 
   // ==================== REGISTER ====================
   const register = async (data) => {

@@ -34,15 +34,12 @@ const handleSubmit = async (e) => {
     toast.success("Login Successful!");
     navigate("/dashboard");
   } catch (err) {
-    // 🔥 IMPORTANT: Do NOTHING if it's a blocked account
-    if (err.message === "Account blocked") {
-      // The blocked message is already shown from AuthContext
-      // So we silently ignore it here
-      console.log("Blocked account - toast already handled");
-    } else {
-      // Only show "Invalid credentials" for normal login failures
-      toast.error("Invalid credentials");
+    // 🔥 Only handle non-blocked errors here
+    if (err.message !== "Account blocked") {
+      // Toast for invalid credentials is already shown in AuthContext
+      // So we do NOTHING here
     }
+    // If it's blocked, do nothing — toast was already shown in context
   } finally {
     setLoading(false);
   }
