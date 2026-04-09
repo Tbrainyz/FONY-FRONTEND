@@ -46,7 +46,7 @@ const login = async (data) => {
     }
 
     // Normal errors only
-    const errorMsg = error.response?.data?.message || "Invalid credentials";
+    const errorMsg =  "Invalid credentials";
     
     toast.error(errorMsg, {
       position: "top-center",
@@ -84,7 +84,7 @@ const login = async (data) => {
         throw new Error("Account blocked");
       }
 
-      toast.error(error.response?.data?.message || "Google login failed");
+      toast.error( "Google login failed");
       throw error;
     }
   };
@@ -102,7 +102,7 @@ const login = async (data) => {
 
       return res.data;
     } catch (error) {
-      const errorMsg = error.response?.data?.message || "Registration failed";
+      const errorMsg =  "Registration failed";
       toast.error(errorMsg);
       throw error;
     }
