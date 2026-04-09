@@ -66,6 +66,9 @@ const SignUp = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     window.location.href = `${apiUrl}/api/users/google`;
   };
+   const handleLogoClick = () => {
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-gray-50">
@@ -73,7 +76,7 @@ const SignUp = () => {
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-md">
           <div className="flex items-center gap-2 mb-10">
-            <img src={Logo} alt="Logo" className="h-10" />
+            <img src={Logo} alt="Logo" className="h-10" onClick={handleLogoClick} />
           </div>
 
           <h2 className="text-3xl font-bold mb-2">Create Account</h2>
