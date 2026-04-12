@@ -17,6 +17,7 @@ const ProfilePage = () => {
     phone: "",
     image: null,
   });
+
   const [preview, setPreview] = useState(DefaultProfile);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -33,10 +34,8 @@ const ProfilePage = () => {
     }
   }, [user]);
 
-   useEffect(() => {
-    if (!user) {
-      navigate("/login", { replace: true });
-    }
+  useEffect(() => {
+    if (!user) navigate("/login", { replace: true });
   }, [user]);
 
   const handleChange = (e) => {
@@ -56,9 +55,9 @@ const ProfilePage = () => {
     setLoading(true);
     try {
       await updateProfile(formData);
-      toast.success("Profile updated successfully");
+      toast.success("Profile updated ✨");
       setIsEditing(false);
-    } catch (err) {
+    } catch {
       toast.error("Update failed");
     } finally {
       setLoading(false);
@@ -66,16 +65,8 @@ const ProfilePage = () => {
   };
 
   const handleCancel = () => {
-    if (user) {
-      setFormData({
-        name: user.name || "",
-        email: user.email || "",
-        phone: user.phone || "",
-        image: null,
-      });
-      setPreview(user.profilePicture || DefaultProfile);
-    }
     setIsEditing(false);
+    setPreview(user.profilePicture || DefaultProfile);
   };
 
   const handleLogout = () => {
@@ -83,134 +74,173 @@ const ProfilePage = () => {
     navigate("/login", { replace: true });
   };
 
-  if (!user) {
-    return <div className="text-center py-20 text-gray-600 dark:text-gray-400">Please log in to view profile</div>;
-  }
+  if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        <form 
-          onSubmit={handleSubmit} 
-          className="bg-white dark:bg-gray-900 p-8 md:p-10 rounded-3xl shadow border border-gray-100 dark:border-gray-800"
-        >
-          <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
-            Personal Information
-          </h2>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-black py-10 px-4">
 
-          {/* Profile Image */}
-          <div className="flex flex-col items-center mb-10">
-            <img
-              src={preview}
-              alt="Profile"
-              referrerPolicy="no-referrer"
-              className="w-32 h-32 rounded-full border-4 border-gray-200 dark:border-gray-700 object-cover"
-              onError={(e) => (e.target.src = DefaultProfile)}
-            />
-            {isEditing && (
-              <label className="mt-4 flex items-center gap-2 text-blue-600 dark:text-blue-400 cursor-pointer text-sm font-semibold">
-                <RiCameraAiLine size={24} />
-                Change Profile Image
-                <input type="file" hidden accept="image/*" onChange={handleImage} />
-              </label>
-            )}
+      <div className="max-w-3xl mx-auto">
+
+        <form
+          onSubmit={handleSubmit}
+          className="relative p-10 rounded-3xl overflow-hidden
+          bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl
+          border border-white/20 dark:border-gray-800
+          shadow-[0_20px_60px_rgba(0,0,0,0.2)]"
+        >
+
+          {/* Glow Effect */}
+          <div className="absolute -top-20 -right-20 w-60 h-60 bg-blue-400/20 blur-3xl rounded-full"></div>
+
+          {/* HEADER */}
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+              Your Profile
+            </h2>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
+              Manage your personal information
+            </p>
           </div>
 
-          {/* Form Fields */}
+          {/* PROFILE IMAGE */}
+          <div className="flex flex-col items-center mb-10">
+            <div className="relative group">
+              <img
+                src={preview}
+                alt="Profile"
+                className="w-32 h-32 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-lg"
+              />
+
+              {isEditing && (
+                <label className="absolute inset-0 flex items-center justify-center 
+                bg-black/50 rounded-full opacity-0 group-hover:opacity-100 cursor-pointer transition">
+                  <RiCameraAiLine size={28} className="text-white" />
+                  <input type="file" hidden accept="image/*" onChange={handleImage} />
+                </label>
+              )}
+            </div>
+
+            <p className="mt-4 font-semibold text-gray-800 dark:text-gray-200">
+              {user.name}
+            </p>
+          </div>
+
+          {/* FORM */}
           <div className="space-y-6">
+
+            {/* NAME */}
             <div>
-              <label className="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">Name</label>
+              <label className="text-sm text-gray-600 dark:text-gray-300">
+                Name
+              </label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
                 disabled={!isEditing}
-                className="w-full h-14 px-5 border border-gray-300 dark:border-gray-600 rounded-2xl 
-                           bg-white dark:bg-gray-800 text-gray-900 dark:text-white 
-                           disabled:opacity-60 focus:outline-none focus:border-[#77C2FF]"
+                className="w-full mt-2 h-12 px-4 rounded-xl border 
+                bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+                border-gray-300 dark:border-gray-600
+                focus:ring-2 focus:ring-[#77C2FF] outline-none
+                disabled:opacity-60 transition"
               />
             </div>
 
+            {/* EMAIL */}
             <div>
-              <label className="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">Email</label>
+              <label className="text-sm text-gray-600 dark:text-gray-300">
+                Email
+              </label>
               <input
                 type="email"
                 value={formData.email}
                 disabled
-                className="w-full h-14 px-5 border border-gray-300 dark:border-gray-600 rounded-2xl 
-                           bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+                className="w-full mt-2 h-12 px-4 rounded-xl 
+                bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
               />
             </div>
 
+            {/* PHONE */}
             <div>
-              <label className="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">Phone Number</label>
+              <label className="text-sm text-gray-600 dark:text-gray-300">
+                Phone
+              </label>
               <input
                 type="text"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
                 disabled={!isEditing}
-                className="w-full h-14 px-5 border border-gray-300 dark:border-gray-600 rounded-2xl 
-                           bg-white dark:bg-gray-800 text-gray-900 dark:text-white 
-                           disabled:opacity-60 focus:outline-none focus:border-[#77C2FF]"
+                className="w-full mt-2 h-12 px-4 rounded-xl border 
+                bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+                border-gray-300 dark:border-gray-600
+                focus:ring-2 focus:ring-[#77C2FF] outline-none
+                disabled:opacity-60"
               />
             </div>
           </div>
 
-          {/* Action Buttons */}
+          {/* ACTIONS */}
           <div className="mt-10 space-y-4">
+
             {!isEditing ? (
               <button
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="w-full py-4 border-2 border-black dark:border-white rounded-2xl font-bold 
-                           shadow-[0_4px_0_0_black] dark:shadow-[0_4px_0_0_white] 
-                           active:translate-y-0.5 active:shadow-none transition-all
-                           text-gray-900 dark:text-white"
+                className="w-full h-12 rounded-xl font-semibold
+                bg-gradient-to-r from-[#77C2FF] to-blue-500 text-white
+                hover:scale-[1.02] active:scale-[0.98] transition"
               >
-                Edit Profile Information
+                Edit Profile
               </button>
             ) : (
               <div className="flex gap-4">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 py-4 bg-[#77C2FF] hover:bg-blue-500 text-white rounded-2xl font-bold 
-                             disabled:opacity-70 transition-all"
+                  className="flex-1 h-12 rounded-xl font-semibold text-white
+                  bg-gradient-to-r from-[#77C2FF] to-blue-500
+                  hover:scale-[1.02] transition disabled:opacity-60"
                 >
-                  {loading ? "Saving..." : "Save Changes"}
+                  {loading ? "Saving..." : "Save"}
                 </button>
+
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="flex-1 py-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 
-                             rounded-2xl font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+                  className="flex-1 h-12 rounded-xl font-semibold
+                  bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300
+                  hover:scale-[1.02] transition"
                 >
                   Cancel
                 </button>
               </div>
             )}
 
+            {/* CHANGE PASSWORD */}
             <button
               type="button"
               onClick={() => navigate("/change-password")}
-              className="w-full flex items-center justify-center gap-3 py-4 border border-gray-400 dark:border-gray-600 
-                         text-blue-600 dark:text-blue-400 rounded-2xl font-semibold 
-                         hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              className="w-full h-12 flex items-center justify-center gap-2 rounded-xl
+              border border-gray-300 dark:border-gray-700
+              text-blue-600 dark:text-blue-400
+              hover:bg-gray-100 dark:hover:bg-gray-800 transition"
             >
-              <MdOutlineLockOpen size={22} />
+              <MdOutlineLockOpen size={20} />
               Change Password
             </button>
 
+            {/* LOGOUT */}
             <button
               type="button"
               onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-3 py-4 border border-red-400 dark:border-red-600 
-                         text-red-600 dark:text-red-400 rounded-2xl font-semibold 
-                         hover:bg-red-50 dark:hover:bg-red-950 transition"
+              className="w-full h-12 flex items-center justify-center gap-2 rounded-xl
+              border border-red-400 dark:border-red-600
+              text-red-600 dark:text-red-400
+              hover:bg-red-50 dark:hover:bg-red-950 transition"
             >
-              <AiOutlineLogout size={22} />
+              <AiOutlineLogout size={20} />
               Log Out
             </button>
           </div>

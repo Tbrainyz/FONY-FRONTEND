@@ -157,14 +157,16 @@ const CreateModal = ({ closeModal, openNextModal }) => {
               </label>
             </div>
           </div>
-           {/* FOOTER */}
+          
         <div className="p-8 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
           <button
             onClick={handleSubmit}
-            disabled={loading || !formData.title || !formData.description || !formData.priority}
-            className="w-full h-12 bg-[#77C2FF] rounded-2xl font-bold border border-b-4 border-black dark:border-white disabled:bg-gray-400 disabled:cursor-not-allowed active:translate-y-0.5 transition-all text-black"
+            disabled={loading}
+            className="w-full h-12 rounded-xl font-semibold text-white 
+            bg-gradient-to-r from-[#77C2FF] to-blue-500 
+            hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
           >
-            {loading ? "Creating..." : "Create New Task"}
+            {loading ? "Creating..." : "Create Task"}
           </button>
         </div>
         </div>

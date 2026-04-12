@@ -6,23 +6,20 @@ const TaskSummaryCard = () => {
   const { totalTasks, completedCount, ongoingCount, loading } = useContext(TaskContext);
 
   const summaries = [
-    { 
-      label: "Total Task", 
-      value: totalTasks, 
-      color: "text-black dark:text-white",
-      bgColor: "bg-white dark:bg-gray-900"
+    {
+      label: "Total Tasks",
+      value: totalTasks,
+      accent: "from-gray-200 to-gray-400 dark:from-gray-700 dark:to-gray-800",
     },
-    { 
-      label: "Ongoing Task", 
-      value: ongoingCount, 
-      color: "text-orange-600 dark:text-orange-400",
-      bgColor: "bg-white dark:bg-gray-900"
+    {
+      label: "Ongoing",
+      value: ongoingCount,
+      accent: "from-orange-300 to-orange-500",
     },
-    { 
-      label: "Completed Task", 
-      value: completedCount, 
-      color: "text-green-600 dark:text-green-400",
-      bgColor: "bg-white dark:bg-gray-900"
+    {
+      label: "Completed",
+      value: completedCount,
+      accent: "from-green-300 to-green-500",
     },
   ];
 
@@ -31,22 +28,29 @@ const TaskSummaryCard = () => {
       {summaries.map((item, i) => (
         <div
           key={i}
-          className={`border border-b-4 border-black dark:border-white 
-                     rounded-3xl p-6 flex gap-5 shadow-sm 
-                     ${item.bgColor} transition-all`}
+          className="relative rounded-3xl p-6 overflow-hidden 
+          bg-white/70 dark:bg-gray-900/70 backdrop-blur-md 
+          border border-gray-200 dark:border-gray-700
+          shadow hover:shadow-xl hover:-translate-y-1 transition-all"
         >
-          <img 
-            src={pic} 
-            alt="" 
-            className="w-12 h-12 dark:brightness-110" 
+          {/* Accent Glow */}
+          <div
+            className={`absolute inset-0 opacity-20 bg-gradient-to-br ${item.accent}`}
           />
-          <div>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
-              {item.label}
-            </p>
-            <p className={`text-3xl font-bold mt-1 ${item.color}`}>
-              {loading ? "..." : item.value}
-            </p>
+
+          <div className="relative flex gap-4 items-center">
+            <div className="p-3 rounded-xl bg-white dark:bg-gray-800 shadow">
+              <img src={pic} alt="" className="w-8 h-8 dark:invert" />
+            </div>
+
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {item.label}
+              </p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                {loading ? "..." : item.value}
+              </p>
+            </div>
           </div>
         </div>
       ))}

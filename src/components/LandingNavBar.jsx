@@ -8,56 +8,83 @@ const LandingNavBar = () => {
   const { user } = useContext(AuthContext);
 
   const handleLogoClick = () => {
-    if (user) {
-      navigate("/dashboard");
-    } else {
-      navigate("/");
-    }
+    user ? navigate("/dashboard") : navigate("/");
   };
 
   return (
-    <nav className="w-full py-6 px-6 md:px-12 lg:px-24 flex items-center justify-between border-b bg-white">
-      {/* Logo */}
-      <img 
-        src={logo} 
-        alt="Logo" 
-        className="h-9 md:h-10 cursor-pointer" 
-        onClick={handleLogoClick}
-      />
+    <nav className="sticky top-4 z-50 px-4 md:px-10">
+      <div
+        className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4 
+        rounded-2xl backdrop-blur-xl bg-white/70 dark:bg-black/50 
+        border border-white/30 dark:border-white/10 
+        shadow-lg"
+      >
+        {/* LOGO */}
+        <img
+          src={logo}
+          alt="Logo"
+          onClick={handleLogoClick}
+          className="h-9 md:h-10 cursor-pointer hover:scale-105 transition"
+        />
 
-      {/* Desktop Navigation Links */}
-      <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-        <a href="#how-it-works" className="hover:text-[#77C2FF] transition">How it Works</a>
-        <a href="#testimonials" className="hover:text-[#77C2FF] transition">Testimonials</a>
-      </div>
-
-      {/* Right Side */}
-      <div className="flex items-center gap-4">
-        {user ? (
-          // Logged In
-          <button
-            onClick={() => navigate("/dashboard")}
-            className="px-7 py-2.5 bg-[#77C2FF] hover:bg-[#5eb8ff] rounded-[48px] border-2 border-b-4 border-black font-semibold text-sm transition-all active:translate-y-0.5"
+        {/* NAV LINKS */}
+        <div className="hidden md:flex items-center gap-10 text-sm font-medium">
+          <a
+            href="#how-it-works"
+            className="relative group text-gray-700 dark:text-gray-300"
           >
-            Go to Dashboard
-          </button>
-        ) : (
-          // Not Logged In
-          <div className="hidden md:flex lg:flex items-center gap-3">
+            How it Works
+            <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-[#77C2FF] transition-all group-hover:w-full" />
+          </a>
+
+          <a
+            href="#testimonials"
+            className="relative group text-gray-700 dark:text-gray-300"
+          >
+            Testimonials
+            <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-[#77C2FF] transition-all group-hover:w-full" />
+          </a>
+        </div>
+
+        {/* RIGHT SIDE */}
+        <div className="flex items-center gap-3">
+          {user ? (
             <button
-              onClick={() => navigate("/login")}
-              className="px-7 py-2.5 border-2 border-b-4 border-black rounded-[48px] font-semibold hover:bg-gray-50 transition"
+              onClick={() => navigate("/dashboard")}
+              className="px-6 py-2.5 rounded-full 
+              bg-gradient-to-r from-[#77C2FF] to-blue-500 
+              text-white font-semibold text-sm 
+              shadow-lg hover:shadow-xl hover:scale-105 
+              active:scale-95 transition-all"
             >
-              Login
+              Go to Dashboard →
             </button>
-            <button
-              onClick={() => navigate("/register")}
-              className="px-7 py-2.5 bg-[#77C2FF] rounded-[48px] border-2 border-b-4 border-black font-semibold shadow-2xl active:translate-y-0.5 transition-all"
-            >
-              Get Started
-            </button>
-          </div>
-        )}
+          ) : (
+            <div className="hidden md:flex items-center gap-3">
+              <button
+                onClick={() => navigate("/login")}
+                className="px-6 py-2.5 rounded-full 
+                border border-gray-300 dark:border-gray-700 
+                text-gray-800 dark:text-gray-200 
+                hover:bg-gray-100 dark:hover:bg-gray-800 
+                transition-all"
+              >
+                Login
+              </button>
+
+              <button
+                onClick={() => navigate("/register")}
+                className="px-6 py-2.5 rounded-full 
+                bg-gradient-to-r from-[#77C2FF] to-blue-500 
+                text-white font-semibold 
+                shadow-lg hover:shadow-xl hover:scale-105 
+                active:scale-95 transition-all"
+              >
+                Get Started
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );

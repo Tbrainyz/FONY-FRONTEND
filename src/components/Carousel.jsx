@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { IoEye } from "react-icons/io5";
 import { FaEdit, FaTrash, FaTasks } from "react-icons/fa";
 import { TaskContext } from "../context/TasksContext";
@@ -13,64 +13,89 @@ const Carousel = ({
 }) => {
   const { getStatusLabel } = useContext(TaskContext);
 
-  const inProgressTasks = tasks.filter((task) => (task.status || 0) < 100);
+  const inProgressTasks = tasks.filter((t) => (t.status || 0) < 100);
 
-  const scrollContainerRef = useRef(null);
+  const scrollRef = useRef(null);
   const intervalRef = useRef(null);
+  const directionRef = useRef(1);
+  const isHoveredRef = useRef(false);
 
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
+
+  /* ---------------- PROGRESS ---------------- */
   const getProgressStyle = (progress = 0) => {
-    let backgroundColor;
-    if (progress <= 25) backgroundColor = "#ef4444";
-    else if (progress <= 50) backgroundColor = "#f59e0b";
-    else if (progress <= 75) backgroundColor = "#22c55e";
-    else backgroundColor = "#15803d";
+    let gradient;
+    if (progress <= 25) gradient = "from-red-400 to-red-600";
+    else if (progress <= 50) gradient = "from-yellow-400 to-orange-500";
+    else if (progress <= 75) gradient = "from-green-400 to-green-600";
+    else gradient = "from-emerald-500 to-emerald-700";
 
-    return {
-      width: `${progress}%`,
-      backgroundColor,
-      transition: "width 0.4s ease-in-out",
-    };
+    return `bg-gradient-to-r ${gradient}`;
   };
 
   const getPriorityClass = (priority) => {
     if (!priority) return "";
-    const prio = priority.toLowerCase();
-    if (prio === "high")
-      return "bg-red-100 dark:bg-red-900/30 border-red-500 dark:border-red-400 text-red-600 dark:text-red-400";
-    if (prio === "medium")
-      return "bg-orange-100 dark:bg-orange-900/30 border-orange-500 dark:border-orange-400 text-orange-600 dark:text-orange-400";
-    if (prio === "low")
-      return "bg-blue-100 dark:bg-blue-900/30 border-blue-500 dark:border-blue-400 text-blue-600 dark:text-blue-400";
+    const p = priority.toLowerCase();
+
+    if (p === "high")
+      return "bg-red-100/80 dark:bg-red-900/30 border-red-500 text-red-600 dark:text-red-400";
+    if (p === "medium")
+      return "bg-orange-100/80 dark:bg-orange-900/30 border-orange-500 text-orange-600 dark:text-orange-400";
+    if (p === "low")
+      return "bg-blue-100/80 dark:bg-blue-900/30 border-blue-500 text-blue-600 dark:text-blue-400";
+
     return "";
   };
 
-  const handleAction = (e, callback) => {
-    e.stopPropagation();
-    callback();
-  };
+  const ActionIcon = ({ children, onClick, hover }) => (
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+      className={`p-2 rounded-xl cursor-pointer transition-all
+      text-gray-600 dark:text-gray-300
+      hover:bg-gray-100 dark:hover:bg-gray-800
+      hover:scale-110 ${hover}`}
+    >
+      {children}
+    </div>
+  );
 
-  // AUTO SCROLL
+  /* ---------------- AUTO SCROLL ---------------- */
   const startAutoScroll = () => {
     if (intervalRef.current || inProgressTasks.length <= 1) return;
 
     intervalRef.current = setInterval(() => {
-      const container = scrollContainerRef.current;
+      if (isHoveredRef.current || isUserScrolling) return;
+
+      const container = scrollRef.current;
       if (!container) return;
 
       const cardWidth = container.children[0]?.offsetWidth || 320;
       const gap = 24;
+      const step = (cardWidth + gap) * directionRef.current;
 
-      let newScrollLeft = container.scrollLeft + cardWidth + gap;
+      let next = container.scrollLeft + step;
 
-      if (newScrollLeft >= container.scrollWidth - container.clientWidth - 10) {
-        newScrollLeft = 0;
+      if (
+        next >= container.scrollWidth - container.clientWidth - 10 &&
+        directionRef.current === 1
+      ) {
+        directionRef.current = -1;
+        next = container.scrollLeft - (cardWidth + gap);
+      }
+
+      if (next <= 0 && directionRef.current === -1) {
+        directionRef.current = 1;
+        next = container.scrollLeft + (cardWidth + gap);
       }
 
       container.scrollTo({
-        left: newScrollLeft,
+        left: next,
         behavior: "smooth",
       });
-    }, 4500); // smoother timing
+    }, 3500);
   };
 
   const stopAutoScroll = () => {
@@ -78,12 +103,47 @@ const Carousel = ({
     intervalRef.current = null;
   };
 
+  /* ---------------- USER SCROLL DETECT ---------------- */
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    let timeout;
+
+    const handleScroll = () => {
+      setIsUserScrolling(true);
+      clearTimeout(timeout);
+
+      timeout = setTimeout(() => {
+        setIsUserScrolling(false);
+      }, 1500);
+    };
+
+    container.addEventListener("scroll", handleScroll);
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  /* ---------------- TAB VISIBILITY ---------------- */
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.hidden) stopAutoScroll();
+      else startAutoScroll();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () =>
+      document.removeEventListener("visibilitychange", handleVisibility);
+  }, []);
+
   useEffect(() => {
     startAutoScroll();
     return () => stopAutoScroll();
   }, [inProgressTasks.length]);
 
-  // EMPTY STATE (cleaner)
+  /* ---------------- EMPTY ---------------- */
   if (inProgressTasks.length === 0) {
     return (
       <div className="mb-10">
@@ -91,17 +151,17 @@ const Carousel = ({
           Tasks in Progress
         </h2>
 
-        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 flex flex-col items-center justify-center text-center">
-          <FaTasks className="text-3xl text-gray-400 mb-3" />
-          <p className="text-gray-600 dark:text-gray-400 text-sm">
-            No tasks in progress yet
+        <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl border border-gray-200 dark:border-gray-800 rounded-3xl p-10 text-center">
+          <FaTasks className="text-4xl mx-auto text-gray-400 mb-3" />
+          <p className="text-gray-500 dark:text-gray-400">
+            No tasks in progress
           </p>
 
           <button
             onClick={openCreateModal}
-            className="mt-4 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm transition"
+            className="mt-4 px-5 py-2 rounded-xl bg-[#77C2FF] text-white font-medium shadow hover:scale-105 transition"
           >
-            + Create new task
+            + Create Task
           </button>
         </div>
       </div>
@@ -115,87 +175,105 @@ const Carousel = ({
         <h2 className="text-3xl md:text-4xl font-[Caveat] font-bold text-gray-900 dark:text-white">
           Tasks in Progress
         </h2>
+
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          {inProgressTasks.length} task{inProgressTasks.length > 1 && "s"}
+          {inProgressTasks.length} task
+          {inProgressTasks.length > 1 && "s"}
         </p>
       </div>
 
       {/* CAROUSEL */}
       <div
-        ref={scrollContainerRef}
-        className="overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide"
-        onMouseEnter={stopAutoScroll}
-        onMouseLeave={startAutoScroll}
+        ref={scrollRef}
+        className="overflow-x-auto snap-x snap-mandatory scroll-smooth scrollable-content"
+        onMouseEnter={() => {
+          isHoveredRef.current = true;
+          stopAutoScroll();
+        }}
+        onMouseLeave={() => {
+          isHoveredRef.current = false;
+          startAutoScroll();
+        }}
       >
         <div className="flex gap-6 px-2 pb-4">
           {inProgressTasks.map((task) => (
-            <div
-              key={task._id}
-              className="min-w-[300px] sm:min-w-[320px] snap-start"
-            >
-              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col h-full">
-
+            <div key={task._id} className="min-w-[320px] snap-start group">
+              <div
+                onClick={() => openViewModal(task)}
+                className="cursor-pointer bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl
+                border border-gray-200 dark:border-gray-800
+                rounded-3xl overflow-hidden shadow-md
+                hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+              >
                 {/* IMAGE */}
-                <div className="h-44 bg-gray-100 dark:bg-gray-800">
+                <div className="h-44 bg-gray-100 dark:bg-gray-800 overflow-hidden">
                   {task.image ? (
                     <img
                       src={task.image}
                       alt={task.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                     />
                   ) : (
-                    <div className="flex items-center justify-center h-full text-gray-400">
+                    <div className="flex items-center justify-center h-full text-3xl text-gray-400">
                       📋
                     </div>
                   )}
                 </div>
 
                 {/* CONTENT */}
-                <div className="p-5 flex flex-col flex-1">
+                <div className="p-5 flex flex-col h-full">
                   <div className="flex justify-between mb-3">
-                    <p className="font-medium text-gray-900 dark:text-gray-100">
+                    <p className="font-semibold text-gray-900 dark:text-white">
                       {task.title}
                     </p>
-                    <span className={`text-xs px-2 py-1 rounded-lg border ${getPriorityClass(task.priority)}`}>
+
+                    <span className={`text-xs px-3 py-1 rounded-xl border ${getPriorityClass(task.priority)}`}>
                       {task.priority || "—"}
                     </span>
                   </div>
 
                   <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-3">
-                    <p>{task.createdAt ? new Date(task.createdAt).toLocaleDateString("en-GB") : "—"}</p>
+                    <p>
+                      {task.createdAt
+                        ? new Date(task.createdAt).toLocaleDateString("en-GB")
+                        : "—"}
+                    </p>
                     <p>{task.status || 0}%</p>
                   </div>
 
-                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full mb-4">
-                    <div className="h-2 rounded-full" style={getProgressStyle(task.status)} />
+                  {/* PROGRESS */}
+                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-4">
+                    <div
+                      className={`h-2 ${getProgressStyle(task.status)}`}
+                      style={{ width: `${task.status || 0}%` }}
+                    />
                   </div>
 
                   {/* ACTIONS */}
-                  <div className="flex justify-between mt-auto pt-3">
-                    <IoEye
-                      onClick={(e) => handleAction(e, () => openViewModal(task))}
-                      className="cursor-pointer text-gray-500 hover:text-blue-500"
-                    />
+                  <div className="flex justify-between mt-auto pt-3 border-t border-gray-200 dark:border-gray-700">
+                    <ActionIcon onClick={() => openViewModal(task)} hover="hover:text-blue-500">
+                      <IoEye />
+                    </ActionIcon>
 
-                    <FaEdit
-                      onClick={(e) =>
-                        handleAction(e, () => {
-                          setSelectedTask(task);
-                          openUpdateModal();
-                        })
-                      }
-                      className="cursor-pointer text-gray-500 hover:text-amber-500"
-                    />
+                    <ActionIcon
+                      onClick={() => {
+                        setSelectedTask(task);
+                        openUpdateModal();
+                      }}
+                      hover="hover:text-amber-500"
+                    >
+                      <FaEdit />
+                    </ActionIcon>
 
-                    <FaTrash
-                      onClick={(e) =>
-                        handleAction(e, () => {
-                          setSelectedTask(task);
-                          openDeleteModal();
-                        })
-                      }
-                      className="cursor-pointer text-gray-500 hover:text-red-500"
-                    />
+                    <ActionIcon
+                      onClick={() => {
+                        setSelectedTask(task);
+                        openDeleteModal();
+                      }}
+                      hover="hover:text-red-500"
+                    >
+                      <FaTrash />
+                    </ActionIcon>
                   </div>
                 </div>
               </div>
