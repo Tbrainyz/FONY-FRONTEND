@@ -16,8 +16,7 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
   };
 
-  // ==================== LOGIN ====================
- // ==================== LOGIN ====================
+ 
 // ==================== LOGIN ====================
 const login = async (data) => {
   try {
@@ -44,11 +43,11 @@ const login = async (data) => {
       throw new Error("Account blocked");
     }
 
-    // All other errors (invalid credentials, network error, etc.)
-    toast.error("Invalid credentials", {
-      position: "top-center",
-      autoClose: 5000,
-    });
+    // // All other errors (invalid credentials, network error, etc.)
+    // toast.error("Invalid credentials", {
+    //   position: "top-center",
+    //   autoClose: 5000,
+    // });
 
     throw error;
   }
@@ -75,7 +74,7 @@ const googleAuth = async (token) => {
 
   } catch (error) {
     if (error.response?.status === 403 || error.message === "Account blocked") {
-      throw new Error("Account blocked"); // Toast already shown
+      throw new Error("Account blocked"); 
     }
 
     toast.error("Google login failed", {

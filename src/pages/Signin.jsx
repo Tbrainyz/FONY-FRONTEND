@@ -12,109 +12,120 @@ const Signin = () => {
   const { login } = useContext(AuthContext);
 
   const [form, setForm] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const validate = () => {
+    let err = {};
+    if (!form.email) err.email = "Email is required";
+    if (!form.password) err.password = "Password is required";
+    return err;
+  };
 
-  if (!form.email || !form.password) {
-    toast.error("Please fill all fields");
-    return;
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  setLoading(true);
-
-  try {
-    await login(form);
-    toast.success("Login Successful!");
-    navigate("/dashboard");
-  } catch (err) {
-    // 🔥 Only handle non-blocked errors here
-    if (err.message !== "Account blocked") {
-      // Toast for invalid credentials is already shown in AuthContext
-      // So we do NOTHING here
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
     }
-    // If it's blocked, do nothing — toast was already shown in context
-  } finally {
-    setLoading(false);
-  }
-};
+
+    setLoading(true);
+
+    try {
+      await login(form);
+      toast.success("Login Successful!");
+      navigate("/dashboard");
+    } catch (err) {
+      toast.error("Invalid email or password");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleGoogleLogin = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     window.location.href = `${apiUrl}/api/users/google`;
   };
-   const handleLogoClick = () => {
-    navigate("/");
-  };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-50">
-      {/* Left Side - Form */}
+    <div className="min-h-screen flex bg-gray-50">
+
+      {/* LEFT */}
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-md">
-          <div className="flex items-center gap-2 mb-10">
-            <img src={Logo} alt="Logo" className="h-10" onClick={handleLogoClick} />
-          </div>
 
-          <h2 className="text-3xl font-bold mb-2">Welcome Back</h2>
-          <p className="text-gray-600 mb-8">
-            Enter your details to sign in to your account.
+          <img
+            src={Logo}
+            alt="Logo"
+            className="h-10 mb-10 cursor-pointer"
+            onClick={() => navigate("/")}
+          />
+
+          <h2 className="text-3xl font-bold mb-2">Welcome Back 👋</h2>
+          <p className="text-gray-500 mb-8">
+            Login to continue managing your tasks
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
+
+            {/* EMAIL */}
             <div>
-              <label className="block mb-1 font-medium">
-                Email <span className="text-red-600">*</span>
-              </label>
               <input
                 type="email"
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                placeholder="Enter Email"
-                className="w-full h-14 px-5 border border-gray-300 rounded-3xl focus:outline-none focus:border-[#77C2FF]"
-                disabled={loading}
+                placeholder="Email"
+                className={`w-full h-14 px-5 rounded-2xl border ${
+                  errors.email ? "border-red-500" : "border-gray-300"
+                } focus:outline-none focus:ring-2 focus:ring-[#77C2FF]`}
               />
+              <p className="h-5 mt-1 text-sm text-red-500">
+                {errors.email || ""}
+              </p>
             </div>
 
-            <div>
-              <label className="block mb-1 font-medium">
-                Password <span className="text-red-600">*</span>
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  placeholder="Enter Your Password"
-                  className="w-full h-14 px-5 border border-gray-300 rounded-3xl pr-12 focus:outline-none focus:border-[#77C2FF]"
-                  disabled={loading}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500"
-                  disabled={loading}
-                >
-                  {showPassword ? (
-                    <AiOutlineEyeInvisible size={22} />
-                  ) : (
-                    <AiOutlineEye size={22} />
-                  )}
-                </button>
-              </div>
+            {/* PASSWORD */}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="Password"
+                className={`w-full h-14 px-5 rounded-2xl border pr-12 ${
+                  errors.password ? "border-red-500" : "border-gray-300"
+                } focus:outline-none focus:ring-2 focus:ring-[#77C2FF]`}
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-[35%] -translate-y-1/2 text-gray-500"
+              >
+                {showPassword ? (
+                  <AiOutlineEyeInvisible size={22} />
+                ) : (
+                  <AiOutlineEye size={22} />
+                )}
+              </button>
+
+              <p className="h-5 mt-1 text-sm text-red-500">
+                {errors.password || ""}
+              </p>
             </div>
 
             <Link
               to="/forgot-password"
-              className="text-sm text-[#77C2FF] block text-right hover:underline"
+              className="text-sm text-[#77C2FF] block text-right"
             >
               Forgot password?
             </Link>
@@ -122,41 +133,49 @@ const handleSubmit = async (e) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-14 bg-[#77C2FF] text-white font-bold rounded-3xl border-2 border-black shadow-[0_4px_0_0_black] active:translate-y-0.5 disabled:opacity-70 transition-all"
+              className="w-full h-14 bg-[#77C2FF] text-white font-semibold rounded-2xl shadow-md"
             >
               {loading ? "Logging in..." : "Login"}
             </button>
 
+            {/* Divider */}
             <div className="relative my-6">
-              <div className="border-t border-gray-300" />
-              <span className="absolute left-1/2 -top-3 bg-gray-50 px-4 text-sm text-gray-500">
-                Or
+              <div className="border-t"></div>
+              <span className="absolute left-1/2 -top-3 bg-gray-50 px-3 text-sm text-gray-400">
+                OR
               </span>
             </div>
 
+            {/* GOOGLE */}
             <button
               type="button"
               onClick={handleGoogleLogin}
-              className="w-full h-14 border border-gray-300 rounded-3xl flex items-center justify-center gap-3 hover:bg-gray-100 transition-colors"
+              className="w-full h-14 border rounded-2xl flex items-center justify-center gap-3 hover:bg-gray-100"
             >
-              <img src={Google} alt="Google" className="w-6 h-6" />
+              <img src={Google} className="w-5" />
               Continue with Google
             </button>
           </form>
 
-          <p className="text-center mt-8 text-sm">
+          <p className="text-center mt-6 text-sm">
             Don’t have an account?{" "}
-            <Link to="/register" className="text-[#77C2FF] font-medium hover:underline">
+            <Link to="/register" className="text-[#77C2FF] font-medium">
               Sign Up
             </Link>
           </p>
         </div>
       </div>
+{/* RIGHT IMAGE */}
+      <div className="hidden lg:flex lg:flex-1 relative">
+  <img
+    src={Run}
+    alt="Illustration"
+    className="w-full h-full object-cover"
+  />
 
-      {/* Right Side - Image */}
-      <div className="hidden lg:flex lg:flex-1 bg-gray-100 items-center justify-center">
-        <img src={Run} alt="Illustration" className="max-h-[90%] object-contain" />
-      </div>
+  <div className="absolute inset-0 bg-black/10"></div>
+</div>
+
     </div>
   );
 };
