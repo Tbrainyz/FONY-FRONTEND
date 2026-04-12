@@ -15,6 +15,7 @@ const Signin = () => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -30,8 +31,8 @@ const Signin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const validationErrors = validate();
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
@@ -43,7 +44,7 @@ const Signin = () => {
       await login(form);
       toast.success("Login Successful!");
       navigate("/dashboard");
-    } catch (err) {
+    } catch {
       toast.error("Invalid email or password");
     } finally {
       setLoading(false);
@@ -51,17 +52,16 @@ const Signin = () => {
   };
 
   const handleGoogleLogin = () => {
+    setGoogleLoading(true);
     const apiUrl = import.meta.env.VITE_API_URL;
     window.location.href = `${apiUrl}/api/users/google`;
   };
 
   return (
     <div className="min-h-screen flex bg-gray-50">
-
       {/* LEFT */}
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-md">
-
           <img
             src={Logo}
             alt="Logo"
@@ -75,7 +75,6 @@ const Signin = () => {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-
             {/* EMAIL */}
             <div>
               <input
@@ -109,7 +108,7 @@ const Signin = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-[35%] -translate-y-1/2 text-gray-500"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
               >
                 {showPassword ? (
                   <AiOutlineEyeInvisible size={22} />
@@ -133,7 +132,7 @@ const Signin = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-14 bg-[#77C2FF] text-white font-semibold rounded-2xl shadow-md"
+              className="w-full h-14 bg-[#77C2FF] text-white font-semibold rounded-2xl shadow-md disabled:opacity-60"
             >
               {loading ? "Logging in..." : "Login"}
             </button>
@@ -150,10 +149,17 @@ const Signin = () => {
             <button
               type="button"
               onClick={handleGoogleLogin}
-              className="w-full h-14 border rounded-2xl flex items-center justify-center gap-3 hover:bg-gray-100"
+              disabled={googleLoading}
+              className="w-full h-14 border rounded-2xl flex items-center justify-center gap-3 hover:bg-gray-100 transition disabled:opacity-60"
             >
-              <img src={Google} className="w-5" />
-              Continue with Google
+              {googleLoading ? (
+                <span className="text-sm">Redirecting...</span>
+              ) : (
+                <>
+                  <img src={Google} className="w-5" />
+                  Continue with Google
+                </>
+              )}
             </button>
           </form>
 
@@ -165,17 +171,12 @@ const Signin = () => {
           </p>
         </div>
       </div>
-{/* RIGHT IMAGE */}
+
+      {/* RIGHT */}
       <div className="hidden lg:flex lg:flex-1 relative">
-  <img
-    src={Run}
-    alt="Illustration"
-    className="w-full h-full object-cover"
-  />
-
-  <div className="absolute inset-0 bg-black/10"></div>
-</div>
-
+        <img src={Run} className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-black/10"></div>
+      </div>
     </div>
   );
 };

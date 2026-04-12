@@ -23,6 +23,7 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -43,8 +44,8 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const validationErrors = validate();
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
@@ -56,20 +57,24 @@ const SignUp = () => {
       await register(form);
       toast.success("Account created successfully!");
       navigate("/dashboard");
-    } catch (err) {
+    } catch {
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
+  const handleGoogleRegister = () => {
+    setGoogleLoading(true);
+    const apiUrl = import.meta.env.VITE_API_URL;
+    window.location.href = `${apiUrl}/api/users/google`;
+  };
+
   return (
     <div className="min-h-screen flex bg-gray-50">
-
       {/* LEFT */}
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-md">
-
           <img
             src={Logo}
             className="h-10 mb-10 cursor-pointer"
@@ -82,7 +87,6 @@ const SignUp = () => {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-
             {["name", "email", "phone"].map((field) => (
               <div key={field}>
                 <input
@@ -112,7 +116,7 @@ const SignUp = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-[35%] -translate-y-1/2"
+                className="absolute right-4 top-1/2 -translate-y-1/2"
               >
                 {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
               </button>
@@ -134,7 +138,7 @@ const SignUp = () => {
               <button
                 type="button"
                 onClick={() => setShowConfirm(!showConfirm)}
-                className="absolute right-4 top-[35%] -translate-y-1/2"
+                className="absolute right-4 top-1/2 -translate-y-1/2"
               >
                 {showConfirm ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
               </button>
@@ -146,17 +150,26 @@ const SignUp = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-14 bg-[#77C2FF] text-white rounded-2xl font-semibold"
+              className="w-full h-14 bg-[#77C2FF] text-white rounded-2xl font-semibold disabled:opacity-60"
             >
               {loading ? "Creating..." : "Sign Up"}
             </button>
 
+            {/* GOOGLE */}
             <button
               type="button"
-              className="w-full h-14 border rounded-2xl flex items-center justify-center gap-3"
+              onClick={handleGoogleRegister}
+              disabled={googleLoading}
+              className="w-full h-14 border rounded-2xl flex items-center justify-center gap-3 hover:bg-gray-100 transition disabled:opacity-60"
             >
-              <img src={Google} className="w-5" />
-              Continue with Google
+              {googleLoading ? (
+                <span className="text-sm">Redirecting...</span>
+              ) : (
+                <>
+                  <img src={Google} className="w-5" />
+                  Continue with Google
+                </>
+              )}
             </button>
           </form>
 
@@ -168,17 +181,12 @@ const SignUp = () => {
           </p>
         </div>
       </div>
-{/* RIGHT IMAGE */}
-     <div className="hidden lg:flex lg:flex-1 relative">
-  <img
-    src={Run}
-    alt="Illustration"
-    className="w-full h-full object-cover"
-  />
 
-  <div className="absolute inset-0 bg-black/10"></div>
-</div>
-
+      {/* RIGHT */}
+      <div className="hidden lg:flex lg:flex-1 relative">
+        <img src={Run} className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-black/10"></div>
+      </div>
     </div>
   );
 };
