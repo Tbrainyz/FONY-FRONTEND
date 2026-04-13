@@ -69,7 +69,7 @@ const Signin = () => {
             onClick={() => navigate("/")}
           />
 
-          <h2 className="text-3xl font-bold mb-2">Welcome Back 👋</h2>
+          <h2 className="text-3xl font-bold mb-2">Welcome Back </h2>
           <p className="text-gray-500 mb-8">
             Login to continue managing your tasks
           </p>
@@ -108,7 +108,7 @@ const Signin = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+                className="absolute right-4 top-[35%] -translate-y-1/2 text-gray-500"
               >
                 {showPassword ? (
                   <AiOutlineEyeInvisible size={22} />

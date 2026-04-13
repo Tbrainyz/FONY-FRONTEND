@@ -81,7 +81,7 @@ const SignUp = () => {
             onClick={() => navigate("/")}
           />
 
-          <h2 className="text-3xl font-bold mb-2">Create Account 🚀</h2>
+          <h2 className="text-3xl font-bold mb-2">Create Account </h2>
           <p className="text-gray-500 mb-8">
             Start managing your tasks smarter
           </p>
@@ -116,7 +116,7 @@ const SignUp = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2"
+                className="absolute right-4 top-[35%] -translate-y-1/2"
               >
                 {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
               </button>
@@ -138,7 +138,7 @@ const SignUp = () => {
               <button
                 type="button"
                 onClick={() => setShowConfirm(!showConfirm)}
-                className="absolute right-4 top-1/2 -translate-y-1/2"
+                className="absolute right-4 top-[35%] -translate-y-1/2"
               >
                 {showConfirm ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
               </button>

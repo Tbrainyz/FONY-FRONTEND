@@ -251,9 +251,7 @@ const Carousel = ({
 
                   {/* ACTIONS */}
                   <div className="flex justify-between mt-auto pt-3 border-t border-gray-200 dark:border-gray-700">
-                    <ActionIcon onClick={() => openViewModal(task)} hover="hover:text-blue-500">
-                      <IoEye />
-                    </ActionIcon>
+                   
 
                     <ActionIcon
                       onClick={() => {
