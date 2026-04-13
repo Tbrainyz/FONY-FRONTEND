@@ -213,7 +213,7 @@ const LandingPage = () => {
           Organize your life, track your progress, and stay consistent — beautifully.
         </p>
 
-        <div className="mt-6">
+        <div className="mt-6 ">
           <SocialDock />
         </div>
       </div>
