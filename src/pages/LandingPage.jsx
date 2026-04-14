@@ -22,7 +22,7 @@ const LandingPage = () => {
   return (
     <div className="w-full overflow-hidden bg-gradient-to-b from-white via-[#f8fbff] to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
 
-      <LandingNavBar />
+      <LandingNavBar  className="" />
 
       {/* ================= HERO ================= */}
       <div className="relative flex flex-col lg:flex-row items-center justify-between px-6 md:px-12 lg:px-20 py-16 lg:py-28 gap-16">

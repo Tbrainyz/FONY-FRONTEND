@@ -6,13 +6,23 @@ export const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
-  const shown = useRef(new Set()); // prevent duplicate toasts
+  const shown = useRef(new Set());
 
   // ================= FETCH =================
   const fetchNotifications = async () => {
     try {
       const res = await API.get("/api/notifications");
-      setNotifications(res.data || []);
+      const data = res.data || [];
+
+      setNotifications(data);
+
+      // show toast only for new unread ones
+      data.forEach((n) => {
+        if (!n.read && !shown.current.has(n._id)) {
+          toast.info(n.message);
+          shown.current.add(n._id);
+        }
+      });
     } catch (err) {
       console.error("Notification fetch error:", err);
     }
@@ -33,25 +43,23 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // ================= TOAST NEW NOTIFICATIONS =================
-  useEffect(() => {
-    notifications.forEach((n) => {
-      if (!n.read && !shown.current.has(n._id)) {
-        toast.info(n.message);
-        shown.current.add(n._id);
-      }
-    });
-  }, [notifications]);
-
-  // ================= AUTO REFRESH =================
+  // ================= INITIAL + REAL-TIME LOOP =================
   useEffect(() => {
     fetchNotifications();
 
-    const interval = setInterval(() => {
-      fetchNotifications();
-    }, 60000); // every 1 min
+    // 🔥 faster polling (better UX)
+    const interval = setInterval(fetchNotifications, 15000); // 15s
 
     return () => clearInterval(interval);
+  }, []);
+
+  // ================= REFRESH ON TAB FOCUS =================
+  useEffect(() => {
+    const handleFocus = () => fetchNotifications();
+
+    window.addEventListener("focus", handleFocus);
+
+    return () => window.removeEventListener("focus", handleFocus);
   }, []);
 
   return (
