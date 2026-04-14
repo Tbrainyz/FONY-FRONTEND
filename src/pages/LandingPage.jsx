@@ -161,35 +161,52 @@ const LandingPage = () => {
       </div>
 
       {/* ================= NEWSLETTER ================= */}
-      <div className="px-6 md:px-12 lg:px-20 py-20">
+   <div className="px-4 sm:px-6 md:px-12 lg:px-20 py-16 sm:py-20">
+  <div className="max-w-5xl mx-auto p-6 sm:p-8 md:p-10 rounded-[32px] sm:rounded-[40px] 
+    bg-white/70 dark:bg-gray-900/60 backdrop-blur-xl 
+    border border-gray-200 dark:border-gray-800 
+    shadow-xl flex flex-col lg:flex-row gap-8 md:gap-10 items-center">
 
-        <div className="max-w-5xl mx-auto p-10 rounded-[40px] bg-white/70 dark:bg-gray-900/60 backdrop-blur-xl border border-gray-200 dark:border-gray-800 shadow-xl flex flex-col md:flex-row gap-10 items-center">
+    {/* TEXT */}
+    <div className="flex-1 w-full text-center lg:text-left">
+      <p className="text-2xl sm:text-3xl font-bold mb-3 text-gray-900 dark:text-white">
+        Stay In The Loop
+      </p>
 
-          <div className="flex-1">
-            <p className="text-3xl font-bold mb-3 text-gray-900 dark:text-white">
-              Stay In The Loop
-            </p>
+      <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
+        Get productivity insights delivered to your inbox.
+      </p>
 
-            <p className="text-gray-600 dark:text-gray-400">
-              Get productivity insights delivered to your inbox.
-            </p>
+      {/* INPUT + BUTTON */}
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 w-full">
+        <input
+          type="email"
+          className="w-full h-12 sm:h-14 px-5 rounded-full border 
+          border-gray-300 dark:border-gray-700 bg-transparent 
+          focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          placeholder="Enter your email"
+        />
 
-            <div className="flex gap-4 mt-6">
-              <input
-                type="email"
-                className="flex-1 h-14 px-5 rounded-full border border-gray-300 dark:border-gray-700 bg-transparent"
-                placeholder="Enter your email"
-              />
-
-              <button className="px-8 rounded-full bg-blue-500 text-white font-semibold hover:scale-105 transition">
-                Subscribe
-              </button>
-            </div>
-          </div>
-
-          <img src={stayloop} className="max-w-xs" />
-        </div>
+        <button className="w-full sm:w-auto px-6 sm:px-8 h-12 sm:h-14 
+          rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 
+          text-white font-semibold shadow-md 
+          hover:scale-[1.03] active:scale-[0.97] transition">
+          Subscribe
+        </button>
       </div>
+    </div>
+
+    {/* IMAGE */}
+    <div className="flex-1 flex justify-center w-full">
+      <img 
+        src={stayloop} 
+        alt="Stay in loop"
+        className="w-full max-w-[200px] sm:max-w-[260px] md:max-w-xs object-contain"
+      />
+    </div>
+  </div>
+</div>
+
 
       {/* ==================== FOOTER ==================== */}
      <footer className="relative px-6 md:px-12 lg:px-20 py-24 overflow-hidden">
