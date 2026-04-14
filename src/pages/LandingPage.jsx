@@ -70,7 +70,7 @@ const LandingPage = () => {
         <img
           src={flex1}
           alt=""
-          className="w-full max-w-md lg:max-w-lg hover:scale-105 transition duration-500"
+          className="w-full max-w-md dark:text-gray-400 lg:max-w-lg hover:scale-105 transition duration-500"
         />
       </div>
 
@@ -109,7 +109,7 @@ const LandingPage = () => {
               <img
                 src={img}
                 alt=""
-                className="max-h-72 group-hover:scale-105 transition"
+                className="max-h-72 dark:text-gray-400 group-hover:scale-105 transition"
               />
             </div>
           ))}

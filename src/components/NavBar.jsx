@@ -9,6 +9,9 @@ import ProfileDropDown from "./ProfileDropDown";
 import { AuthContext } from "../context/AuthContext";
 import ThemeToggle from "./ThemeToggle";
 
+// 🔔 NEW IMPORT
+import NotificationBellInline from "./NotificationBellInline";
+
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [indicatorStyle, setIndicatorStyle] = useState({});
@@ -29,7 +32,7 @@ const NavBar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ACTIVE INDICATOR (🔥 MAGIC)
+  // ACTIVE INDICATOR
   useEffect(() => {
     const activeBtn = navRef.current?.querySelector(".active-nav");
     if (activeBtn) {
@@ -76,7 +79,6 @@ const NavBar = () => {
           ref={navRef}
           className="hidden md:flex relative items-center gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl"
         >
-          {/* 🔥 ACTIVE INDICATOR */}
           <span
             className="absolute top-1 bottom-1 bg-[#77C2FF] dark:bg-blue-500 rounded-xl transition-all duration-300 ease-in-out"
             style={indicatorStyle}
@@ -85,7 +87,6 @@ const NavBar = () => {
           {navBtn("/dashboard", "Dashboard")}
           {navBtn("/completed", "Completed")}
 
-          {/* ADMIN */}
           {user?.role === "admin" && (
             <button
               onClick={() => navigate("/authdash")}
@@ -102,6 +103,9 @@ const NavBar = () => {
         <div className="flex items-center gap-4">
 
           <ThemeToggle />
+
+          {/* 🔔 NOTIFICATION */}
+          <NotificationBellInline />
 
           {/* PROFILE */}
           <div ref={dropdownRef} className="relative">
@@ -123,7 +127,6 @@ const NavBar = () => {
               />
             </div>
 
-            {/* DROPDOWN */}
             {isOpen && (
               <div className="absolute right-0 mt-3 z-50 animate-[fadeIn_.2s_ease]">
                 <div className="backdrop-blur-xl bg-white/90 dark:bg-gray-900/90 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl p-2">

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/Logo.svg";
+import darkmodelogo from "../assets/logodarkmode.svg";
 import { AuthContext } from "../context/AuthContext";
 
 const LandingNavBar = () => {
@@ -20,12 +21,13 @@ const LandingNavBar = () => {
         shadow-lg"
       >
         {/* LOGO */}
-        <img
-          src={logo}
-          alt="Logo"
-          onClick={handleLogoClick}
-          className="h-9 md:h-10 cursor-pointer hover:scale-105 transition"
-        />
+      <div
+                className="cursor-pointer hover:scale-105 transition-transform"
+              
+              >
+                <img src={logo} className="h-9 md:h-10 block dark:hidden" />
+                <img src={darkmodelogo} className="h-9 md:h-10 hidden dark:block" />
+              </div>
 
         {/* NAV LINKS */}
         <div className="hidden md:flex items-center gap-10 text-sm font-medium">

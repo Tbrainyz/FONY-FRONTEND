@@ -29,6 +29,13 @@
   --primary-foreground: #000000;
 }
 
+.dark .black-to-gray {
+  filter: 
+    brightness(0.85) 
+    contrast(1.2) 
+    grayscale(0.4);
+}
+
 /* Apply base styles using variables */
 body {
   background-color: hsl(var(--background));

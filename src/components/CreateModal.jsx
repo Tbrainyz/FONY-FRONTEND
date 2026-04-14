@@ -10,6 +10,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
     title: "",
     description: "",
     priority: "",
+    dueDate: "", // ✅ added
   });
 
   const [imageFile, setImageFile] = useState(null);
@@ -46,8 +47,14 @@ const CreateModal = ({ closeModal, openNextModal }) => {
 
     try {
       setLoading(true);
-      const data = { ...formData, image: imageFile };
+
+      const data = {
+        ...formData,
+        image: imageFile,
+      };
+
       await createTask(data);
+
       closeModal();
       if (openNextModal) openNextModal();
     } catch (error) {
@@ -64,7 +71,9 @@ const CreateModal = ({ closeModal, openNextModal }) => {
         {/* HEADER */}
         <div className="flex justify-between items-start px-8 pt-8 pb-6 border-b border-gray-200 dark:border-gray-700">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Create New Task</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Create New Task
+            </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1">
               Enter description about this task
             </p>
@@ -77,7 +86,8 @@ const CreateModal = ({ closeModal, openNextModal }) => {
         </div>
 
         {/* BODY */}
-        <div className=" scrollable-content  p-8  space-y-6 max-h-[70vh] overflow-y-auto">
+        <div className="scrollable-content p-8 space-y-6 max-h-[70vh] overflow-y-auto">
+
           {/* Title */}
           <div>
             <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -103,7 +113,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className ="w-full mt-1 h-12 px-5 whitespace-pre-wrap text-wrap break-words break-all truncate rounded-2xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-[#77C2FF] focus:outline-none"
+              className="w-full mt-1 h-12 px-5 whitespace-pre-wrap text-wrap break-words break-all truncate rounded-2xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-[#77C2FF] focus:outline-none"
               placeholder="What is this task about?"
             />
           </div>
@@ -128,6 +138,20 @@ const CreateModal = ({ closeModal, openNextModal }) => {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* ✅ Due Date */}
+          <div>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Due Date (Optional)
+            </label>
+            <input
+              type="date"
+              name="dueDate"
+              value={formData.dueDate}
+              onChange={handleChange}
+              className="w-full mt-1 h-12 px-5 rounded-2xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            />
           </div>
 
           {/* Image Upload */}
@@ -157,21 +181,24 @@ const CreateModal = ({ closeModal, openNextModal }) => {
               </label>
             </div>
           </div>
-          
-        <div className="p-8 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-          <button
-            onClick={handleSubmit}
-            disabled={loading}
-            className="w-full h-12 rounded-xl font-semibold text-white 
-            bg-gradient-to-r from-[#77C2FF] to-blue-500 
-            hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
-          >
-            {loading ? "Creating..." : "Create Task"}
-          </button>
-        </div>
-        </div>
 
-       
+          {/* FOOTER */}
+          <div className="p-8 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+            <button
+              onClick={handleSubmit}
+              disabled={
+                loading ||
+                !formData.title ||
+                !formData.description ||
+                !formData.priority
+              }
+              className="w-full h-12 bg-[#77C2FF] rounded-2xl font-bold border border-b-4 border-black dark:border-white disabled:bg-gray-400 disabled:cursor-not-allowed active:translate-y-0.5 transition-all text-black"
+            >
+              {loading ? "Creating..." : "Create New Task"}
+            </button>
+          </div>
+
+        </div>
       </div>
     </div>
   );

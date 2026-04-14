@@ -11,6 +11,7 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
     description: "",
     priority: "",
     status: 0,
+    dueDate: "", // ✅ added
   });
 
   const [imageFile, setImageFile] = useState(null);
@@ -24,6 +25,9 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
         description: task.description || "",
         priority: task.priority || "",
         status: task.status || 0,
+        dueDate: task.dueDate
+          ? new Date(task.dueDate).toISOString().split("T")[0]
+          : "",
       });
       setPreviewUrl(task.image || null);
     }
@@ -41,8 +45,11 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handlePriority = (priority) => setFormData({ ...formData, priority });
-  const handleStatus = (value) => setFormData({ ...formData, status: value });
+  const handlePriority = (priority) =>
+    setFormData({ ...formData, priority });
+
+  const handleStatus = (value) =>
+    setFormData({ ...formData, status: value });
 
   const handleImage = (e) => {
     const file = e.target.files[0];
@@ -55,8 +62,14 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      const data = { ...formData, image: imageFile };
+
+      const data = {
+        ...formData,
+        image: imageFile,
+      };
+
       await updateTask(task._id, data);
+
       closeModal();
       if (openNextModal) openNextModal();
     } catch (err) {
@@ -73,9 +86,14 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
         {/* HEADER */}
         <div className="flex justify-between items-start px-8 pt-8 pb-6 border-b border-gray-200 dark:border-gray-700">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Update Task</h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">Update your task details</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Update Task
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
+              Update your task details
+            </p>
           </div>
+
           <MdCancel
             className="text-3xl cursor-pointer text-gray-500 hover:text-black dark:hover:text-white transition-colors"
             onClick={closeModal}
@@ -83,10 +101,13 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
         </div>
 
         {/* BODY */}
-        <div className=" scrollable-content  p-8  space-y-6 max-h-[70vh] overflow-y-auto">
+        <div className="scrollable-content p-8 space-y-6 max-h-[70vh] overflow-y-auto">
+
           {/* Title */}
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Task Name *</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Task Name *
+            </label>
             <input
               type="text"
               name="title"
@@ -98,7 +119,9 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
 
           {/* Description */}
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Description *</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Description *
+            </label>
             <input
               type="text"
               name="description"
@@ -110,7 +133,9 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
 
           {/* Priority */}
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Priority</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Priority
+            </label>
             <div className="grid grid-cols-3 gap-3 mt-2">
               {["low", "medium", "high"].map((level) => (
                 <button
@@ -130,7 +155,9 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
 
           {/* Status */}
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Progress</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Progress
+            </label>
             <div className="flex flex-wrap gap-2 mt-2">
               {[0, 25, 50, 75, 100].map((val) => (
                 <button
@@ -148,9 +175,25 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
             </div>
           </div>
 
-          {/* Image Upload */}
+          {/* ✅ Due Date */}
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Update Image</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Due Date
+            </label>
+            <input
+              type="date"
+              name="dueDate"
+              value={formData.dueDate}
+              onChange={handleChange}
+              className="w-full mt-1 h-12 px-5 rounded-2xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            />
+          </div>
+
+          {/* Image */}
+          <div>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Update Image
+            </label>
             <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl p-6 mt-2 hover:border-[#77C2FF]">
               <input
                 type="file"
@@ -168,18 +211,19 @@ const UpdateModal = ({ task, closeModal, openNextModal }) => {
               </label>
             </div>
           </div>
-              {/* FOOTER */}
-        <div className="p-8 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-          <button
-            onClick={handleSubmit}
-            className="w-full h-12 rounded-xl bg-gradient-to-r from-[#77C2FF] to-blue-500 text-white font-semibold"
-          >
-            {loading ? "Updating..." : "Update Task"}
-          </button>
-        </div>
-        </div>
 
-    
+          {/* FOOTER */}
+          <div className="p-8 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+            <button
+              onClick={handleSubmit}
+              disabled={loading}
+              className="w-full h-12 rounded-xl bg-gradient-to-r from-[#77C2FF] to-blue-500 text-white font-semibold disabled:opacity-50"
+            >
+              {loading ? "Updating..." : "Update Task"}
+            </button>
+          </div>
+
+        </div>
       </div>
     </div>
   );

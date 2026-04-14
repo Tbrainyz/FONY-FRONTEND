@@ -24,7 +24,7 @@ export const TaskProvider = ({ children }) => {
 
       let url = `/api/tasks?page=${pageNumber}`;
       if (priority) url += `&priority=${priority}`;
-      if (status !== null) url += `&status=${status}`; // numeric status
+      if (status !== null) url += `&status=${status}`;
 
       const res = await API.get(url);
 
@@ -39,7 +39,7 @@ export const TaskProvider = ({ children }) => {
       setHasPrevPage(res.data.hasPrevPage || false);
 
     } catch (error) {
-      console.error("Fetch tasks error:", error.response?.data || error.message || error);
+      console.error("Fetch tasks error:", error.response?.data || error.message);
     } finally {
       setLoading(false);
     }
@@ -49,10 +49,17 @@ export const TaskProvider = ({ children }) => {
   const createTask = async (data) => {
     try {
       const formData = new FormData();
+
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("priority", data.priority);
       formData.append("status", data.status || 0);
+
+      // ✅ dueDate added
+      if (data.dueDate) {
+        formData.append("dueDate", data.dueDate);
+      }
+
       if (data.image) formData.append("image", data.image);
 
       await API.post("/api/tasks", formData, {
@@ -60,66 +67,70 @@ export const TaskProvider = ({ children }) => {
       });
 
       await fetchTasks(1, priorityFilter);
+
     } catch (error) {
-      console.error("Create task error:", error.response?.data || error.message || error);
+      console.error("Create task error:", error.response?.data || error.message);
       throw error;
     }
   };
 
   // ================= UPDATE TASK =================
   const updateTask = async (id, data) => {
-  try {
-    const formData = new FormData();
+    try {
+      const formData = new FormData();
 
-    formData.append("title", data.title);
-    formData.append("description", data.description);
-    formData.append("priority", data.priority);
-    formData.append("status", data.status);
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("priority", data.priority);
+      formData.append("status", data.status);
 
-    // ✅ VERY IMPORTANT
-    if (data.image) {
-      formData.append("image", data.image);
+      // ✅ dueDate added
+      if (data.dueDate) {
+        formData.append("dueDate", data.dueDate);
+      }
+
+      if (data.image) formData.append("image", data.image);
+
+      await API.put(`/api/tasks/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      await fetchTasks(page, priorityFilter);
+
+    } catch (error) {
+      console.error("Update task error:", error.response?.data || error.message);
+      throw error;
     }
+  };
 
-    await API.put(`/api/tasks/${id}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    await fetchTasks(page, priorityFilter);
-
-  } catch (error) {
-    console.error("Update task error:", error.response?.data || error.message);
-    throw error; // ✅ important so modal catches it
-  }
-};
+  // ================= COMPLETE TASK =================
+  const completeTask = async (id) => {
+    try {
+      await API.put(`/api/tasks/complete/${id}`);
+      await fetchTasks(page, priorityFilter);
+    } catch (error) {
+      console.error("Complete task error:", error.response?.data || error.message);
+    }
+  };
 
   // ================= DELETE TASK =================
   const deleteTask = async (id) => {
     try {
-      await API.delete(`/api/tasks/${id}`);
+      await API.delete(`/api/tasks/${id}`); // ✅ FIXED ROUTE
       await fetchTasks(page, priorityFilter);
     } catch (error) {
-      console.error("Delete task error:", error.response?.data || error.message || error);
+      console.error("Delete task error:", error.response?.data || error.message);
     }
   };
 
-  // ================= STATUS HELPER =================
   const getStatusLabel = (status) => {
     switch (status) {
-      case 0:
-        return "Not Started";
-      case 25:
-        return "Started";
-      case 50:
-        return "Halfway";
-      case 75:
-        return "Almost Done";
-      case 100:
-        return "Completed";
-      default:
-        return "Unknown";
+      case 0: return "Not Started";
+      case 25: return "Started";
+      case 50: return "Halfway";
+      case 75: return "Almost Done";
+      case 100: return "Completed";
+      default: return "Unknown";
     }
   };
 
@@ -141,6 +152,7 @@ export const TaskProvider = ({ children }) => {
         fetchTasks,
         createTask,
         updateTask,
+        completeTask,
         deleteTask,
         getStatusLabel,
       }}
