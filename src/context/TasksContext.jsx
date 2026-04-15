@@ -114,14 +114,15 @@ export const TaskProvider = ({ children }) => {
   };
 
   // ================= DELETE TASK =================
-  const deleteTask = async (id) => {
-    try {
-      await API.delete(`/api/tasks/${id}`); // ✅ FIXED ROUTE
-      await fetchTasks(page, priorityFilter);
-    } catch (error) {
-      console.error("Delete task error:", error.response?.data || error.message);
-    }
-  };
+ const deleteTask = async (id) => {
+  try {
+    await API.delete(`/api/tasks/${id}`); // ✅ FIXED
+    await fetchTasks(page, priorityFilter);
+  } catch (error) {
+    console.error("Delete task error:", error);
+  }
+};
+
 
   const getStatusLabel = (status) => {
     switch (status) {
