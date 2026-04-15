@@ -192,7 +192,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
                 !formData.description ||
                 !formData.priority
               }
-              className="w-full h-12 bg-[#77C2FF] rounded-2xl font-bold border border-b-4 border-black dark:border-white disabled:bg-gray-400 disabled:cursor-not-allowed active:translate-y-0.5 transition-all text-black"
+            className="w-full h-12 rounded-xl bg-gradient-to-r from-[#77C2FF] to-blue-500 text-white font-semibold disabled:opacity-50"
             >
               {loading ? "Creating..." : "Create New Task"}
             </button>

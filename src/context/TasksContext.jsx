@@ -1,5 +1,7 @@
 import { createContext, useState, useCallback } from "react";
 import API from "../api/axios";
+import { useContext } from "react";
+import { NotificationContext } from "./NotificationContext";
 
 export const TaskContext = createContext();
 
@@ -17,33 +19,40 @@ export const TaskProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [priorityFilter, setPriorityFilter] = useState("");
 
+  const { fetchNotifications } = useContext(NotificationContext);
+
   // ================= FETCH TASKS =================
-  const fetchTasks = useCallback(async (pageNumber = 1, priority = "", status = null) => {
-    try {
-      setLoading(true);
+  const fetchTasks = useCallback(
+    async (pageNumber = 1, priority = "", status = null) => {
+      try {
+        setLoading(true);
 
-      let url = `/api/tasks?page=${pageNumber}`;
-      if (priority) url += `&priority=${priority}`;
-      if (status !== null) url += `&status=${status}`;
+        let url = `/api/tasks?page=${pageNumber}`;
+        if (priority) url += `&priority=${priority}`;
+        if (status !== null) url += `&status=${status}`;
 
-      const res = await API.get(url);
+        const res = await API.get(url);
 
-      setTasks(res.data.data || []);
-      setTotalTasks(res.data.totalTasks || 0);
-      setCompletedCount(res.data.completedCount || 0);
-      setOngoingCount(res.data.ongoingCount || 0);
+        setTasks(res.data.data || []);
+        setTotalTasks(res.data.totalTasks || 0);
+        setCompletedCount(res.data.completedCount || 0);
+        setOngoingCount(res.data.ongoingCount || 0);
 
-      setPage(res.data.page || 1);
-      setTotalPages(res.data.pages || 1);
-      setHasNextPage(res.data.hasNextPage || false);
-      setHasPrevPage(res.data.hasPrevPage || false);
-
-    } catch (error) {
-      console.error("Fetch tasks error:", error.response?.data || error.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+        setPage(res.data.page || 1);
+        setTotalPages(res.data.pages || 1);
+        setHasNextPage(res.data.hasNextPage || false);
+        setHasPrevPage(res.data.hasPrevPage || false);
+      } catch (error) {
+        console.error(
+          "Fetch tasks error:",
+          error.response?.data || error.message,
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    [],
+  );
 
   // ================= CREATE TASK =================
   const createTask = async (data) => {
@@ -67,9 +76,12 @@ export const TaskProvider = ({ children }) => {
       });
 
       await fetchTasks(1, priorityFilter);
-
+      await fetchNotifications(); // 🔥 add this
     } catch (error) {
-      console.error("Create task error:", error.response?.data || error.message);
+      console.error(
+        "Create task error:",
+        error.response?.data || error.message,
+      );
       throw error;
     }
   };
@@ -96,9 +108,12 @@ export const TaskProvider = ({ children }) => {
       });
 
       await fetchTasks(page, priorityFilter);
-
+      await fetchNotifications(); // 🔥 add this
     } catch (error) {
-      console.error("Update task error:", error.response?.data || error.message);
+      console.error(
+        "Update task error:",
+        error.response?.data || error.message,
+      );
       throw error;
     }
   };
@@ -109,29 +124,38 @@ export const TaskProvider = ({ children }) => {
       await API.put(`/api/tasks/complete/${id}`);
       await fetchTasks(page, priorityFilter);
     } catch (error) {
-      console.error("Complete task error:", error.response?.data || error.message);
+      console.error(
+        "Complete task error:",
+        error.response?.data || error.message,
+      );
     }
   };
 
   // ================= DELETE TASK =================
- const deleteTask = async (id) => {
-  try {
-    await API.delete(`/api/tasks/${id}`); // ✅ FIXED
-    await fetchTasks(page, priorityFilter);
-  } catch (error) {
-    console.error("Delete task error:", error);
-  }
-};
-
+  const deleteTask = async (id) => {
+    try {
+      await API.delete(`/api/tasks/${id}`); // ✅ FIXED
+      await fetchTasks(page, priorityFilter);
+      await fetchNotifications(); // 🔥 add this
+    } catch (error) {
+      console.error("Delete task error:", error);
+    }
+  };
 
   const getStatusLabel = (status) => {
     switch (status) {
-      case 0: return "Not Started";
-      case 25: return "Started";
-      case 50: return "Halfway";
-      case 75: return "Almost Done";
-      case 100: return "Completed";
-      default: return "Unknown";
+      case 0:
+        return "Not Started";
+      case 25:
+        return "Started";
+      case 50:
+        return "Halfway";
+      case 75:
+        return "Almost Done";
+      case 100:
+        return "Completed";
+      default:
+        return "Unknown";
     }
   };
 
