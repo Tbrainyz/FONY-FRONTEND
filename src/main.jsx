@@ -15,11 +15,11 @@ createRoot(document.getElementById("root")).render(
       {" "}
       {/* ← Wrap everything with ThemeProvider */}
       <AuthProvider>
-        <TaskProvider>
-          <NotificationProvider>
+        <NotificationProvider>
+          <TaskProvider>
             <App />
-          </NotificationProvider>
-        </TaskProvider>
+          </TaskProvider>
+        </NotificationProvider>
       </AuthProvider>
     </ThemeProvider>
 
