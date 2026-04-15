@@ -9,7 +9,6 @@ const NotificationBellInline = () => {
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
-  // close on outside click
   useEffect(() => {
     const handleClick = (e) => {
       if (ref.current && !ref.current.contains(e.target)) {
@@ -25,22 +24,12 @@ const NotificationBellInline = () => {
       {/* 🔔 ICON */}
       <button
         onClick={() => setOpen(!open)}
-        className="
-          relative p-2 rounded-xl
-          hover:bg-gray-100 dark:hover:bg-gray-800
-          transition
-        "
+        className="relative p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition"
       >
-        <IoNotificationsOutline className="text-xl text-gray-700 dark:text-gray-300" />
+        <IoNotificationsOutline className="text-xl text-gray-700 dark:text-gray-200" />
 
-        {/* BADGE */}
         {unreadCount > 0 && (
-          <span className="
-            absolute -top-1 -right-1
-            bg-red-500 text-white text-[10px]
-            px-1.5 py-[2px]
-            rounded-full
-          ">
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 py-[2px] rounded-full">
             {unreadCount}
           </span>
         )}
@@ -48,15 +37,21 @@ const NotificationBellInline = () => {
 
       {/* DROPDOWN */}
       {open && (
-        <div className="
-          absolute right-0 mt-3 w-80 max-h-[400px] overflow-y-auto
-          backdrop-blur-xl bg-white/90 dark:bg-gray-900/90
-          border border-gray-200 dark:border-gray-700
-          rounded-2xl shadow-xl z-50
+        <div className="absolute right-0 mt-3 w-80 max-h-[400px] overflow-y-auto rounded-2xl shadow-xl z-50
+          bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700
         ">
+
+          {/* HEADER */}
+          <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+              Notifications
+            </p>
+          </div>
+
+          {/* EMPTY STATE */}
           {notifications.length === 0 ? (
-            <p className="p-4 text-sm text-center text-gray-500">
-              No notifications
+            <p className="p-6 text-sm text-center text-gray-500 dark:text-gray-400">
+              No notifications yet
             </p>
           ) : (
             notifications.map((n) => (
@@ -64,12 +59,21 @@ const NotificationBellInline = () => {
                 key={n._id}
                 onClick={() => markAsRead(n._id)}
                 className={`
-                  p-3 border-b text-sm cursor-pointer transition
-                  ${!n.read ? "bg-gray-100 dark:bg-gray-800" : ""}
-                  hover:bg-gray-200 dark:hover:bg-gray-700
+                  px-4 py-3 text-sm cursor-pointer transition border-b
+                  border-gray-100 dark:border-gray-800
+                  hover:bg-gray-100 dark:hover:bg-gray-800
+                  ${!n.read ? "bg-gray-50 dark:bg-gray-800/60" : ""}
+                  text-gray-800 dark:text-gray-200
                 `}
               >
-                {n.message}
+                <p className="leading-snug">{n.message}</p>
+
+                {/* optional time hint if you later add createdAt */}
+                {n.createdAt && (
+                  <p className="text-[10px] mt-1 text-gray-400 dark:text-gray-500">
+                    {new Date(n.createdAt).toLocaleString()}
+                  </p>
+                )}
               </div>
             ))
           )}
