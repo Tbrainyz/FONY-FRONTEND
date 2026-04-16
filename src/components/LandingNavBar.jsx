@@ -16,8 +16,8 @@ const LandingNavBar = () => {
     <nav className="sticky top-4 z-50 px-4 md:px-10">
       <div
         className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4 
-        rounded-2xl backdrop-blur-xl bg-white/70 dark:bg-black/50 
-        border border-white/30 dark:border-white/10 
+        rounded-2xl backdrop-blur-xl bg-white/70 
+        border border-white/30 
         shadow-lg"
       >
         {/* LOGO */}
@@ -25,15 +25,15 @@ const LandingNavBar = () => {
                 className="cursor-pointer hover:scale-105 transition-transform"
               
               >
-                <img src={logo} className="h-9 md:h-10 block dark:hidden" />
-                <img src={darkmodelogo} className="h-9 md:h-10 hidden dark:block" />
+                <img src={logo} className="h-9 md:h-10  " />
+           
               </div>
 
         {/* NAV LINKS */}
         <div className="hidden md:flex items-center gap-10 text-sm font-medium">
           <a
             href="#how-it-works"
-            className="relative group text-gray-700 dark:text-gray-300"
+            className="relative group text-gray-700 "
           >
             How it Works
             <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-[#77C2FF] transition-all group-hover:w-full" />
@@ -41,7 +41,7 @@ const LandingNavBar = () => {
 
           <a
             href="#testimonials"
-            className="relative group text-gray-700 dark:text-gray-300"
+            className="relative group text-gray-700 "
           >
             Testimonials
             <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-[#77C2FF] transition-all group-hover:w-full" />
@@ -66,9 +66,9 @@ const LandingNavBar = () => {
               <button
                 onClick={() => navigate("/login")}
                 className="px-6 py-2.5 rounded-full 
-                border border-gray-300 dark:border-gray-700 
-                text-gray-800 dark:text-gray-200 
-                hover:bg-gray-100 dark:hover:bg-gray-800 
+                border border-gray-300 
+                text-gray-800 
+                hover:bg-gray-100 
                 transition-all"
               >
                 Login

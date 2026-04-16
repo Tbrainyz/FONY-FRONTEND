@@ -1,7 +1,6 @@
-import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import foot from "../assets/Foot.svg";
 import flex1 from "../assets/flex1.svg";
 import flex2 from "../assets/flex2.svg";
 import flex3 from "../assets/flex3.svg";
@@ -20,7 +19,7 @@ const LandingPage = () => {
   const { user } = useContext(AuthContext);
 
   return (
-    <div className="w-full overflow-hidden bg-gradient-to-b from-white via-[#f8fbff] to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+    <div className="w-full overflow-hidden bg-gradient-to-b from-white via-[#f8fbff] to-white ">
 
       <LandingNavBar  className="" />
 
@@ -31,7 +30,7 @@ const LandingPage = () => {
         <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-blue-300/30 blur-[120px] rounded-full"></div>
 
         <div className="max-w-xl lg:max-w-2xl relative z-10">
-          <p className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tight text-gray-900 dark:text-white">
+          <p className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tight text-gray-900 ">
             Organize What Matters,
             <br />
             <span className="bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent">
@@ -58,7 +57,7 @@ const LandingPage = () => {
 
                 <button
                   onClick={() => navigate("/login")}
-                  className="px-10 py-4 rounded-full border border-gray-300 dark:border-gray-700 backdrop-blur-md hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                  className="px-10 py-4 rounded-full border border-gray-300 backdrop-blur-md hover:bg-gray-100 "
                 >
                   Login
                 </button>
@@ -70,14 +69,14 @@ const LandingPage = () => {
         <img
           src={flex1}
           alt=""
-          className="w-full max-w-md dark:text-gray-400 lg:max-w-lg hover:scale-105 transition duration-500"
+          className="w-full max-w-md lg:max-w-lg hover:scale-105 transition duration-500"
         />
       </div>
 
       {/* ================= HOW IT WORKS ================= */}
       <div id="how-it-works" className="px-6 md:px-12 lg:px-20 py-20">
 
-        <p className="text-4xl md:text-5xl lg:text-6xl font-black text-center mb-20 text-gray-900 dark:text-white">
+        <p className="text-4xl md:text-5xl lg:text-6xl font-black text-center mb-20 text-gray-900 ">
           A Simple Way To Manage Your Tasks
         </p>
 
@@ -86,10 +85,10 @@ const LandingPage = () => {
           {[flex2, flex3, flex4].map((img, i) => (
             <div
               key={i}
-              className="group flex flex-col md:flex-row items-center gap-10 bg-white/70 dark:bg-gray-900/60 backdrop-blur-xl border border-gray-200 dark:border-gray-800 rounded-[40px] p-8 shadow-lg hover:shadow-2xl transition"
+              className="group flex flex-col md:flex-row items-center gap-10 bg-white/70 backdrop-blur-xl border border-gray-200  rounded-[40px] p-8 shadow-lg hover:shadow-2xl transition"
             >
               <div className="flex-1">
-                <p className="text-3xl font-bold mb-3 text-gray-900 dark:text-white">
+                <p className="text-3xl font-bold mb-3 text-gray-900 ">
                   {i === 0
                     ? "Create Your Tasks"
                     : i === 1
@@ -97,7 +96,7 @@ const LandingPage = () => {
                     : "Stay Organized"}
                 </p>
 
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-gray-600 ">
                   {i === 0
                     ? "Add what matters when it matters. Big goals or small wins, all in one place."
                     : i === 1
@@ -109,7 +108,7 @@ const LandingPage = () => {
               <img
                 src={img}
                 alt=""
-                className="max-h-72 dark:text-gray-400 group-hover:scale-105 transition"
+                className="max-h-72  group-hover:scale-105 transition"
               />
             </div>
           ))}
@@ -119,7 +118,7 @@ const LandingPage = () => {
       {/* ================= TESTIMONIALS ================= */}
       <div id="testimonials" className="px-6 md:px-12 lg:px-20 py-20">
 
-        <p className="text-4xl md:text-5xl font-black text-center mb-16 text-gray-900 dark:text-white">
+        <p className="text-4xl md:text-5xl font-black text-center mb-16 text-gray-900 ">
           Loved By People Who Get Things Done
         </p>
 
@@ -128,15 +127,15 @@ const LandingPage = () => {
           {[eclipse1, joseph, wasiu].map((img, i) => (
             <div
               key={i}
-              className="p-8 rounded-[30px] bg-white/70 dark:bg-gray-900/60 backdrop-blur-xl border border-gray-200 dark:border-gray-800 shadow hover:shadow-xl transition"
+              className="p-8 rounded-[30px] bg-white/70  backdrop-blur-xl border border-gray-200  shadow hover:shadow-xl transition"
             >
               <img src={img} className="mx-auto mb-4 w-16" />
 
-              <p className="font-bold text-lg text-center text-gray-900 dark:text-white">
+              <p className="font-bold text-lg text-center text-gray-900 ">
                 {["OlaChi Maryam", "Joseph Ibrahim", "Wasiu David"][i]}
               </p>
 
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-3 text-center">
+              <p className="text-sm text-gray-600  mt-3 text-center">
                 This app completely changed how I manage my tasks.
               </p>
             </div>
@@ -163,17 +162,17 @@ const LandingPage = () => {
       {/* ================= NEWSLETTER ================= */}
    <div className="px-4 sm:px-6 md:px-12 lg:px-20 py-16 sm:py-20">
   <div className="max-w-5xl mx-auto p-6 sm:p-8 md:p-10 rounded-[32px] sm:rounded-[40px] 
-    bg-white/70 dark:bg-gray-900/60 backdrop-blur-xl 
-    border border-gray-200 dark:border-gray-800 
+    bg-white/70  backdrop-blur-xl 
+    border border-gray-200 
     shadow-xl flex flex-col lg:flex-row gap-8 md:gap-10 items-center">
 
     {/* TEXT */}
     <div className="flex-1 w-full text-center lg:text-left">
-      <p className="text-2xl sm:text-3xl font-bold mb-3 text-gray-900 dark:text-white">
+      <p className="text-2xl sm:text-3xl font-bold mb-3 text-gray-900 ">
         Stay In The Loop
       </p>
 
-      <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
+      <p className="text-gray-600 text-sm sm:text-base">
         Get productivity insights delivered to your inbox.
       </p>
 
@@ -182,7 +181,7 @@ const LandingPage = () => {
         <input
           type="email"
           className="w-full h-12 sm:h-14 px-5 rounded-full border 
-          border-gray-300 dark:border-gray-700 bg-transparent 
+          border-gray-300  bg-transparent 
           focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           placeholder="Enter your email"
         />
@@ -218,7 +217,7 @@ const LandingPage = () => {
   </div>
 
   {/* GLASS CONTAINER */}
-  <div className="max-w-7xl mx-auto rounded-[40px] border border-white/20 dark:border-gray-800 bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl p-10 md:p-14 shadow-[0_20px_80px_rgba(0,0,0,0.08)]">
+  <div className="max-w-7xl mx-auto rounded-[40px] border border-white/20  bg-white/60  backdrop-blur-xl p-10 md:p-14 shadow-[0_20px_80px_rgba(0,0,0,0.08)]">
 
     <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
 
@@ -226,7 +225,7 @@ const LandingPage = () => {
       <div>
         <img src={footLogo} alt="logo" className="w-40 mb-5" />
 
-        <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+        <p className="text-gray-600  text-sm leading-relaxed">
           Organize your life, track your progress, and stay consistent — beautifully.
         </p>
 
@@ -251,7 +250,7 @@ const LandingPage = () => {
         },
       ].map((section, i) => (
         <div key={i}>
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-5">
+          <h3 className="font-semibold text-gray-900  mb-5">
             {section.title}
           </h3>
 
@@ -259,7 +258,7 @@ const LandingPage = () => {
             {section.links.map((link, idx) => (
               <li
                 key={idx}
-                className="relative w-fit text-gray-600 dark:text-gray-400 cursor-pointer group"
+                className="relative w-fit text-gray-600  cursor-pointer group"
               >
                 {link}
 
