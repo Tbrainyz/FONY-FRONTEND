@@ -12,7 +12,7 @@ import SuccessModal from "../components/SuccessModal";
 import DeleteModal from "../components/DeleteModal";
 import TaskRow from "../components/TaskRow";
 import TaskViewModal from "../components/TaskViewModal";
-import { TaskContext } from "../context/TasksContext";
+import { TasksContext } from "../context/TasksContext";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -40,7 +40,7 @@ const DashBoard = () => {
     priorityFilter,
     setPriorityFilter,
     setPage,
-  } = useContext(TaskContext);
+  } = useContext(TasksContext);
 
   useEffect(() => {
     fetchTasks(page, priorityFilter || "");

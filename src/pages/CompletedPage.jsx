@@ -9,7 +9,7 @@ import { FaTrash } from "react-icons/fa";
 import ViewModal from "../components/ViewModal";
 import DeleteModal from "../components/DeleteModal";
 import arr from "../assets/AltArrow.svg";
-import { TaskContext } from "../context/TasksContext";
+import { TasksContext } from "../context/TasksContext";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -23,7 +23,7 @@ const CompletedPage = () => {
     loading,
     priorityFilter,
     setPriorityFilter,
-  } = useContext(TaskContext);
+  } = useContext(TasksContext);
 
   const [selectedTask, setSelectedTask] = useState(null);
   const [taskToDelete, setTaskToDelete] = useState(null);
