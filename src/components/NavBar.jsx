@@ -10,7 +10,7 @@ import { AuthContext } from "../context/AuthContext";
 import ThemeToggle from "./ThemeToggle";
 
 // 🔔 NEW IMPORT
-import NotificationBellInline from "./NotificationBellInline";
+// import NotificationBellInline from "./NotificationBellInline";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
