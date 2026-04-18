@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import pic from "../assets/list.svg";
-import { TaskContext } from "../context/TasksContext";
+import {TasksContext} from "../context/TasksContext";
 
 const TaskSummaryCard = () => {
-  const { totalTasks, completedCount, ongoingCount, loading } = useContext(TaskContext);
+  const { totalTasks, completedCount, ongoingCount, loading } = useContext(TasksContext);
 
   const summaries = [
     {

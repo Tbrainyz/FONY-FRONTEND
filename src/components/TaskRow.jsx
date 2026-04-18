@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { IoEye } from "react-icons/io5";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { TaskContext } from "../context/TasksContext";
+import { TasksContext } from "../context/TasksContext";
 
 const TaskRow = ({
   tasks = [],
@@ -11,7 +11,7 @@ const TaskRow = ({
   openViewModal,
   openCreateModal,
 }) => {
-  const { getStatusLabel } = useContext(TaskContext);
+  const { getStatusLabel } = useContext(TasksContext);
 
   const getProgressStyle = (progress = 0) => {
     let gradient;

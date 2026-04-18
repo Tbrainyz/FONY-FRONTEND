@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { IoEye } from "react-icons/io5";
 import { FaEdit, FaTrash, FaTasks } from "react-icons/fa";
-import { TaskContext } from "../context/TasksContext";
+import { TasksContext } from "../context/TasksContext";
 
 const Carousel = ({
   tasks = [],
@@ -11,7 +11,7 @@ const Carousel = ({
   openViewModal,
   openCreateModal,
 }) => {
-  const { getStatusLabel } = useContext(TaskContext);
+  const { getStatusLabel } = useContext(TasksContext);
 
   const inProgressTasks = tasks.filter((t) => (t.status || 0) < 100);
 
