@@ -3,7 +3,7 @@ import API from "../api/axios";
 
 export const TasksContext = createContext();
 
-export const TasksProvider = ({ children }) => {
+export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const [totalTasks, setTotalTasks] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
@@ -18,32 +18,34 @@ export const TasksProvider = ({ children }) => {
   const [priorityFilter, setPriorityFilter] = useState("");
 
   // ================= FETCH TASKS =================
-  const fetchTasks = useCallback(async (pageNumber = 1, priority = "", status = null) => {
-    try {
-      setLoading(true);
+  const fetchTasks = useCallback(
+    async (pageNumber = 1, priority = "", status = null) => {
+      try {
+        setLoading(true);
 
-      let url = `/api/tasks?page=${pageNumber}`;
-      if (priority) url += `&priority=${priority}`;
-      if (status !== null) url += `&status=${status}`;
+        let url = `/api/tasks?page=${pageNumber}`;
+        if (priority) url += `&priority=${priority}`;
+        if (status !== null) url += `&status=${status}`;
 
-      const res = await API.get(url);
+        const res = await API.get(url);
 
-      setTasks(res.data.data || []);
-      setTotalTasks(res.data.totalTasks || 0);
-      setCompletedCount(res.data.completedCount || 0);
-      setOngoingCount(res.data.ongoingCount || 0);
+        setTasks(res.data.data || []);
+        setTotalTasks(res.data.totalTasks || 0);
+        setCompletedCount(res.data.completedCount || 0);
+        setOngoingCount(res.data.ongoingCount || 0);
 
-      setPage(res.data.page || 1);
-      setTotalPages(res.data.pages || 1);
-      setHasNextPage(res.data.hasNextPage || false);
-      setHasPrevPage(res.data.hasPrevPage || false);
-
-    } catch (error) {
-      console.error("Fetch tasks error:", error.response?.data || error.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+        setPage(res.data.page || 1);
+        setTotalPages(res.data.pages || 1);
+        setHasNextPage(res.data.hasNextPage || false);
+        setHasPrevPage(res.data.hasPrevPage || false);
+      } catch (error) {
+        console.error("Fetch tasks error:", error.response?.data || error.message);
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
   // ================= CREATE TASK =================
   const createTask = async (data) => {
@@ -65,7 +67,6 @@ export const TasksProvider = ({ children }) => {
       await fetchTasks(1, priorityFilter);
     } catch (error) {
       console.error("Create task error:", error.response?.data || error.message);
-      throw error;
     }
   };
 
@@ -89,7 +90,6 @@ export const TasksProvider = ({ children }) => {
       await fetchTasks(page, priorityFilter);
     } catch (error) {
       console.error("Update task error:", error.response?.data || error.message);
-      throw error;
     }
   };
 
