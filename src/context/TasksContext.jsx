@@ -1,10 +1,9 @@
-import { createContext, useState, useCallback, useContext } from "react";
+import { createContext, useState, useCallback } from "react";
 import API from "../api/axios";
-// import { NotificationContext } from "./NotificationContext";
 
-// export const TaskContext = createContext();
+export const TasksContext = createContext();
 
-export const TaskProvider = ({ children }) => {
+export const TasksProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const [totalTasks, setTotalTasks] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
@@ -17,11 +16,6 @@ export const TaskProvider = ({ children }) => {
 
   const [loading, setLoading] = useState(false);
   const [priorityFilter, setPriorityFilter] = useState("");
-
-  // const notificationCtx = useContext(NotificationContext);
-
-  // // safe access (prevents crash if provider loads later)
-  // const fetchNotifications = notificationCtx?.fetchNotifications;
 
   // ================= FETCH TASKS =================
   const fetchTasks = useCallback(async (pageNumber = 1, priority = "", status = null) => {
@@ -43,6 +37,7 @@ export const TaskProvider = ({ children }) => {
       setTotalPages(res.data.pages || 1);
       setHasNextPage(res.data.hasNextPage || false);
       setHasPrevPage(res.data.hasPrevPage || false);
+
     } catch (error) {
       console.error("Fetch tasks error:", error.response?.data || error.message);
     } finally {
@@ -68,7 +63,6 @@ export const TaskProvider = ({ children }) => {
       });
 
       await fetchTasks(1, priorityFilter);
-      // await fetchNotifications?.(); // safe call
     } catch (error) {
       console.error("Create task error:", error.response?.data || error.message);
       throw error;
@@ -93,7 +87,6 @@ export const TaskProvider = ({ children }) => {
       });
 
       await fetchTasks(page, priorityFilter);
-      // await fetchNotifications?.();
     } catch (error) {
       console.error("Update task error:", error.response?.data || error.message);
       throw error;
@@ -115,14 +108,13 @@ export const TaskProvider = ({ children }) => {
     try {
       await API.delete(`/api/tasks/${id}`);
       await fetchTasks(page, priorityFilter);
-      // await fetchNotifications?.();
     } catch (error) {
       console.error("Delete task error:", error);
     }
   };
 
   return (
-    <TaskContext.Provider
+    <TasksContext.Provider
       value={{
         tasks,
         totalTasks,
@@ -144,6 +136,6 @@ export const TaskProvider = ({ children }) => {
       }}
     >
       {children}
-    </TaskContext.Provider>
+    </TasksContext.Provider>
   );
 };
