@@ -1,8 +1,8 @@
 import { createContext, useState, useCallback, useContext } from "react";
 import API from "../api/axios";
-import { NotificationContext } from "./NotificationContext";
+// import { NotificationContext } from "./NotificationContext";
 
-export const TaskContext = createContext();
+// export const TaskContext = createContext();
 
 export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
@@ -18,10 +18,10 @@ export const TaskProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [priorityFilter, setPriorityFilter] = useState("");
 
-  const notificationCtx = useContext(NotificationContext);
+  // const notificationCtx = useContext(NotificationContext);
 
-  // safe access (prevents crash if provider loads later)
-  const fetchNotifications = notificationCtx?.fetchNotifications;
+  // // safe access (prevents crash if provider loads later)
+  // const fetchNotifications = notificationCtx?.fetchNotifications;
 
   // ================= FETCH TASKS =================
   const fetchTasks = useCallback(async (pageNumber = 1, priority = "", status = null) => {
