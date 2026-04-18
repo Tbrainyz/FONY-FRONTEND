@@ -1,15 +1,9 @@
 import React, { useContext } from "react";
 import pic from "../assets/list.svg";
-import { TasksContext } from "../context/TasksContext";
+import { TasksContext } from "../context/TasksContext";z
 
 const TaskSummaryCard = () => {
-  const ctx = useContext(TasksContext);
-
-  if (!ctx) {
-    return null; // prevents crash if provider is not ready
-  }
-
-  const { totalTasks, completedCount, ongoingCount, loading } = ctx;
+  const { totalTasks, completedCount, ongoingCount, loading } = useContext(TasksContext);
 
   const summaries = [
     {
@@ -53,7 +47,6 @@ const TaskSummaryCard = () => {
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 {item.label}
               </p>
-
               <p className="text-3xl font-bold text-gray-900 dark:text-white">
                 {loading ? "..." : item.value}
               </p>
