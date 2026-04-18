@@ -10,7 +10,7 @@ const CreateModal = ({ closeModal, openNextModal }) => {
     title: "",
     description: "",
     priority: "",
-    dueDate: "", // ✅ added
+    dueDate: "", 
   });
 
   const [imageFile, setImageFile] = useState(null);
