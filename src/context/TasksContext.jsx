@@ -68,7 +68,7 @@ export const TaskProvider = ({ children }) => {
       });
 
       await fetchTasks(1, priorityFilter);
-      await fetchNotifications?.(); // safe call
+      // await fetchNotifications?.(); // safe call
     } catch (error) {
       console.error("Create task error:", error.response?.data || error.message);
       throw error;
@@ -93,7 +93,7 @@ export const TaskProvider = ({ children }) => {
       });
 
       await fetchTasks(page, priorityFilter);
-      await fetchNotifications?.();
+      // await fetchNotifications?.();
     } catch (error) {
       console.error("Update task error:", error.response?.data || error.message);
       throw error;
@@ -115,7 +115,7 @@ export const TaskProvider = ({ children }) => {
     try {
       await API.delete(`/api/tasks/${id}`);
       await fetchTasks(page, priorityFilter);
-      await fetchNotifications?.();
+      // await fetchNotifications?.();
     } catch (error) {
       console.error("Delete task error:", error);
     }
