@@ -104,8 +104,8 @@ const NavBar = () => {
 
           <ThemeToggle />
 
-          {/* 🔔 NOTIFICATION */}
-          <NotificationBellInline />
+          🔔 NOTIFICATION
+          {/* <NotificationBellInline /> */}
 
           {/* PROFILE */}
           <div ref={dropdownRef} className="relative">
