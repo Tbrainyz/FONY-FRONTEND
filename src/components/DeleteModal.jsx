@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { MdCancel } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { TaskContext } from "../context/TasksContext";
+import { TasksContext } from "../context/TasksContext";
 
 const DeleteModal = ({ task, user, closeModal, onConfirm }) => {
-  const { deleteTask } = useContext(TaskContext);
+  const { deleteTask } = useContext(TasksContext);
 
   const handleDelete = async () => {
     try {

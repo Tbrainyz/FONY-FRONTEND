@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import { MdCancel } from "react-icons/md";
 import pic from "../assets/Vector.svg";
-import { TaskContext } from "../context/TasksContext";
+import { TasksContext } from "../context/TasksContext";
 
 const CreateModal = ({ closeModal, openNextModal }) => {
-  const { createTask } = useContext(TaskContext);
+  const { createTask } = useContext(TasksContext);
 
   const [formData, setFormData] = useState({
     title: "",
