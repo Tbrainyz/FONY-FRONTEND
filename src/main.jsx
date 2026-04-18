@@ -5,7 +5,7 @@ import App from "./App.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { TaskProvider } from "./context/TasksContext.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx"; // ← Add this
-import { NotificationProvider } from "./context/NotificationContext.jsx";
+// import { NotificationProvider } from "./context/NotificationContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -15,11 +15,11 @@ createRoot(document.getElementById("root")).render(
       {" "}
       {/* ← Wrap everything with ThemeProvider */}
       <AuthProvider>
-        <NotificationProvider>
+      
           <TaskProvider>
             <App />
           </TaskProvider>
-        </NotificationProvider>
+      
       </AuthProvider>
     </ThemeProvider>
 
