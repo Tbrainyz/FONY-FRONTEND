@@ -104,7 +104,7 @@ const NavBar = () => {
 
           <ThemeToggle />
 
-          🔔 NOTIFICATION
+          {/* 🔔 NOTIFICATION */}
           {/* <NotificationBellInline /> */}
 
           {/* PROFILE */}
